@@ -1,14 +1,9 @@
 package com.ivantanin.questionbase;
 
-import com.ivantanin.questionbase.entity.Question;
 import com.ivantanin.questionbase.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
-
-import static com.ivantanin.questionbase.service.QuestionService.*;
 
 @SpringBootApplication
 public class QuestionbaseApplication {
@@ -20,7 +15,8 @@ public class QuestionbaseApplication {
 
 		SpringApplication.run(QuestionbaseApplication.class, args);
 	}
-/*
+/*  Code fot testing
+
 	@EventListener(ApplicationReadyEvent.class)
 		public void testJpaMethods(){
 
@@ -41,7 +37,7 @@ public class QuestionbaseApplication {
 
 		questionService.findAll().forEach(System.out::println);
 
-		questionService.findAllById((long) 2).forEach(System.out::println);
+		questionService.findAllById((Long) 2).forEach(System.out::println);
 	}
 */
 }

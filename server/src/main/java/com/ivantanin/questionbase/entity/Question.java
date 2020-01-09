@@ -1,9 +1,14 @@
 package com.ivantanin.questionbase.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.ToString;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Questions")
+@ToString(of = {"id", "topic", "text", "answer", "reward", "author", "creationData"})
 public class Question {
 
     @Id
@@ -26,22 +31,11 @@ public class Question {
     @Column(name = "author", nullable = false)
     private String author;
 
-    @Column(name = "creation_data", nullable = false)
-    private String creationData;
+    @Column(name = "creation_date", nullable = false, updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd hh:mm:ss")
+    private LocalDateTime creationDate;
 
-    @Override
-    public String toString() {
-        return "Question{" +
-                "id=" + id +
-                ", topic='" + topic + '\'' +
-                ", text='" + text + '\'' +
-                ", answer='" + answer + '\'' +
-                ", reward='" + reward + '\'' +
-                ", author='" + author + '\'' +
-                ", creationData=" + creationData +
-                '}';
-    }
-
+    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -82,9 +76,9 @@ public class Question {
         this.author = author;
     }
 
-    public String getCreationData() { return creationData; }
+    public LocalDateTime getCreationDate() { return creationDate; }
 
-    public void setCreationData(String creationData) {
-        this.creationData = creationData;
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 }

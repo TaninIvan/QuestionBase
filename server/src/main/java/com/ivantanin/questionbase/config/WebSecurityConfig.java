@@ -1,62 +1,45 @@
 package com.ivantanin.questionbase.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configurers.provisioning.InMemoryUserDetailsManagerConfigurer;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    private final DataSource dataSource;
 
-    @Autowired
-    private AuthenticationEntryPoint authEntryPoint;
+    public WebSecurityConfig(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-
-        // All requests send to the Web Server request must be authenticated
-        http.authorizeRequests().anyRequest().authenticated();
-
-        // Use AuthenticationEntryPoint to authenticate user/password
-        http.httpBasic().authenticationEntryPoint(authEntryPoint);
+        http
+                .authorizeRequests()
+                    .antMatchers("/", "/registration").permitAll()  // opening access for all to "/" and "/registration"
+                    .anyRequest().authenticated()                               // prohibiting unauthorized users from clicking on other requests
+                .and()
+                    .formLogin() //
+                    .loginPage("/login")                                        // indicate the path for logging
+                    .permitAll()
+                .and()
+                    .logout()
+                    .permitAll();
     }
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        return bCryptPasswordEncoder;
-    }
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-
-        String password = "123";
-
-        String encrytedPassword = this.passwordEncoder().encode(password);
-        System.out.println("Encoded password of 123=" + encrytedPassword);
-
-
-        InMemoryUserDetailsManagerConfigurer<AuthenticationManagerBuilder> //
-                mngConfig = auth.inMemoryAuthentication();
-
-        // Defines 2 users, stored in memory.
-        // ** Spring BOOT >= 2.x (Spring Security 5.x)
-        // Spring auto add ROLE_
-        UserDetails u1 = User.withUsername("tom").password(encrytedPassword).roles("USER").build();
-        UserDetails u2 = User.withUsername("jerry").password(encrytedPassword).roles("USER").build();
-
-        mngConfig.withUser(u1);
-        mngConfig.withUser(u2);
-
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.jdbcAuthentication()
+                .dataSource(dataSource)
+                .passwordEncoder(NoOpPasswordEncoder.getInstance())
+                .usersByUsernameQuery("SELECT username, password FROM usr WHERE username=?")
+                .authoritiesByUsernameQuery("SELECT u.username, ur.roles FROM usr u INNER JOIN user_role ur ON u.id = ur.user_id WHERE u.username=?");
     }
 }
