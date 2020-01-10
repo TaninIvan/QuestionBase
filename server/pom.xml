@@ -70,6 +70,13 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Hibernate types to use JsonBinaryType -->
+		<dependency>
+			<groupId>com.vladmihalcea</groupId>
+			<artifactId>hibernate-types-52</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+
 	</dependencies>
 
 
