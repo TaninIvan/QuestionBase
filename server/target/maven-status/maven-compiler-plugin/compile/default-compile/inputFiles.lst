@@ -1,2 +1,13 @@
-C:\Users\ivan.tanin\Downloads\questionbase\src\main\java\com\ivantanin\questionbase\QuestionbaseApplication.java
-C:\Users\ivan.tanin\Downloads\questionbase\src\main\java\com\ivantanin\questionbase\entity\Question.java
+C:\Users\ivan.tanin\Desktop\QuestionBase\server\src\main\java\com\ivantanin\questionbase\controller\UserController.java
+C:\Users\ivan.tanin\Desktop\QuestionBase\server\src\main\java\com\ivantanin\questionbase\entity\Avatar.java
+C:\Users\ivan.tanin\Desktop\QuestionBase\server\src\main\java\com\ivantanin\questionbase\entity\User.java
+C:\Users\ivan.tanin\Desktop\QuestionBase\server\src\main\java\com\ivantanin\questionbase\entity\Question.java
+C:\Users\ivan.tanin\Desktop\QuestionBase\server\src\main\java\com\ivantanin\questionbase\QuestionbaseApplication.java
+C:\Users\ivan.tanin\Desktop\QuestionBase\server\src\main\java\com\ivantanin\questionbase\service\QuestionService.java
+C:\Users\ivan.tanin\Desktop\QuestionBase\server\src\main\java\com\ivantanin\questionbase\repository\UserRepository.java
+C:\Users\ivan.tanin\Desktop\QuestionBase\server\src\main\java\com\ivantanin\questionbase\config\WebSecurityConfig.java
+C:\Users\ivan.tanin\Desktop\QuestionBase\server\src\main\java\com\ivantanin\questionbase\controller\QuestionController.java
+C:\Users\ivan.tanin\Desktop\QuestionBase\server\src\main\java\com\ivantanin\questionbase\entity\Answer.java
+C:\Users\ivan.tanin\Desktop\QuestionBase\server\src\main\java\com\ivantanin\questionbase\entity\Role.java
+C:\Users\ivan.tanin\Desktop\QuestionBase\server\src\main\java\com\ivantanin\questionbase\repository\QuestionRepository.java
+C:\Users\ivan.tanin\Desktop\QuestionBase\server\src\main\java\com\ivantanin\questionbase\entity\Topic.java

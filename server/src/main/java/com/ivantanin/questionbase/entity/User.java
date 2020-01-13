@@ -9,6 +9,7 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Set;
 
 @Entity
@@ -18,9 +19,12 @@ import java.util.Set;
 
 public class User {
 
-    @OneToOne
-    @JoinColumn(name = "avatar_id", referencedColumnName = "av_id")
-    private Avatar avatar;
+   @OneToOne(cascade = CascadeType.ALL)
+   @JoinColumn(name = "avatar_id")
+   private Avatar avatar;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Collection<Answer> answer;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

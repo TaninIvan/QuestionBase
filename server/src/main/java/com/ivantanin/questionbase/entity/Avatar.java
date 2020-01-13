@@ -13,17 +13,14 @@ import java.sql.Blob;
 @TypeDef(name = "Blob", typeClass = Blob.class)
 public class Avatar {
 
-    @OneToOne(mappedBy = "avatar", cascade = CascadeType.ALL)
+    @OneToOne(optional = false, mappedBy = "avatar")
     private User user;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long av_id;
+    private Long avatar_id;
 
     @Type(type = "Blob")
     @Column(name = "image")
     private Blob blob;
-
-    public Avatar() {
-    }
 }
