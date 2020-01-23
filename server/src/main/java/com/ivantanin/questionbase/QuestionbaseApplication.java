@@ -11,8 +11,11 @@ import org.springframework.context.event.EventListener;
 @SpringBootApplication
 public class QuestionbaseApplication {
 
-	@Autowired
-	private QuestionService questionService;
+	private final QuestionService questionService;
+
+	public QuestionbaseApplication(QuestionService questionService) {
+		this.questionService = questionService;
+	}
 
 	public static void main(String[] args) {
 
