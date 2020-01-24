@@ -1,17 +1,13 @@
 package com.ivantanin.questionbase.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
-//import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Entity
-@Data
 @Table(name = "Questions")
-//@ToString(of = {"id", "topic", "questionText", "correctAnswers", "reward", "author", "creationDate"})
 public class Question {
 
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
@@ -25,9 +21,6 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ques_id", nullable = false)
     private Long id;
-
-    @Column(name = "topic")
-    private String topic;
 
     @Column(name = "question_text", nullable = false)
     private String questionText;
@@ -45,23 +38,12 @@ public class Question {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd hh:mm:ss")
     private LocalDateTime creationDate;
 
-    public Question() {
-    }
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getTopic() {
-        return topic;
-    }
-
-    public void setTopic(String topic) {
-        this.topic = topic;
     }
 
     public String getQuestionText() {
@@ -101,11 +83,16 @@ public class Question {
     }
 
     public String getCorrectAnswers() { return correctAnswers;}
+    /*
+    public void addTopic(long id) {
+        TopicService topicService = new TopicService();
+        this.questionTopics.add(topicService.getTopic(id));
+    } */
 
     @Override
     public String toString(){
         return "{" + this.id.toString() + ";" + this.questionText + ";(" + this.correctAnswers + ");" +
-                    this.reward + ";" + this.author + ";" + this.creationDate + ";" + this.topic + ";}";
+                    this.reward + ";" + this.author + ";" + this.creationDate + "}";
 
     }
 

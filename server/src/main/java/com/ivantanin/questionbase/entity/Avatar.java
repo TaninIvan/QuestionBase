@@ -45,9 +45,11 @@ public class Avatar implements Serializable {
 
     public byte[] getImage() { return this.image;}
 
+    public Long getAvatarId() {return this.avatar_id;}
+
     @Override
     public String toString(){
-        return "{" + this.avatar_id.toString() + ";" + Arrays.toString(this.image) + ";}";
+        return "{" + this.avatar_id.toString() + ";" + Arrays.toString(this.image) + "}";
 
     }
 }

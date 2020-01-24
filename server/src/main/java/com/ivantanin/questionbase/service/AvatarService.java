@@ -8,10 +8,10 @@ import java.util.logging.Logger;
 
 public class AvatarService {
     private static Logger log = Logger.getLogger(UserService.class.getName());
-    private EntityManagerFactory emfactory = Persistence.createEntityManagerFactory( "questionPersistence" );
-    private EntityManager em = emfactory.createEntityManager();
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory( "Persistence" );
+    private EntityManager em = emf.createEntityManager();
 
-    // Function for creating a new question
+    // Function for creating a new avatar
     public void createAvatar(Avatar avatar){
         try {
             em.getTransaction().begin();

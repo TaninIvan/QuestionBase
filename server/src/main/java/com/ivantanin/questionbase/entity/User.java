@@ -1,16 +1,11 @@
 package com.ivantanin.questionbase.entity;
 
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.ToString;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Set;
 
 @Entity
 @Table(name = "usr")
@@ -62,10 +57,6 @@ public class User {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -98,19 +89,29 @@ public class User {
         this.address = address;
     }
 
-    @Data
-    @AllArgsConstructor
-    @ToString(of = {"country", "town", "street", "house"})
     class Address implements Serializable {
         private String country;
         private String town;
         private String street;
         private String house;
+
+        public Address(){
+            this.country = "no info";
+            this.town = "no info";
+            this.street = "no info";
+            this.house = "no info";
+        }
+
+        @Override
+        public String toString(){
+            return "{" + this.country + "," + this.town + "," + this.street + "," + this.house + "}";
+
+        }
     }
 
     @Override
     public String toString(){
-        return "{" + this.id.toString() + ";" + this.username + this.score + ";}";
+        return "{" + this.id.toString() + ";" + this.username + ";" + this.score + "}";
 
     }
 

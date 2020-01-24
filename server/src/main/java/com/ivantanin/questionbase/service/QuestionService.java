@@ -11,16 +11,13 @@ import java.util.logging.Logger;
 public class QuestionService {
 
     private static Logger log = Logger.getLogger(UserService.class.getName());
-    private EntityManagerFactory emfactory = Persistence.createEntityManagerFactory( "questionPersistence" );
-    private EntityManager em = emfactory.createEntityManager();
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory( "Persistence" );
+    private EntityManager em = emf.createEntityManager();
 
     // Function for creating a new question
     public void createQuestion(Question question){
 
         question.setCreationDate(LocalDateTime.now());
-        if (question.getTopic() == null){
-            question.setTopic("none");
-        }
 
         if (question.getCorrectAnswers() == null){
             question.setCorrectAnswers("...");
@@ -56,7 +53,6 @@ public class QuestionService {
             question1.setReward(100);
             question1.setAuthor("Ivan");
             question1.setQuestionText("How are you?");
-            question1.setTopic("Mood");
             question1.setCreationDate(LocalDateTime.now());
 
             Question question2 = new Question();
@@ -64,7 +60,6 @@ public class QuestionService {
             question2.setReward(100);
             question2.setAuthor("DDT");
             question2.setQuestionText("What is autumn?");
-            question2.setTopic("Music");
             question2.setCreationDate(LocalDateTime.now());
 
             em.getTransaction().begin();
