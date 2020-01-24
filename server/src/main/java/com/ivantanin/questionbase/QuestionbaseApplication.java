@@ -2,50 +2,36 @@ package com.ivantanin.questionbase;
 
 import com.ivantanin.questionbase.entity.Question;
 import com.ivantanin.questionbase.service.QuestionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
+
+import java.time.LocalDateTime;
 
 @SpringBootApplication
 public class QuestionbaseApplication {
 
-	private final QuestionService questionService;
-
-	public QuestionbaseApplication(QuestionService questionService) {
-		this.questionService = questionService;
-	}
-
 	public static void main(String[] args) {
-
 		SpringApplication.run(QuestionbaseApplication.class, args);
+
+		QuestionService questionService = new QuestionService();
+
+		questionService.fillDataBase();
+
+		Question ques = new Question();
+		ques.setCorrectAnswers("three;3");
+		ques.setReward(10);
+		ques.setAuthor("Tanin Ivan");
+		ques.setQuestionText("How many sides in a triangle??");
+		ques.setCreationDate(LocalDateTime.now());
+		ques.setTopic("Geometry");
+
+		questionService.createQuestion(ques);
+
+		System.out.println(questionService.getQuestion(4));
+		questionService.getAllQuestions().forEach(System.out::println);
+
 	}
 
 
-	@EventListener(ApplicationReadyEvent.class)
-		public void testJpaMethods(){
-
-		Question question = new Question();
-		question.setCorrectAnswers("Ivan;Vanya;Tanin Ivan;");
-		question.setReward(50);
-		question.setAuthor("Tanin Ivan");
-		question.setQuestionText("What is my name?");
-
-		Question question1 = new Question();
-		question1.setCorrectAnswers("Fine;");
-		question1.setReward(100);
-		question1.setAuthor("Ivan");
-		question1.setQuestionText("How are you?");
-		question1.setTopic("Mood");
-
-
-		questionService.createQuestion(question);
-		questionService.createQuestion(question1);
-
-		questionService.findAll().forEach(System.out::println);
-
-		questionService.findAllById((long) 2).forEach(System.out::println);
-	}
 
 }

@@ -2,7 +2,7 @@ package com.ivantanin.questionbase.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import lombok.ToString;
+//import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,11 +11,11 @@ import java.util.Collection;
 @Entity
 @Data
 @Table(name = "Questions")
-@ToString(of = {"id", "topic", "text", "correctAnswers", "reward", "author", "creationData"})
+//@ToString(of = {"id", "topic", "questionText", "correctAnswers", "reward", "author", "creationDate"})
 public class Question {
 
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
-    private Collection<Answer> answer;
+    private Collection<Answer> usersAnswers;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "questions_topics", joinColumns = @JoinColumn(name = "question_id"), inverseJoinColumns = @JoinColumn(name = "topic_name"))
@@ -29,10 +29,10 @@ public class Question {
     @Column(name = "topic")
     private String topic;
 
-    @Column(name = "question_text")
+    @Column(name = "question_text", nullable = false)
     private String questionText;
 
-    @Column(name = "correct_answers")
+    @Column(name = "correct_answers", nullable = false)
     private String correctAnswers;
 
     @Column(name = "reward")
@@ -96,20 +96,17 @@ public class Question {
         return creationDate;
     }
 
-    /*
-    public void setCorrectAnswers(HashSet<String> answers){
-        StringBuilder str = new StringBuilder();
-
-        for (String s : answers) {
-            str.append(s).append(";");
-        }
-
-        this.correctAnswers = str.toString();
-    } */
-
     public void setCorrectAnswers(String correctAnswers) {
         this.correctAnswers = correctAnswers;
     }
 
     public String getCorrectAnswers() { return correctAnswers;}
+
+    @Override
+    public String toString(){
+        return "{" + this.id.toString() + ";" + this.questionText + ";(" + this.correctAnswers + ");" +
+                    this.reward + ";" + this.author + ";" + this.creationDate + ";" + this.topic + ";}";
+
+    }
+
 }
