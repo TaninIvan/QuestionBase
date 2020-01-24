@@ -8,8 +8,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Logger;
 
-
-@Service
 public class QuestionService {
 
     private static Logger log = Logger.getLogger(UserService.class.getName());

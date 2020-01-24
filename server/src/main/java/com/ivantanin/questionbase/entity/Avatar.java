@@ -1,25 +1,15 @@
 package com.ivantanin.questionbase.entity;
 
-import lombok.Data;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-
 import javax.imageio.ImageIO;
 import javax.persistence.*;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.sql.Blob;
-import java.sql.SQLException;
+import java.io.*;
+import java.util.Arrays;
+import java.util.Base64;
 
 @Entity
-@Data
 @Table(name = "avatar")
-@TypeDef(name = "Blob", typeClass = Blob.class)
-public class Avatar {
+public class Avatar implements Serializable {
 
     @OneToOne(optional = false, mappedBy = "avatar")
     private User user;
@@ -28,9 +18,8 @@ public class Avatar {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long avatar_id;
 
-    @Type(type = "Blob")
     @Column(name = "image")
-    private Blob blob;
+    private byte[] image;
 
     public User getUser() {
         return user;
@@ -40,13 +29,25 @@ public class Avatar {
         this.user = user;
     }
 
-    public Blob getBlob() {
-        return blob;
+    public void setImage(String url) {
+        try {
+            BufferedImage image = ImageIO.read(new File(url));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(1000);
+
+            ImageIO.write(image, "jpg", baos);
+            baos.flush();
+            this.image = Base64.getEncoder().encode(baos.toByteArray());
+            baos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void setBlob(String url) throws IOException, SQLException {
-        BufferedImage image = ImageIO.read(new File(url));
-        OutputStream outputStream = blob.setBinaryStream(1);
-        ImageIO.write(image, "jpg", outputStream);
+    public byte[] getImage() { return this.image;}
+
+    @Override
+    public String toString(){
+        return "{" + this.avatar_id.toString() + ";" + Arrays.toString(this.image) + ";}";
+
     }
 }

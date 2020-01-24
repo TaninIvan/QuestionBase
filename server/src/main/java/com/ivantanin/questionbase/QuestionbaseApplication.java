@@ -1,12 +1,16 @@
 package com.ivantanin.questionbase;
 
+import com.ivantanin.questionbase.entity.Avatar;
 import com.ivantanin.questionbase.entity.Question;
 import com.ivantanin.questionbase.entity.User;
+import com.ivantanin.questionbase.service.AvatarService;
 import com.ivantanin.questionbase.service.QuestionService;
 import com.ivantanin.questionbase.service.UserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 @SpringBootApplication
@@ -47,6 +51,19 @@ public class QuestionbaseApplication {
 
 		System.out.println(userService.getUser(4));
 		userService.getAllUsers().forEach(System.out::println);
+
+		// Testing avatars
+		AvatarService avatarService = new AvatarService();
+
+		avatarService.fillAvatarTable();
+
+		Avatar avatar4 = new Avatar();
+		avatar4.setImage("C:\\Users\\ivan.tanin\\Desktop\\QuestionBase\\server\\src\\main\\resources\\ava4.jpg");
+
+		avatarService.createAvatar(avatar4);
+
+		System.out.println(avatarService.getAvatar(4));
+		avatarService.getAllAvatars().forEach(System.out::println);
 	}
 
 

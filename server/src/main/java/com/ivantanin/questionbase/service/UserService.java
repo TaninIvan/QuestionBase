@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.logging.Logger;
 
-@Service
 public class UserService {
 
     private static Logger log = Logger.getLogger(UserService.class.getName());
