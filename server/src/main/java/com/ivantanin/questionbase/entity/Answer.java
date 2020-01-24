@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 
 public class Answer {
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "question_id")
     private Question question;
 
@@ -37,8 +37,37 @@ public class Answer {
         this.answerDate = creationDate;
     }
 
-    public LocalDateTime getAnswerDate() {
-        return answerDate;
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public User getUser() {
+        return this.user;
     }
 
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
+    public Question getQuestion(){
+        return this.question;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    @Override
+    public String toString(){
+        return "{" + this.id.toString() + ";" + this.getUser().getUsername() + ";" + this.getUser().getId() + ";" +
+                    this.getQuestion().getId() + ";" + this.getQuestion().getQuestionText() +"}";
+
+    }
 }
