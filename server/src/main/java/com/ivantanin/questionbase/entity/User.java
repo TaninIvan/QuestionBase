@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.Set;
 
 @Entity
-@Data
 @Table(name = "usr")
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 
@@ -43,10 +42,61 @@ public class User {
     @Column(name = "address", columnDefinition = "jsonb")
     private Address address;
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.LAZY)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
+    public Avatar getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Avatar avatar) {
+        this.avatar = avatar;
+    }
+
+    public Collection<Answer> getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(Collection<Answer> answer) {
+        this.answer = answer;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
     @Data
     @AllArgsConstructor
@@ -56,6 +106,12 @@ public class User {
         private String town;
         private String street;
         private String house;
+    }
+
+    @Override
+    public String toString(){
+        return "{" + this.id.toString() + ";" + this.username + this.score + ";}";
+
     }
 
 }

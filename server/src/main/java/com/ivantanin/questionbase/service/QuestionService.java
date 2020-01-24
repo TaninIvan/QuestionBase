@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 @Service
 public class QuestionService {
 
-    private static Logger log = Logger.getLogger(QuestionService.class.getName());
+    private static Logger log = Logger.getLogger(UserService.class.getName());
     private EntityManagerFactory emfactory = Persistence.createEntityManagerFactory( "questionPersistence" );
     private EntityManager em = emfactory.createEntityManager();
 
@@ -42,7 +42,7 @@ public class QuestionService {
 
     }
 
-    public void fillDataBase(){
+    public void fillQuestionTable(){
 
         Query query = em.createQuery("SELECT q.id FROM Question q");
         if (query.getResultList().isEmpty()) {
@@ -75,10 +75,10 @@ public class QuestionService {
             em.persist(question2);
             em.getTransaction().commit();
 
-            log.info("Base has no any records");
+            log.info("Questions table has no any records");
 
         } else {
-            log.info("Base has already had some records");
+            log.info("Questions table has already had some records");
         }
     }
 
