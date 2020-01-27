@@ -7,8 +7,9 @@ import javax.persistence.*;
 import java.util.List;
 
 public class AnswerService {
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory( "Persistence" );
-    private EntityManager em = emf.createEntityManager();
+
+    @PersistenceContext
+    private EntityManager em;
 
     // Function for creating a new question
     public void createAnswer(Answer answer){
@@ -19,7 +20,6 @@ public class AnswerService {
         } catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
     public Answer getAnswer(long id){

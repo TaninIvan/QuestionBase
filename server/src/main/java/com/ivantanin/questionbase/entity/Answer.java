@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
 
 public class Answer {
 
+    @PersistenceContext
+    private EntityManager em;
+
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "user_id")
     private User user;
@@ -38,18 +41,29 @@ public class Answer {
     }
 
     public void setUser(User user) {
+        em.getTransaction().begin();
         this.user = user;
+        user.addAnswer(this);
+        em.merge(this);
+        em.merge(user);
+        em.getTransaction().commit();
     }
+
     public User getUser() {
         return this.user;
     }
 
-    public void setQuestion(Question question) {
-        this.question = question;
-    }
-
     public Question getQuestion(){
         return this.question;
+    }
+
+    public void setQuestion(Question q){
+        em.getTransaction().begin();
+        this.question = q;
+        q.addUserAnswer(this);
+        em.merge(this);
+        em.merge(q);
+        em.getTransaction().commit();
     }
 
     public Long getId() {

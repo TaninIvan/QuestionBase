@@ -1,7 +1,6 @@
 package com.ivantanin.questionbase.service;
 
 import com.ivantanin.questionbase.entity.User;
-import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 import java.util.List;
@@ -10,8 +9,9 @@ import java.util.logging.Logger;
 public class UserService {
 
     private static Logger log = Logger.getLogger(UserService.class.getName());
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory( "Persistence" );
-    private EntityManager em = emf.createEntityManager();
+
+    @PersistenceContext
+    private EntityManager em;
 
     // Function for creating a new user
     public void createUser(User user){
@@ -22,7 +22,6 @@ public class UserService {
         } catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
     public void fillUsersTable(){

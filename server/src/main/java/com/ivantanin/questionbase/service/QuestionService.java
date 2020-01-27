@@ -1,8 +1,6 @@
 package com.ivantanin.questionbase.service;
 
 import com.ivantanin.questionbase.entity.Question;
-import org.springframework.stereotype.Service;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,8 +9,9 @@ import java.util.logging.Logger;
 public class QuestionService {
 
     private static Logger log = Logger.getLogger(UserService.class.getName());
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory( "Persistence" );
-    private EntityManager em = emf.createEntityManager();
+
+    @PersistenceContext
+    private EntityManager em;
 
     // Function for creating a new question
     public void createQuestion(Question question){

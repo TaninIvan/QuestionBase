@@ -17,8 +17,8 @@ public class User {
    @JoinColumn(name = "avatar_id")
    private Avatar avatar;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Collection<Answer> answer;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Collection<Answer> answers;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,12 +45,16 @@ public class User {
         this.avatar = avatar;
     }
 
-    public Collection<Answer> getAnswer() {
-        return answer;
+    public Collection<Answer> getAnswers() {
+        return answers;
     }
 
-    public void setAnswer(Collection<Answer> answer) {
-        this.answer = answer;
+    public void addAnswer(Answer an) {
+        this.answers.add(an);
+    }
+
+    public void setAnswers(Collection<Answer> answers) {
+        this.answers = answers;
     }
 
     public Long getId() {
@@ -104,7 +108,7 @@ public class User {
 
         @Override
         public String toString(){
-            return "{" + this.country + "," + this.town + "," + this.street + "," + this.house + "}";
+            return this.country + "," + this.town + "," + this.street + "," + this.house;
 
         }
     }

@@ -10,10 +10,6 @@ import com.ivantanin.questionbase.service.QuestionService;
 import com.ivantanin.questionbase.service.UserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.time.LocalDateTime;
 
 @SpringBootApplication
@@ -35,7 +31,10 @@ public class QuestionbaseApplication {
 		ques.setAuthor("Tanin Ivan");
 		ques.setQuestionText("How many sides in a triangle?");
 		ques.setCreationDate(LocalDateTime.now());
-		//--ques.setTopic("Geometry");
+
+
+		//ques.setTopic("Geometry"); --------------- НЕ РАБОТАЕТ
+
 
 		// Add new question to BD
 		questionService.createQuestion(ques);
@@ -64,6 +63,7 @@ public class QuestionbaseApplication {
 		userService.getAllUsers().forEach(System.out::println);
 
 	// Testing avatars
+
 		AvatarService avatarService = new AvatarService();
 
 		// Fill the table
@@ -73,32 +73,31 @@ public class QuestionbaseApplication {
 		Avatar avatar4 = new Avatar();
 		avatar4.setImage("C:\\Users\\ivan.tanin\\Desktop\\QuestionBase\\server\\src\\main\\resources\\ava4.jpg");
 
+
 		// Add new avatar to BD
 		avatarService.createAvatar(avatar4);
+		avatar4.setUser(usr);
 
 		// Print info about avatars
 		System.out.println(avatarService.getAvatar(4));
 		avatarService.getAllAvatars().forEach(System.out::println);
 
-	// Testing answersЫ
+	// Testing answers
 		AnswerService answerService = new AnswerService();
 		Answer answer1 = new Answer();
 
 		// Create and init new answer
 		answer1.setAnswerDate(LocalDateTime.now());
-		answer1.setUser(usr);
-		answer1.setQuestion(ques);
 		answer1.setText("Я не помню");
 
-		// Add new avatar to BD
+		// Add new answer to BD
 		answerService.createAnswer(answer1);
+		answer1.setUser(usr);
+		answer1.setQuestion(ques);
 
 		// Print info about answers
 		System.out.println(answerService.getAnswer(1));
 		answerService.getAllAnswersByUser(4).forEach(System.out::println);
 		answerService.getAllUsersByAnswer(1).forEach(System.out::println);
 	}
-
-
-
 }

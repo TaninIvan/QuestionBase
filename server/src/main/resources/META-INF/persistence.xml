@@ -4,7 +4,7 @@
              version="2.0">
 <persistence-unit name="Persistence">
     <properties>
-        <property name="hibernate.hbm2ddl.auto" value="validate"/>
+        <property name="hibernate.hbm2ddl.auto" value="update"/>
         <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/postgres"/>
         <property name="hibernate.connection.username" value="postgres"/>
         <property name="hibernate.connection.password" value="11060"/>

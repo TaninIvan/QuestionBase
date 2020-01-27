@@ -8,8 +8,9 @@ import java.util.logging.Logger;
 
 public class AvatarService {
     private static Logger log = Logger.getLogger(UserService.class.getName());
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory( "Persistence" );
-    private EntityManager em = emf.createEntityManager();
+
+    @PersistenceContext
+    private EntityManager em;
 
     // Function for creating a new avatar
     public void createAvatar(Avatar avatar){
@@ -20,7 +21,6 @@ public class AvatarService {
         } catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
     public void fillAvatarTable(){

@@ -11,7 +11,10 @@ import java.util.Base64;
 @Table(name = "avatar")
 public class Avatar implements Serializable {
 
-    @OneToOne(optional = false, mappedBy = "avatar")
+    @PersistenceContext
+    private EntityManager em;
+
+    @OneToOne(mappedBy = "avatar", cascade = CascadeType.REFRESH)
     private User user;
 
     @Id
@@ -26,18 +29,20 @@ public class Avatar implements Serializable {
     }
 
     public void setUser(User user) {
+
+        em.getTransaction().begin();
         this.user = user;
+        user.setAvatar(this);
+        em.merge(user);
+        em.getTransaction().commit();
     }
 
     public void setImage(String url) {
-        try {
+        try ( ByteArrayOutputStream baos = new ByteArrayOutputStream(1000)){
             BufferedImage image = ImageIO.read(new File(url));
-            ByteArrayOutputStream baos = new ByteArrayOutputStream(1000);
-
             ImageIO.write(image, "jpg", baos);
             baos.flush();
             this.image = Base64.getEncoder().encode(baos.toByteArray());
-            baos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
