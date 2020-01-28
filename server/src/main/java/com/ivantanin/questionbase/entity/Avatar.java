@@ -14,7 +14,7 @@ public class Avatar implements Serializable {
     @PersistenceContext
     private EntityManager em;
 
-    @OneToOne(mappedBy = "avatar", cascade = CascadeType.REFRESH)
+    @OneToOne(mappedBy = "avatar", cascade = CascadeType.MERGE)
     private User user;
 
     @Id
