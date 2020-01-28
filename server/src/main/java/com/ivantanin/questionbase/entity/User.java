@@ -24,74 +24,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username")
     private String username;
-
-    @Column(name = "password")
     private String password;
-
-    @Column(name = "score")
     private Integer score;
 
     @Type(type = "jsonb")
-    @Column(name = "address", columnDefinition = "jsonb")
+    @Column(columnDefinition = "jsonb")
     private Address address;
-
-    public Avatar getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(Avatar avatar) {
-        this.avatar = avatar;
-    }
-
-    public Collection<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void addAnswer(Answer an) {
-        this.answers.add(an);
-    }
-
-    public void setAnswers(Collection<Answer> answers) {
-        this.answers = answers;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Integer getScore() {
-        return score;
-    }
-
-    public void setScore(Integer score) {
-        this.score = score;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
 
     class Address implements Serializable {
         private String country;
@@ -105,18 +44,6 @@ public class User {
             this.street = "no info";
             this.house = "no info";
         }
-
-        @Override
-        public String toString(){
-            return this.country + "," + this.town + "," + this.street + "," + this.house;
-
-        }
-    }
-
-    @Override
-    public String toString(){
-        return "{" + this.id.toString() + ";" + this.username + ";" + this.score + "}";
-
     }
 
 }
