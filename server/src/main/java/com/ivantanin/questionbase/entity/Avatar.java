@@ -1,29 +1,60 @@
 package com.ivantanin.questionbase.entity;
 
-import lombok.Data;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-
+import javax.imageio.ImageIO;
 import javax.persistence.*;
-import java.sql.Blob;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.util.Arrays;
+import java.util.Base64;
 
 @Entity
-@Data
 @Table(name = "avatar")
-@TypeDef(name = "Blob", typeClass = Blob.class)
-public class Avatar {
+public class Avatar implements Serializable {
 
-    @OneToOne(mappedBy = "avatar", cascade = CascadeType.ALL)
+    @PersistenceContext
+    private EntityManager em;
+
+    @OneToOne(mappedBy = "avatar", cascade = CascadeType.MERGE)
     private User user;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long av_id;
+    private Long avatar_id;
 
-    @Type(type = "Blob")
     @Column(name = "image")
-    private Blob blob;
+    private byte[] image;
 
-    public Avatar() {
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+
+        em.getTransaction().begin();
+        this.user = user;
+        user.setAvatar(this);
+        em.merge(user);
+        em.getTransaction().commit();
+    }
+
+    public void setImage(String url) {
+        try ( ByteArrayOutputStream baos = new ByteArrayOutputStream(1000)){
+            BufferedImage image = ImageIO.read(new File(url));
+            ImageIO.write(image, "jpg", baos);
+            baos.flush();
+            this.image = Base64.getEncoder().encode(baos.toByteArray());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public byte[] getImage() { return this.image;}
+
+    public Long getAvatarId() {return this.avatar_id;}
+
+    @Override
+    public String toString(){
+        return "{" + this.avatar_id.toString() + ";" + Arrays.toString(this.image) + "}";
+
     }
 }

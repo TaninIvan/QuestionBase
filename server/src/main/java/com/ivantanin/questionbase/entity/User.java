@@ -1,26 +1,24 @@
 package com.ivantanin.questionbase.entity;
 
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.ToString;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
-
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.Collection;
 
 @Entity
-@Data
 @Table(name = "usr")
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 
 public class User {
 
-    @OneToOne
-    @JoinColumn(name = "avatar_id", referencedColumnName = "av_id")
-    private Avatar avatar;
+   @OneToOne(cascade = CascadeType.ALL)
+   @JoinColumn(name = "avatar_id")
+   private Avatar avatar;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Collection<Answer> answers;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,19 +37,86 @@ public class User {
     @Column(name = "address", columnDefinition = "jsonb")
     private Address address;
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.LAZY)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
+    public Avatar getAvatar() {
+        return avatar;
+    }
 
-    @Data
-    @AllArgsConstructor
-    @ToString(of = {"country", "town", "street", "house"})
+    public void setAvatar(Avatar avatar) {
+        this.avatar = avatar;
+    }
+
+    public Collection<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void addAnswer(Answer an) {
+        this.answers.add(an);
+    }
+
+    public void setAnswers(Collection<Answer> answers) {
+        this.answers = answers;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     class Address implements Serializable {
         private String country;
         private String town;
         private String street;
         private String house;
+
+        public Address(){
+            this.country = "no info";
+            this.town = "no info";
+            this.street = "no info";
+            this.house = "no info";
+        }
+
+        @Override
+        public String toString(){
+            return this.country + "," + this.town + "," + this.street + "," + this.house;
+
+        }
+    }
+
+    @Override
+    public String toString(){
+        return "{" + this.id.toString() + ";" + this.username + ";" + this.score + "}";
+
     }
 
 }
