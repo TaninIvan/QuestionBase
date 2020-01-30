@@ -1,38 +1,39 @@
 package com.ivantanin.questionbase.controller;
 
-import com.ivantanin.questionbase.service.QuestionService;
+import com.ivantanin.questionbase.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/question")
+@RequestMapping("/user")
 @RestController
-public class QuestionController {
+public class UserController {
 
     @Autowired
-    QuestionService questionService;
+    UserService userService;
 
     @GetMapping("save")
-    public String saveQuestion(){
-        System.out.println("Save request for question");
-        return  questionService.createQuestion("How are you?", "Fine","Tanin Ivan", 10) + " saved!";
+    public String saveUser(){
+        System.out.println("Save request for user");
+        return  userService.createUser("Tester", "DifficultPassword", 0) + "saved!";
     }
 
     @GetMapping("read")
-    public String readQuestion(){
-        return questionService.getQuestion(1L);
+    public String readUser(){
+        return userService.getUser(1L);
     }
 
     @GetMapping("delete")
     public String deleteQuestion(){
-        questionService.deleteQuestion(1L);
+        userService.deleteUser(1L);
         return "Deleted!";
     }
 
     @GetMapping("deleteall")
     public String deleteAllQuestions(){
-        questionService.deleteAll();
+        userService.deleteAll();
         return "All questions has deleted!";
     }
 }
+

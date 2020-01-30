@@ -5,9 +5,7 @@ import com.ivantanin.questionbase.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 public class QuestionService {
@@ -16,7 +14,7 @@ public class QuestionService {
     QuestionRepository questionRepository;
 
     @Transactional
-    public void createQuestion(String text, String answer, String author, int rew){
+    public Question createQuestion(String text, String answer, String author, int rew){
         Question question = new Question();
         question.setCreationDate(LocalDateTime.now());
         question.setQuestionText(text);
@@ -25,7 +23,8 @@ public class QuestionService {
         question.setReward(rew);
 
         questionRepository.save(question);
-        System.out.println("I saved");
+        System.out.println("I saved question!");
+        return question;
     }
 
     public String getQuestion(Long id) {

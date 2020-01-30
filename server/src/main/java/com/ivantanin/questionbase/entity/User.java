@@ -1,6 +1,7 @@
 package com.ivantanin.questionbase.entity;
 
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 @Entity
+@Data
 @Table(name = "usr")
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 
