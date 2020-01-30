@@ -21,24 +21,24 @@ public class UserController {
 
     @GetMapping("read")
     public String readUser(){
-        return userService.getUser(1L);
+        return userService.get(1L);
     }
 
     @GetMapping("read/all")
     public String readAllUser(){
-        return userService.getAllUsers();
+        return userService.getAll();
     }
 
     @GetMapping("delete")
     public String deleteQuestion(){
-        userService.deleteUser(1L);
-        return "Deleted!";
+        userService.delete(1L);
+        return "User has deleted!";
     }
 
     @GetMapping("delete/all")
     public String deleteAllQuestions(){
         userService.deleteAll();
-        return "All questions has deleted!";
+        return "All users have deleted!";
     }
 }
 

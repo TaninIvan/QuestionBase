@@ -21,23 +21,23 @@ public class QuestionController {
 
     @GetMapping("read")
     public String readQuestion(){
-        return questionService.getQuestion(1L);
+        return questionService.get(1L);
     }
 
     @GetMapping("read/all")
-    public String readAllQuestion(){
-        return questionService.getAllQuestion();
+    public String readAllQuestions(){
+        return questionService.getAll();
     }
 
     @GetMapping("delete")
     public String deleteQuestion(){
-        questionService.deleteQuestion(1L);
-        return "Deleted!";
+        questionService.delete(1L);
+        return "Question has deleted!";
     }
 
     @GetMapping("delete/all")
     public String deleteAllQuestions(){
         questionService.deleteAll();
-        return "All questions has deleted!";
+        return "All questions have deleted!";
     }
 }

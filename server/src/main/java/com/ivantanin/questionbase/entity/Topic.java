@@ -1,9 +1,12 @@
 package com.ivantanin.questionbase.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Data
 public class Topic {
 
     @Id

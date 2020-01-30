@@ -20,19 +20,19 @@ public class UserService {
         user.setScore(score);
 
         userRepository.save(user);
-        System.out.println("I saved user");
+        System.out.println("I saved new user");
         return user;
     }
 
-    public String getUser(Long id) {
+    public String get(Long id) {
         return String.valueOf(userRepository.findById(id).orElse(new User()));
     }
 
-    public String getAllUsers() {
+    public String getAll() {
         return String.valueOf(userRepository.findAll());
     }
 
-    public void deleteUser(Long id) {
+    public void delete(Long id) {
         userRepository.deleteById(id);
     }
 

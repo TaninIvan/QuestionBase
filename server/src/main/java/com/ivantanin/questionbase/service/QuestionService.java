@@ -23,19 +23,19 @@ public class QuestionService {
         question.setReward(rew);
 
         questionRepository.save(question);
-        System.out.println("I saved question!");
+        System.out.println("I saved new question!");
         return question;
     }
 
-    public String getQuestion(Long id) {
+    public String get(Long id) {
         return String.valueOf(questionRepository.findById(id).orElse(new Question()));
     }
 
-    public String getAllQuestion() {
+    public String getAll() {
         return String.valueOf(questionRepository.findAll());
     }
 
-    public void deleteQuestion(Long id) {
+    public void delete(Long id) {
         questionRepository.deleteById(id);
     }
 
