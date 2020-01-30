@@ -24,13 +24,18 @@ public class QuestionController {
         return questionService.getQuestion(1L);
     }
 
+    @GetMapping("read/all")
+    public String readAllQuestion(){
+        return questionService.getAllQuestion();
+    }
+
     @GetMapping("delete")
     public String deleteQuestion(){
         questionService.deleteQuestion(1L);
         return "Deleted!";
     }
 
-    @GetMapping("deleteall")
+    @GetMapping("delete/all")
     public String deleteAllQuestions(){
         questionService.deleteAll();
         return "All questions has deleted!";

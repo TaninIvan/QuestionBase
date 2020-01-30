@@ -28,6 +28,10 @@ public class UserService {
         return String.valueOf(userRepository.findById(id).orElse(new User()));
     }
 
+    public String getAllUsers() {
+        return String.valueOf(userRepository.findAll());
+    }
+
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
