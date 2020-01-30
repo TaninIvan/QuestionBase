@@ -8,8 +8,4 @@ import java.util.Optional;
 
 @Repository
 public interface QuestionRepository extends CrudRepository<Question,Long> {
-
-    //Question save(Question question);
-
-    Optional<Question> getById(Long id);
 }

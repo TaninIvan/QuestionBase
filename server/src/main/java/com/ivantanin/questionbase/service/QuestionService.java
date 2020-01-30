@@ -29,6 +29,14 @@ public class QuestionService {
     }
 
     public String getQuestion(Long id) {
-        return String.valueOf(questionRepository.getById(id).orElse(new Question()));
+        return String.valueOf(questionRepository.findById(id).orElse(new Question()));
+    }
+
+    public void deleteQuestion(Long id) {
+        questionRepository.deleteById(id);
+    }
+
+    public void deleteAll() {
+        questionRepository.deleteAll();
     }
 }
