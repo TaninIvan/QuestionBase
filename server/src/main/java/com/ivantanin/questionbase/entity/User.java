@@ -1,12 +1,14 @@
 package com.ivantanin.questionbase.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Data
@@ -20,7 +22,8 @@ public class User {
    private Avatar avatar;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Collection<Answer> answers;
+    @JsonIgnoreProperties("user")
+    private Set<Answer> answers;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +36,16 @@ public class User {
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private Address address;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", score=" + score +
+                ", address=" + address +
+                '}';
+    }
 
     class Address implements Serializable {
         private String country;

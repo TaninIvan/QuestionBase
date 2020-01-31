@@ -26,7 +26,7 @@ public class AvatarController {
             System.out.println(ioe.getMessage());
         }
 
-        System.out.println("Save request for user");
+        System.out.println("Save request for avatar");
         return  avatarService.createAvatar( 1L, baos.toByteArray());
     }
 
@@ -38,7 +38,7 @@ public class AvatarController {
     @GetMapping("delete")
     public String deleteAvatar(){
         avatarService.delete(1L);
-        return "User has deleted!";
+        return "Avatar has deleted!";
     }
 }
 
