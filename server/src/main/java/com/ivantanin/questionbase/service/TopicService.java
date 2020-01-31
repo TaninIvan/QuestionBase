@@ -22,16 +22,16 @@ public class TopicService {
         return topic;
     }
 
-    public String get(Long id) {
-        return String.valueOf(topicRepository.findById(id).orElse(new Topic()));
+    public String get(String topicName) {
+        return String.valueOf(topicRepository.findByTopicName(topicName).orElse(new Topic()));
     }
 
     public String getAll() {
         return String.valueOf(topicRepository.findAll());
     }
 
-    public void delete(Long id) {
-        topicRepository.deleteById(id);
+    public void delete(String topicName) {
+        topicRepository.deleteByTopicName(topicName);
     }
 
     public void deleteAll() {

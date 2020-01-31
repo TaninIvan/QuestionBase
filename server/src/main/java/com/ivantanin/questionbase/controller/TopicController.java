@@ -1,7 +1,6 @@
 package com.ivantanin.questionbase.controller;
 
 import com.ivantanin.questionbase.service.TopicService;
-import com.ivantanin.questionbase.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +21,7 @@ public class TopicController {
 
     @GetMapping("read")
     public String readTopic(){
-        return topicService.get(1L);
+        return topicService.get("History");
     }
 
     @GetMapping("read/all")
@@ -32,7 +31,7 @@ public class TopicController {
 
     @GetMapping("delete")
     public String deleteTopic(){
-        topicService.delete(1L);
+        topicService.delete("History");
         return "Topic has deleted!";
     }
 

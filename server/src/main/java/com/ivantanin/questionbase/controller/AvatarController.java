@@ -9,7 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-@RequestMapping("/avatar")
+@RequestMapping("/user/avatar")
 @RestController
 public class AvatarController {
 
@@ -35,21 +35,10 @@ public class AvatarController {
         return String.valueOf(avatarService.get(1L));
     }
 
-    @GetMapping("read/all")
-    public String readAllAvatars(){
-        return avatarService.getAll();
-    }
-
     @GetMapping("delete")
     public String deleteAvatar(){
         avatarService.delete(1L);
         return "User has deleted!";
-    }
-
-    @GetMapping("delete/all")
-    public String deleteAllQuestions(){
-        avatarService.deleteAll();
-        return "All users have deleted!";
     }
 }
 

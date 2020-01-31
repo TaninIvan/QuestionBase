@@ -1,6 +1,7 @@
 package com.ivantanin.questionbase.controller;
 
 import com.ivantanin.questionbase.service.QuestionService;
+import com.ivantanin.questionbase.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,8 @@ public class QuestionController {
 
     @Autowired
     QuestionService questionService;
+    @Autowired
+    TopicService topicService;
 
     @GetMapping("save")
     public String saveQuestion(){
@@ -39,5 +42,10 @@ public class QuestionController {
     public String deleteAllQuestions(){
         questionService.deleteAll();
         return "All questions have deleted!";
+    }
+
+    @GetMapping("update/addTopic")
+    public String addTopic(){
+       return questionService.addTopic(1L,"History");
     }
 }

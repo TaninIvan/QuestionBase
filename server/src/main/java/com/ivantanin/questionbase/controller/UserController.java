@@ -21,7 +21,7 @@ public class UserController {
 
     @GetMapping("read")
     public String readUser(){
-        return userService.get(1L);
+        return String.valueOf(userService.get(1L));
     }
 
     @GetMapping("read/all")
