@@ -1,8 +1,13 @@
 package com.ivantanin.questionbase.entity;
 
+import lombok.Data;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.io.*;
 @Entity
+@Data
+@ToString(exclude = {"user","image"})
 @Table(name = "avatar")
 public class Avatar implements Serializable {
 
@@ -16,8 +21,5 @@ public class Avatar implements Serializable {
     @Column(name = "image")
     private byte[] image;
 
-    public User getUser() {
-        return user;
-    }
 
 }
