@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface TopicRepository extends CrudRepository<Topic, Long> {
-    public Optional<Topic> findByTopicName(String topicName);
-    public void  deleteByTopicName(String topicName);
+public interface TopicRepository extends CrudRepository<Topic, String> {
+     Optional<Topic> findByTopicName(String topicName);
+     void  deleteByTopicName(String topicName);
 }
