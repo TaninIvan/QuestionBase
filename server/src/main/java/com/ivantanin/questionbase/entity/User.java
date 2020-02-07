@@ -1,11 +1,11 @@
 package com.ivantanin.questionbase.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;

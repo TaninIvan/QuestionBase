@@ -1,12 +1,12 @@
 package com.ivantanin.questionbase;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.ivantanin.questionbase.entity.*;
+import com.ivantanin.questionbase.entity.Answer;
+import com.ivantanin.questionbase.entity.Question;
+import com.ivantanin.questionbase.entity.User;
 import com.ivantanin.questionbase.service.*;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,12 +14,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Logger;
 
 @Configuration
@@ -29,7 +25,6 @@ public class InsertTestData {
 
     @Autowired UserService userService;
     @Autowired QuestionService questionService;
-    @Autowired TopicService topicService;
     @Autowired AvatarService avatarService;
     @Autowired AnswerService answerService;
 

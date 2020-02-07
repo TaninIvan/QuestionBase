@@ -3,13 +3,9 @@ package com.ivantanin.questionbase.service;
 import com.ivantanin.questionbase.entity.Question;
 import com.ivantanin.questionbase.entity.Topic;
 import com.ivantanin.questionbase.repository.QuestionRepository;
-import com.ivantanin.questionbase.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 @Service
