@@ -11,6 +11,13 @@ import java.util.Set;
 @Data
 public class Topic {
 
+    public Topic() {
+    }
+
+    public Topic(String topicName) {
+        this.topicName = topicName;
+    }
+
     @Id
     @Column(name = "topic_name", nullable = false)
     private String topicName;

@@ -13,13 +13,9 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    @Autowired
-    UserRepository userRepository;
+    @Autowired UserRepository userRepository;
+    @Autowired AvatarRepository avatarRepository;
 
-    @Autowired
-    AvatarRepository avatarRepository;
-
-    @Transactional
     public User createUser(String username, String password, int score){
         User user = new User();
         user.setUsername(username);
@@ -31,12 +27,16 @@ public class UserService {
         return user;
     }
 
+    public void createUser(User newUser){
+        userRepository.save(newUser);
+    }
+
     public User get(Long id) {
         return userRepository.findById(id).orElse(new User());
     }
 
-    public String getAll() {
-        return String.valueOf(userRepository.findAll());
+    public Iterable<User> getAll() {
+        return (userRepository.findAll());
     }
 
     public void delete(Long id) {

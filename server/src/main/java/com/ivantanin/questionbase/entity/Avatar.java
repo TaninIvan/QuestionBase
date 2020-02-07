@@ -11,7 +11,7 @@ import java.io.*;
 @Table(name = "avatar")
 public class Avatar implements Serializable {
 
-    @OneToOne(mappedBy = "avatar", cascade = CascadeType.MERGE)
+    @OneToOne(mappedBy = "avatar", cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     private User user;
 
     @Id

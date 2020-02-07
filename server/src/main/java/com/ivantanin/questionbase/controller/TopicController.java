@@ -1,5 +1,6 @@
 package com.ivantanin.questionbase.controller;
 
+import com.ivantanin.questionbase.entity.Topic;
 import com.ivantanin.questionbase.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +21,12 @@ public class TopicController {
     }
 
     @GetMapping("read")
-    public String readTopic(){
+    public Topic readTopic(){
         return topicService.get("History");
     }
 
     @GetMapping("read/all")
-    public String readAllTopics(){
+    public Iterable<Topic> readAllTopics(){
         return topicService.getAll();
     }
 

@@ -8,23 +8,18 @@ import com.ivantanin.questionbase.repository.QuestionRepository;
 import com.ivantanin.questionbase.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.logging.Logger;
 
 @Service
 public class AnswerService {
 
-    @Autowired
-    AnswerRepository answerRepository;
+    @Autowired AnswerRepository answerRepository;
+    @Autowired UserRepository userRepository;
+    @Autowired QuestionRepository questionRepository;
+    private static Logger log = Logger.getLogger(AnswerService.class.getName());
 
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    QuestionRepository questionRepository;
-
-    @Transactional
     public Answer createAnswer(Long questionId, Long userId, String str){
         Answer answer = new Answer();
         Question question = questionRepository.findById(questionId).get();
@@ -36,16 +31,28 @@ public class AnswerService {
         answer.setText(str);
 
         answerRepository.save(answer);
-        System.out.println("I saved new answer!");
+        log.fine("New answer saved!");
         return answer;
     }
 
-    public String get(Long id) {
-        return String.valueOf(answerRepository.findById(id).orElse(new Answer()));
+    public Answer createAnswer(Long questionId, Long userId, Answer answer){
+        Question question = questionRepository.findById(questionId).get();
+        User user = userRepository.findById(userId).get();
+
+        answer.setQuestion(question);
+        answer.setUser(user);
+
+        answerRepository.save(answer);
+        log.fine("New answer saved!");
+        return answer;
     }
 
-    public String getAll() {
-        return String.valueOf(answerRepository.findAll());
+    public Answer get(Long id) {
+        return answerRepository.findById(id).orElse(new Answer());
+    }
+
+    public Iterable<Answer> getAll() {
+        return answerRepository.findAll();
     }
 
     public void delete(Long id) {

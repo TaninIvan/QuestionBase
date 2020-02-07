@@ -1,5 +1,6 @@
 package com.ivantanin.questionbase.controller;
 
+import com.ivantanin.questionbase.entity.User;
 import com.ivantanin.questionbase.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +21,12 @@ public class UserController {
     }
 
     @GetMapping("read")
-    public String readUser(){
-        return String.valueOf(userService.get(1L));
+    public User readUser(){
+        return userService.get(1L);
     }
 
     @GetMapping("read/all")
-    public String readAllUser(){
+    public Iterable<User> readAllUser(){
         return userService.getAll();
     }
 

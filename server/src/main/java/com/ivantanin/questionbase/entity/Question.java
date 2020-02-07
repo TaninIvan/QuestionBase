@@ -2,7 +2,6 @@ package com.ivantanin.questionbase.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -12,6 +11,10 @@ import java.util.Set;
 @Entity
 @Data
 public class Question {
+
+    public Question() {
+        this.setCreationDate(LocalDateTime.now());
+    }
 
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
     @JsonIgnoreProperties("question")

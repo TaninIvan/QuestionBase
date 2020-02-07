@@ -2,7 +2,6 @@ package com.ivantanin.questionbase.service;
 
 import com.ivantanin.questionbase.entity.Question;
 import com.ivantanin.questionbase.entity.Topic;
-import com.ivantanin.questionbase.repository.AvatarRepository;
 import com.ivantanin.questionbase.repository.QuestionRepository;
 import com.ivantanin.questionbase.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,22 +10,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 public class QuestionService {
 
-    @Autowired
-    QuestionRepository questionRepository;
+    @Autowired QuestionRepository questionRepository;
+    @Autowired TopicService topicService;
 
-    @Autowired
-    TopicRepository topicRepository;
+    private static Logger log = Logger.getLogger(QuestionService.class.getName());
 
-    @Autowired
-    AvatarRepository avatarRepository;
-
-
-    @Transactional
-    public Question createQuestion(String text, String answer, String author, int rew){
+    public Question createQuestion(String text, String answer, String author, int rew, String topicName){
         Question question = new Question();
         question.setCreationDate(LocalDateTime.now());
         question.setQuestionText(text);
@@ -35,16 +29,23 @@ public class QuestionService {
         question.setReward(rew);
 
         questionRepository.save(question);
-        System.out.println("I saved new question!");
+        addTopic(question, new Topic(topicName));
+        log.fine("New question saved");
         return question;
     }
 
-    public String get(Long id) {
-        return String.valueOf(questionRepository.findById(id).orElse(new Question()));
+    public void createQuestion(Question question){
+        question.getTopics().forEach(topic -> addTopic(question,topic));  // костыль для тестовых данных
+        questionRepository.save(question);
+        log.fine("New question saved");
     }
 
-    public String getAll() {
-        return String.valueOf(questionRepository.findAll());
+    public Question get(Long id) {
+        return questionRepository.findById(id).orElse(new Question());
+    }
+
+    public Iterable<Question> getAll() {
+        return questionRepository.findAll();
     }
 
     public void delete(Long id) {
@@ -55,21 +56,21 @@ public class QuestionService {
         questionRepository.deleteAll();
     }
 
-    @Transactional
-    public String addTopic(Long questionId, String topicName) {
-        Optional<Question> question = questionRepository.findById(questionId);
-        Optional<Topic> topic = topicRepository.findByTopicName(topicName);
+    public void addTopic(Question question, Topic newtopic) {
+        String topicName = newtopic.getTopicName();
+        Topic topic = topicService.get(topicName);
 
-        if (!question.get().getTopics().contains(topic)) {
-            question.get().setTopics(topic.get());
-            topic.get().setQuestions(question.get());
-            questionRepository.save(question.get());
-            return "Topic added to question!";
-        } else {
-            return "This question already has this topic!";
+        if (topic == null) {
+            topic = new Topic(topicName);
+            topicService.createTopic(topic);
         }
 
+        if (!question.getTopics().contains(topic)) {
+            question.setTopics(topic);
+            topic.setQuestions(question);
+            questionRepository.save(question);
+            topicService.createTopic(topic);
+            log.fine("Topic added to the question!");
+        } else log.fine("Topic already added!");
     }
-
-
 }

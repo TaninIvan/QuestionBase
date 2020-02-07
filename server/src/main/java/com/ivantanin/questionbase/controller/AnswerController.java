@@ -1,5 +1,6 @@
 package com.ivantanin.questionbase.controller;
 
+import com.ivantanin.questionbase.entity.Answer;
 import com.ivantanin.questionbase.service.AnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,16 +17,16 @@ public class AnswerController {
     @GetMapping("save")
     public String saveUser(){
         System.out.println("Save request for user");
-        return  answerService.createAnswer(1L, 1L, "Fine") + " saved!";
+        return  answerService.createAnswer(1L, 1L, "Fine").toString() + " saved!";
     }
 
     @GetMapping("read")
-    public String readUser(){
-        return String.valueOf(answerService.get(1L));
+    public Answer readUser(){
+        return answerService.get(1L);
     }
 
     @GetMapping("read/all")
-    public String readAllUser(){
+    public Iterable<Answer> readAllUser(){
         return answerService.getAll();
     }
 
