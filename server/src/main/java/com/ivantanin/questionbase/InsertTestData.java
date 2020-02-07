@@ -75,22 +75,6 @@ public class InsertTestData {
             }
         }
 
-        /*
-        if (!topicService.getAll().iterator().hasNext()) {
-            try {
-                JSONParser parser = new JSONParser();
-                JSONArray jsonArray = (JSONArray) parser.parse(new FileReader("C:\\Users\\ivan.tanin\\Desktop\\QuestionBase\\server\\src\\main\\resources\\topics.json"));
-
-                Gson gson = new Gson();
-                Topic[] topics = gson.fromJson(String.valueOf(jsonArray), Topic[].class);
-                for (Topic topic : topics) {
-                    topicService.createTopic(topic);
-                }
-            } catch (IOException | ParseException e) {
-                log.warning(e.getMessage());
-            }
-        } */
-
         if (!avatarService.getAll().iterator().hasNext()) {
 
             avatarService.createAvatar(1L, "C:\\Users\\ivan.tanin\\Desktop\\QuestionBase\\server\\src\\main\\resources\\testAvas\\ava1.jpg");
