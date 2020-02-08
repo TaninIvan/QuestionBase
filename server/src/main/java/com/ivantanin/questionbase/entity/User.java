@@ -35,7 +35,7 @@ public class User {
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    private Address address;
+    private Address[] address;
 
     @Override
     public String toString() {
@@ -47,19 +47,6 @@ public class User {
                 '}';
     }
 
-    class Address implements Serializable {
-        private String country;
-        private String town;
-        private String street;
-        private String house;
-
-        public Address(){
-            this.country = "no info";
-            this.town = "no info";
-            this.street = "no info";
-            this.house = "no info";
-        }
-    }
 
 }
 

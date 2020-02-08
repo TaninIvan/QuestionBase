@@ -16,7 +16,7 @@ public class AvatarController {
 
     @GetMapping("save")
     public Avatar saveAvatar(){
-        return  avatarService.createAvatar( 1L, "C:\\Users\\ivan.tanin\\Desktop\\QuestionBase\\server\\src\\main\\resources\\testAvas\\ava1.jpg");
+        return  avatarService.createAvatar( 1L, "src\\main\\resources\\testAvas\\ava1.jpg");
     }
 
     @GetMapping("read")

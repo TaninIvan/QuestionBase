@@ -44,7 +44,7 @@ public class InsertTestData {
         if (!userService.getAll().iterator().hasNext()) {
             try {
                 JSONParser parser = new JSONParser();
-                JSONArray jsonArray = (JSONArray) parser.parse(new FileReader("C:\\Users\\ivan.tanin\\Desktop\\QuestionBase\\server\\src\\main\\resources\\users.json"));
+                JSONArray jsonArray = (JSONArray) parser.parse(new FileReader("src\\main\\resources\\users.json"));
 
                 Gson gson = new Gson();
                 User[] users = gson.fromJson(String.valueOf(jsonArray), User[].class);
@@ -59,7 +59,7 @@ public class InsertTestData {
         if (!questionService.getAll().iterator().hasNext()) {
             try {
                 JSONParser parser = new JSONParser();
-                JSONArray jsonArray = (JSONArray) parser.parse(new FileReader("C:\\Users\\ivan.tanin\\Desktop\\QuestionBase\\server\\src\\main\\resources\\questions.json"));
+                JSONArray jsonArray = (JSONArray) parser.parse(new FileReader("src\\main\\resources\\questions.json"));
                 Gson gson = new Gson();
                 Question[] questions = gson.fromJson(String.valueOf(jsonArray), Question[].class);
                 for (Question question : questions) {
@@ -72,22 +72,22 @@ public class InsertTestData {
 
         if (!avatarService.getAll().iterator().hasNext()) {
 
-            avatarService.createAvatar(1L, "C:\\Users\\ivan.tanin\\Desktop\\QuestionBase\\server\\src\\main\\resources\\testAvas\\ava1.jpg");
-            avatarService.createAvatar(2L, "C:\\Users\\ivan.tanin\\Desktop\\QuestionBase\\server\\src\\main\\resources\\testAvas\\ava2.jpg");
-            avatarService.createAvatar(3L, "C:\\Users\\ivan.tanin\\Desktop\\QuestionBase\\server\\src\\main\\resources\\testAvas\\ava3.jpg");
-            avatarService.createAvatar(4L, "C:\\Users\\ivan.tanin\\Desktop\\QuestionBase\\server\\src\\main\\resources\\testAvas\\ava4.jpg");
-            avatarService.createAvatar(5L, "C:\\Users\\ivan.tanin\\Desktop\\QuestionBase\\server\\src\\main\\resources\\testAvas\\ava5.jpg");
-            avatarService.createAvatar(6L, "C:\\Users\\ivan.tanin\\Desktop\\QuestionBase\\server\\src\\main\\resources\\testAvas\\ava6.jpg");
-            avatarService.createAvatar(7L, "C:\\Users\\ivan.tanin\\Desktop\\QuestionBase\\server\\src\\main\\resources\\testAvas\\ava7.jpg");
-            avatarService.createAvatar(8L, "C:\\Users\\ivan.tanin\\Desktop\\QuestionBase\\server\\src\\main\\resources\\testAvas\\ava8.jpg");
-            avatarService.createAvatar(9L, "C:\\Users\\ivan.tanin\\Desktop\\QuestionBase\\server\\src\\main\\resources\\testAvas\\ava9.jpg");
-            avatarService.createAvatar(10L, "C:\\Users\\ivan.tanin\\Desktop\\QuestionBase\\server\\src\\main\\resources\\testAvas\\ava10.jpg");
+            avatarService.createAvatar(1L, "src\\main\\resources\\testAvas\\ava1.jpg");
+            avatarService.createAvatar(2L, "src\\main\\resources\\testAvas\\ava2.jpg");
+            avatarService.createAvatar(3L, "src\\main\\resources\\testAvas\\ava3.jpg");
+            avatarService.createAvatar(4L, "src\\main\\resources\\testAvas\\ava4.jpg");
+            avatarService.createAvatar(5L, "src\\main\\resources\\testAvas\\ava5.jpg");
+            avatarService.createAvatar(6L, "src\\main\\resources\\testAvas\\ava6.jpg");
+            avatarService.createAvatar(7L, "src\\main\\resources\\testAvas\\ava7.jpg");
+            avatarService.createAvatar(8L, "src\\main\\resources\\testAvas\\ava8.jpg");
+            avatarService.createAvatar(9L, "src\\main\\resources\\testAvas\\ava9.jpg");
+            avatarService.createAvatar(10L, "src\\main\\resources\\testAvas\\ava10.jpg");
         }
 
         if (!answerService.getAll().iterator().hasNext()) {
             try {
                 JSONParser parser = new JSONParser();
-                JSONArray jsonArray = (JSONArray) parser.parse(new FileReader("C:\\Users\\ivan.tanin\\Desktop\\QuestionBase\\server\\src\\main\\resources\\answers.json"));
+                JSONArray jsonArray = (JSONArray) parser.parse(new FileReader("src\\main\\resources\\answers.json"));
                 Gson gson = new Gson();
                 Answer[] answers = gson.fromJson(String.valueOf(jsonArray), Answer[].class);
                 Long questionId = 1L;

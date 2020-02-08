@@ -6,23 +6,22 @@ import com.ivantanin.questionbase.repository.AvatarRepository;
 import com.ivantanin.questionbase.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 public class UserService {
 
     @Autowired UserRepository userRepository;
     @Autowired AvatarRepository avatarRepository;
+    private static Logger log = Logger.getLogger(UserService.class.getName());
 
     public User createUser(String username, String password, int score){
         User user = new User();
         user.setUsername(username);
         user.setPassword(password);
         user.setScore(score);
-
-        userRepository.save(user);
-        System.out.println("I saved new user");
+        log.fine("New user saved!");
         return user;
     }
 
