@@ -1,6 +1,7 @@
 package com.ivantanin.questionbase.controller;
 
 import com.ivantanin.questionbase.dto.UserDto;
+import com.ivantanin.questionbase.entity.Topic;
 import com.ivantanin.questionbase.entity.User;
 import com.ivantanin.questionbase.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -28,13 +29,18 @@ public class UserController {
         return convertToDto(userCreated);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping("{id}")
     @ResponseBody
     public User getUser(@PathVariable("id") Long id){
         return userService.get(id);
     }
 
-    @GetMapping("/all")
+    @GetMapping("all")
+    public Iterable<User> getAllUsers(){
+        return userService.getAll();
+    }
+
+    @GetMapping("all/page")
     @ResponseBody
     public List<UserDto> getUsers(
             @PathVariable("page") int page,

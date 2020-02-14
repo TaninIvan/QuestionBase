@@ -37,6 +37,11 @@ public class QuestionController {
     }
 
     @GetMapping("all")
+    public Iterable<Question> getAllQuestions(){
+        return questionService.getAll();
+    }
+
+    @GetMapping("all/page")
     @ResponseBody
     public List<QuestionDto> getQuestions(
             @PathVariable("page") int page,

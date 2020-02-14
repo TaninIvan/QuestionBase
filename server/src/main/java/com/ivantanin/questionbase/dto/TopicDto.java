@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 public class TopicDto {
 
     @NotNull
-    private Long id;
+    private String topicName;
 
 
 }
