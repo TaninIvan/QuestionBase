@@ -12,7 +12,9 @@ public class UserDto {
 
     @NotNull
     private Long id;
+    @NotNull
     private String username;
+    @NotNull
     private String password;
     private Integer score;
     private Long avatar;

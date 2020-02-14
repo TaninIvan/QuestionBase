@@ -10,10 +10,9 @@ import java.time.LocalDateTime;
 @ToString
 public class QuestionDto {
 
-    @NotNull
-    private Long id;
-    private String questionText;
+    @NotNull private Long id;
+    @NotNull private String questionText;
     private String correctAnswers;
     private String author;
-    private LocalDateTime creationDate;
+    @NotNull private LocalDateTime creationDate;
 }

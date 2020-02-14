@@ -58,8 +58,8 @@ public class UserService {
     }
 
     // update
-    public void updateUser(User newuser) {
-        userRepository.save(newuser);
+    public void updateUser(User newUser) {
+        userRepository.save(newUser);
     }
 
     // delete

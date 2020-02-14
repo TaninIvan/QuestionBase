@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequestMapping("/question")
+@RequestMapping("question")
 @RestController
 public class QuestionController {
 
@@ -30,13 +30,13 @@ public class QuestionController {
         return convertToDto(questionCreated);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "{id}")
     @ResponseBody
     public Question getQuestion(@PathVariable("id") Long id){
         return questionService.get(id);
     }
 
-    @GetMapping("/all")
+    @GetMapping("all")
     @ResponseBody
     public List<QuestionDto> getQuestions(
             @PathVariable("page") int page,
@@ -44,13 +44,13 @@ public class QuestionController {
             @PathVariable("sortDir") String sortDir,
             @PathVariable("sort") String sort) {
 
-        List<Question> posts = questionService.getQuestionList(page, size, sortDir, sort);
-        return posts.stream()
+        List<Question> questions = questionService.getQuestionList(page, size, sortDir, sort);
+        return questions.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
-    @PutMapping("/{id}")
+    @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public void updateUser(@RequestBody QuestionDto questionDto) throws ParseException {
         Question question = convertToEntity(questionDto);
@@ -58,13 +58,13 @@ public class QuestionController {
     }
 
 
-    @DeleteMapping("/{id}" )
+    @DeleteMapping("{id}" )
     public String deleteQuestion(@PathVariable("id") Long id){
         questionService.delete(1L);
         return "Question has deleted!";
     }
 
-    @DeleteMapping("/deleteAll")
+    @DeleteMapping("deleteAll")
     public String deleteAllQuestions(){
         questionService.deleteAll();
         return "All deleted";

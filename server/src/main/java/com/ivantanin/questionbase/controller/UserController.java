@@ -42,32 +42,32 @@ public class UserController {
             @PathVariable("sortDir") String sortDir,
             @PathVariable("sort") String sort) {
 
-        List<User> posts = userService.getUserList(page, size, sortDir, sort);
-        return posts.stream()
+        List<User> users = userService.getUserList(page, size, sortDir, sort);
+        return users.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
-    @PutMapping("/{id}")
+    @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public void updateUser(@RequestBody UserDto userDto) throws ParseException {
         User user = convertToEntity(userDto);
         userService.updateUser(user);
     }
 
-    @DeleteMapping("/{id}" )
+    @DeleteMapping("{id}" )
     public String deleteUser(@PathVariable("id") Long id){
         userService.delete(id);
-        return "Deleted";
+        return "User has deleted!";
     }
 
-    @DeleteMapping("/deleteAll")
+    @DeleteMapping("deleteAll")
     public String deleteAllUsers(){
         userService.deleteAll();
-        return "All deleted";
+        return "All users have deleted!";
     }
 
-    @GetMapping(value = "/streamTest")
+    @GetMapping(value = "streamTest")
     @ResponseBody
     public List<User> streamTest(
             @PathVariable("from") int from,

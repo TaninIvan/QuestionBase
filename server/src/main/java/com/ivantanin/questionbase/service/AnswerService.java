@@ -7,9 +7,12 @@ import com.ivantanin.questionbase.repository.AnswerRepository;
 import com.ivantanin.questionbase.repository.QuestionRepository;
 import com.ivantanin.questionbase.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.logging.Logger;
 
 @Service
@@ -20,33 +23,18 @@ public class AnswerService {
     @Autowired QuestionRepository questionRepository;
     private static Logger log = Logger.getLogger(AnswerService.class.getName());
 
-    public Answer createAnswer(Long questionId, Long userId, String str){
-        Answer answer = new Answer();
-        Question question = questionRepository.findById(questionId).get();
-        User user = userRepository.findById(userId).get();
-
-        answer.setAnswerDate(LocalDateTime.now());
-        answer.setQuestion(question);
-        answer.setUser(user);
-        answer.setText(str);
-
-        answerRepository.save(answer);
-        log.fine("New answer saved!");
-        return answer;
-    }
-
+    // create
     public Answer createAnswer(Long questionId, Long userId, Answer answer){
         Question question = questionRepository.findById(questionId).get();
         User user = userRepository.findById(userId).get();
 
         answer.setQuestion(question);
         answer.setUser(user);
-
-        answerRepository.save(answer);
         log.fine("New answer saved!");
-        return answer;
+        return answerRepository.save(answer);
     }
 
+    // get
     public Answer get(Long id) {
         return answerRepository.findById(id).orElse(new Answer());
     }
@@ -55,6 +43,20 @@ public class AnswerService {
         return answerRepository.findAll();
     }
 
+    public List<Answer> getAnswerList(
+            int page, int size, String sortDir, String sort) {
+        PageRequest pageReq
+                = PageRequest.of(page, size, Sort.Direction.fromString(sortDir), sort);
+        Page<Answer> answers = answerRepository.findAll(pageReq);
+        return answers.getContent();
+    }
+
+    // update
+    public void updateAnswer(Answer newAnswer) {
+        answerRepository.save(newAnswer);
+    }
+
+    //delete
     public void delete(Long id) {
         answerRepository.deleteById(id);
     }
@@ -63,10 +65,9 @@ public class AnswerService {
         answerRepository.deleteAll();
     }
 
+    // other
     public boolean isCorrect(Answer answer) {
-        if (answer.getQuestion().getCorrectAnswers().contains(answer.getText())) {
-            return true;
-        } else return false;
+        return answer.getQuestion().getCorrectAnswers().contains(answer.getText());
     }
 
 
