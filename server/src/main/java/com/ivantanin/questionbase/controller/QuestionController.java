@@ -1,54 +1,91 @@
 package com.ivantanin.questionbase.controller;
 
+import com.ivantanin.questionbase.dto.QuestionDto;
+import com.ivantanin.questionbase.dto.TopicDto;
 import com.ivantanin.questionbase.entity.Question;
 import com.ivantanin.questionbase.entity.Topic;
 import com.ivantanin.questionbase.service.QuestionService;
-import com.ivantanin.questionbase.service.TopicService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.expression.ParseException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequestMapping("/question")
 @RestController
 public class QuestionController {
 
-    @Autowired
-    QuestionService questionService;
-    @Autowired
-    TopicService topicService;
+    @Autowired QuestionService questionService;
+    @Autowired ModelMapper modelMapper;
 
-    @GetMapping("save")
-    public String saveQuestion(){
-        System.out.println("Save request for question");
-        return  questionService.createQuestion("How are you?", "Fine","Tanin Ivan", 10, "Personal") + " saved!";
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public QuestionDto createQuestion(@RequestBody QuestionDto questionDto) throws ParseException {
+        Question question = convertToEntity(questionDto);
+        Question questionCreated = questionService.createQuestion(question);
+        return convertToDto(questionCreated);
     }
 
-    @GetMapping("read")
-    public Question readQuestion(){
-        return questionService.get(1L);
+    @GetMapping(value = "/{id}")
+    @ResponseBody
+    public Question getQuestion(@PathVariable("id") Long id){
+        return questionService.get(id);
     }
 
-    @GetMapping("read/all")
-    public Iterable<Question> readAllQuestions(){
-        return questionService.getAll();
+    @GetMapping("/all")
+    @ResponseBody
+    public List<QuestionDto> getQuestions(
+            @PathVariable("page") int page,
+            @PathVariable("size") int size,
+            @PathVariable("sortDir") String sortDir,
+            @PathVariable("sort") String sort) {
+
+        List<Question> posts = questionService.getQuestionList(page, size, sortDir, sort);
+        return posts.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
-    @GetMapping("delete")
-    public String deleteQuestion(){
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateUser(@RequestBody QuestionDto questionDto) throws ParseException {
+        Question question = convertToEntity(questionDto);
+        questionService.updateQuestion(question);
+    }
+
+
+    @DeleteMapping("/{id}" )
+    public String deleteQuestion(@PathVariable("id") Long id){
         questionService.delete(1L);
         return "Question has deleted!";
     }
 
-    @GetMapping("delete/all")
+    @DeleteMapping("/deleteAll")
     public String deleteAllQuestions(){
         questionService.deleteAll();
-        return "All questions have deleted!";
+        return "All deleted";
     }
 
-    @GetMapping("update/addTopic")
-    public String addTopic(){
-       questionService.addTopic(questionService.get(1L),new Topic("History"));
+    @PutMapping("{id}/addTopic")
+    public String addTopic(@PathVariable Long id, @RequestBody TopicDto topicDto){
+       Topic topic = convertToEntity(topicDto);
+       questionService.addTopic(questionService.get(id),topic);
        return "Success";
+    }
+
+    private QuestionDto convertToDto(Question question) {
+        return modelMapper.map(question, QuestionDto.class);
+    }
+
+    private Question convertToEntity(QuestionDto questionDto) throws ParseException {
+        return modelMapper.map(questionDto, Question.class);
+    }
+
+    private Topic convertToEntity(TopicDto topicDto) throws ParseException {
+        return modelMapper.map(topicDto, Topic.class);
     }
 }

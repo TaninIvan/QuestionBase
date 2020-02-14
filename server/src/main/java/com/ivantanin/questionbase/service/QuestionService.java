@@ -4,8 +4,13 @@ import com.ivantanin.questionbase.entity.Question;
 import com.ivantanin.questionbase.entity.Topic;
 import com.ivantanin.questionbase.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.logging.Logger;
 
 @Service
@@ -13,9 +18,9 @@ public class QuestionService {
 
     @Autowired QuestionRepository questionRepository;
     @Autowired TopicService topicService;
-
     private static Logger log = Logger.getLogger(QuestionService.class.getName());
 
+    // create
     public Question createQuestion(String text, String answer, String author, int rew, String topicName){
         Question question = new Question();
         question.setCreationDate(LocalDateTime.now());
@@ -30,12 +35,14 @@ public class QuestionService {
         return question;
     }
 
-    public void createQuestion(Question question){
+    public Question createQuestion(Question question){
         question.getTopics().forEach(topic -> addTopic(question,topic));  // костыль для тестовых данных
-        questionRepository.save(question);
         log.fine("New question saved");
+        return questionRepository.save(question);
+
     }
 
+    // get
     public Question get(Long id) {
         return questionRepository.findById(id).orElse(new Question());
     }
@@ -44,6 +51,20 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
+    public List<Question> getQuestionList(
+            int page, int size, String sortDir, String sort) {
+        PageRequest pageReq
+                = PageRequest.of(page, size, Sort.Direction.fromString(sortDir), sort);
+        Page<Question> questions = questionRepository.findAll(pageReq);
+        return questions.getContent();
+    }
+
+    // update
+    public void updateQuestion(Question newQuestion) {
+        questionRepository.save(newQuestion);
+    }
+
+    // delete
     public void delete(Long id) {
         questionRepository.deleteById(id);
     }
@@ -52,6 +73,7 @@ public class QuestionService {
         questionRepository.deleteAll();
     }
 
+    // topic
     public void addTopic(Question question, Topic newtopic) {
         String topicName = newtopic.getTopicName();
         Topic topic = topicService.get(topicName);

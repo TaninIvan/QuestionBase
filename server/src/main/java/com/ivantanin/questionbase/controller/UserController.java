@@ -34,7 +34,7 @@ public class UserController {
         return userService.get(id);
     }
 
-    @GetMapping("read/all")
+    @GetMapping("/all")
     @ResponseBody
     public List<UserDto> getUsers(
             @PathVariable("page") int page,
