@@ -103,6 +103,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-orm:5.2.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-tx:5.2.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aspects:5.2.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.modelmapper:modelmapper:2.3.6" level="project" />
     <orderEntry type="library" name="Maven: com.vladmihalcea:hibernate-types-52:2.2.2" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:4.12" level="project" />
     <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:2.1" level="project" />

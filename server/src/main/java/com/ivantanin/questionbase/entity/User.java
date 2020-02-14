@@ -7,7 +7,8 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
-import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -19,6 +20,7 @@ public class User {
 
    @OneToOne(cascade = CascadeType.ALL)
    @JoinColumn(name = "avatar_id")
+   @JsonIgnoreProperties("user")
    private Avatar avatar;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -47,7 +49,24 @@ public class User {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return id.equals(user.id) &&
+                Objects.equals(username, user.username) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(score, user.score) &&
+                Arrays.equals(address, user.address);
+    }
 
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(id, username, password, score);
+        result = 31 * result + Arrays.hashCode(address);
+        return result;
+    }
 }
 
 
