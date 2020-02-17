@@ -2,31 +2,30 @@ package com.ivantanin.questionbase.controller;
 
 import com.ivantanin.questionbase.entity.Avatar;
 import com.ivantanin.questionbase.service.AvatarService;
+import com.ivantanin.questionbase.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/user/avatar")
+@RequestMapping("/{userId}/avatar")
 @RestController
 public class AvatarController {
 
-    @Autowired
-    AvatarService avatarService;
+    @Autowired AvatarService avatarService;
+    @Autowired UserService userService;
 
-    @GetMapping("save")
-    public Avatar saveAvatar(){
-        return  avatarService.createAvatar( 1L, "src\\main\\resources\\testAvas\\ava1.jpg");
+    @PutMapping("/{avatarURL")
+    public Avatar createAvatar(@PathVariable("userId") Long userId, @PathVariable("avatarURL") String avatarURL){
+        return  avatarService.createAvatar( userId, avatarURL);
     }
 
-    @GetMapping("read")
-    public Avatar readAvatar(){
-        return avatarService.get(1L);
+    @GetMapping()
+    public Avatar getAvatar(@PathVariable("userId") Long userId){
+        return avatarService.get(userService.get(userId).getAvatar().getAvatar_id());
     }
 
-    @GetMapping("delete")
-    public String deleteAvatar(){
-        avatarService.delete(1L);
+    @DeleteMapping("/{id}")
+    public String deleteAvatar(@PathVariable("id") Long id){
+        avatarService.delete(id);
         return "Avatar has deleted!";
     }
 }

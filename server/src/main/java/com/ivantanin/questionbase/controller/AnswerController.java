@@ -1,9 +1,7 @@
 package com.ivantanin.questionbase.controller;
 
 import com.ivantanin.questionbase.dto.AnswerDto;
-import com.ivantanin.questionbase.dto.UserDto;
 import com.ivantanin.questionbase.entity.Answer;
-import com.ivantanin.questionbase.entity.User;
 import com.ivantanin.questionbase.service.AnswerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +31,8 @@ public class AnswerController {
 
     @GetMapping("/{id}")
     @ResponseBody
-    public Answer getAnswer(@PathVariable("id") Long id){
-        return answerService.get(id);
+    public AnswerDto getAnswer(@PathVariable("id") Long id){
+        return convertToDto(answerService.get(id));
     }
 
     @GetMapping("/all")
@@ -58,13 +56,13 @@ public class AnswerController {
         answerService.updateAnswer(answer);
     }
 
-    @GetMapping("delete")
+    @DeleteMapping("/{id}")
     public String deleteAnswer(@PathVariable("id") Long id){
         answerService.delete(id);
         return "Answer has deleted!";
     }
 
-    @GetMapping("deleteAll")
+    @DeleteMapping("/all")
     public String deleteAllQuestions(){
         answerService.deleteAll();
         return "All answers have deleted!";

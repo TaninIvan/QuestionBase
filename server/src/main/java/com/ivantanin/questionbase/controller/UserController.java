@@ -31,8 +31,8 @@ public class UserController {
 
     @GetMapping("{id}")
     @ResponseBody
-    public User getUser(@PathVariable("id") Long id){
-        return userService.get(id);
+    public UserDto getUser(@PathVariable("id") Long id){
+        return convertToDto(userService.get(id));
     }
 
     @GetMapping("all")
@@ -67,7 +67,7 @@ public class UserController {
         return "User has deleted!";
     }
 
-    @DeleteMapping("deleteAll")
+    @DeleteMapping("all")
     public String deleteAllUsers(){
         userService.deleteAll();
         return "All users have deleted!";

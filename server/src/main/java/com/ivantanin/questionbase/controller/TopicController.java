@@ -1,9 +1,7 @@
 package com.ivantanin.questionbase.controller;
 
 import com.ivantanin.questionbase.dto.TopicDto;
-import com.ivantanin.questionbase.dto.UserDto;
 import com.ivantanin.questionbase.entity.Topic;
-import com.ivantanin.questionbase.entity.User;
 import com.ivantanin.questionbase.service.TopicService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +19,10 @@ public class TopicController {
     @Autowired TopicService topicService;
     @Autowired ModelMapper modelMapper;
 
-    @GetMapping("save")
-    public String saveTopic(){
-        System.out.println("Save request for topic");
-        return  topicService.createTopic("History") + "saved!";
-    }
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public TopicDto createUser(@RequestBody TopicDto topicDto) throws ParseException {
+    public TopicDto createTopic(@RequestBody TopicDto topicDto) throws ParseException {
         Topic topic = convertToEntity(topicDto);
         Topic topicCreated = topicService.createTopic(topic);
         return convertToDto(topicCreated);
@@ -38,8 +30,8 @@ public class TopicController {
 
     @GetMapping(value = "/{topicName}")
     @ResponseBody
-    public Topic getTopic(@PathVariable("topicName")String topicName){
-        return topicService.get(topicName);
+    public TopicDto getTopic(@PathVariable("topicName")String topicName){
+        return convertToDto(topicService.get(topicName.substring(0,1).toUpperCase() + topicName.substring(1))); // topic name must be capitalized
     }
 
     @GetMapping("all")
@@ -61,20 +53,23 @@ public class TopicController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("delete")
-    public String deleteTopic(){
-        topicService.delete("History");
+    @DeleteMapping("{topicName}" )
+    public String deleteUser(@PathVariable("topicName") String topicName){
+        topicService.delete(topicName.substring(0,1).toUpperCase() + topicName.substring(1)); // topic name must be capitalized
         return "Topic has deleted!";
     }
 
-    @GetMapping("delete/all")
+    @DeleteMapping("all")
     public String deleteAllTopics(){
         topicService.deleteAll();
         return "All topics have deleted!";
     }
 
     private TopicDto convertToDto(Topic topic) {
-        return modelMapper.map(topic, TopicDto.class);
+
+        TopicDto topicDto = modelMapper.map(topic, TopicDto.class);
+        topic.getQuestions().forEach(question -> topicDto.addQuestion(question.getId()));
+        return topicDto;
     }
 
     private Topic convertToEntity(TopicDto topicDto) throws ParseException {

@@ -32,8 +32,8 @@ public class QuestionController {
 
     @GetMapping(value = "{id}")
     @ResponseBody
-    public Question getQuestion(@PathVariable("id") Long id){
-        return questionService.get(id);
+    public QuestionDto getQuestion(@PathVariable("id") Long id){
+        return convertToDto(questionService.get(id));
     }
 
     @GetMapping("all")
@@ -69,7 +69,7 @@ public class QuestionController {
         return "Question has deleted!";
     }
 
-    @DeleteMapping("deleteAll")
+    @DeleteMapping("all")
     public String deleteAllQuestions(){
         questionService.deleteAll();
         return "All deleted";

@@ -1,7 +1,6 @@
 package com.ivantanin.questionbase.service;
 
 import com.ivantanin.questionbase.entity.Topic;
-import com.ivantanin.questionbase.entity.User;
 import com.ivantanin.questionbase.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
