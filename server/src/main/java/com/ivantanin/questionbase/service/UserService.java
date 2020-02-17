@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -39,13 +38,6 @@ public class UserService {
 
     public Iterable<User> getAll() {
         return (userRepository.findAll());
-    }
-
-    public List<User> getUserWithScoresBetween(int from, int to) {
-        List<User> users = new ArrayList<>();
-        userRepository.findAll().forEach(users::add);
-        return users.stream().filter(user ->
-                user.getScore() >= from && user.getScore() <= to).collect(Collectors.toList());
     }
 
     public List<User> getUserList(Pageable pageable) { ;

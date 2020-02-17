@@ -72,12 +72,14 @@ public class UserController {
         return "All users have deleted!";
     }
 
-    @GetMapping(value = "streamTest")
-    @ResponseBody
+    @GetMapping("streamTest")
     public List<User> streamTest(
-            @PathVariable("from") int from,
-            @PathVariable("to") int to){
-        return userService.getUserWithScoresBetween(from,to);
+            @RequestParam Optional<Integer> from,
+            @RequestParam Optional<Integer> to,
+            @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable){
+
+        return userService.getUserList(pageable).stream().filter(user ->
+                user.getScore() >= from.orElse(1) && user.getScore() <= to.orElse(1)).collect(Collectors.toList());
     }
 
     @GetMapping("noAnswer")
