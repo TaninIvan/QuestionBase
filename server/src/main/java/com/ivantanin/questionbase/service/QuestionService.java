@@ -27,7 +27,8 @@ public class QuestionService {
         question.setCreationDate(LocalDateTime.now());
         question.setQuestionText(text);
         question.setAuthor(author);
-        question.setCorrectAnswers(answer);
+        // All correct answers are stored without capital letters
+        question.setCorrectAnswers(answer.toLowerCase());
         question.setReward(rew);
 
         questionRepository.save(question);
@@ -37,7 +38,10 @@ public class QuestionService {
     }
 
     public Question createQuestion(Question question){
-        question.getTopics().forEach(topic -> addTopic(question,topic));  // костыль для тестовых данных
+        // To avoid errors when loading from json file in InsertTestData.java
+        question.getTopics().forEach(topic -> addTopic(question, topic));
+        // All correct answers are stored without capital letters
+        question.setCorrectAnswers(question.getCorrectAnswers().toLowerCase());
         log.fine("New question saved");
         return questionRepository.save(question);
 

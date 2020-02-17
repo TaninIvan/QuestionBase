@@ -1,7 +1,6 @@
 package com.ivantanin.questionbase.controller;
 
 import com.ivantanin.questionbase.dto.UserDto;
-import com.ivantanin.questionbase.entity.Topic;
 import com.ivantanin.questionbase.entity.User;
 import com.ivantanin.questionbase.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -89,7 +88,7 @@ public class UserController {
 
     private UserDto convertToDto(User user) {
         UserDto userDto = modelMapper.map(user, UserDto.class);
-        userDto.setAvatarId(user.getAvatar().getAvatar_id());
+        userDto.setAvatar(user.getAvatar());
         userDto.setAddress(user.getAddress());
         return userDto;
     }

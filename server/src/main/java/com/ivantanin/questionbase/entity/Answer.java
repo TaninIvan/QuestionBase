@@ -37,7 +37,7 @@ public class Answer {
     private String text;
 
     @Column(name = "answer_date", nullable = false, updatable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime answerDate;
 
     @Override

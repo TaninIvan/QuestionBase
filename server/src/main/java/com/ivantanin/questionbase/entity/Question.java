@@ -6,6 +6,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -14,6 +15,8 @@ public class Question {
 
     public Question() {
         this.setCreationDate(LocalDateTime.now());
+        this.topics = new HashSet<Topic>();
+        this.usersAnswers = new HashSet<Answer>();
     }
 
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
@@ -40,7 +43,7 @@ public class Question {
     private String author;
 
     @Column(name = "creation_date", nullable = false, updatable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime creationDate;
 
     @Override

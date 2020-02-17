@@ -29,8 +29,7 @@ public class QuestionController {
     @ResponseBody
     public QuestionDto createQuestion(@RequestBody QuestionDto questionDto) throws ParseException {
         Question question = convertToEntity(questionDto);
-        Question questionCreated = questionService.createQuestion(question);
-        return convertToDto(questionCreated);
+        return convertToDto(questionService.createQuestion(question));
     }
 
     @GetMapping(value = "{id}")
@@ -46,7 +45,8 @@ public class QuestionController {
 
     @GetMapping("all/page")
     @ResponseBody
-    public List<QuestionDto> getQuestions(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+    public List<QuestionDto> getQuestions(
+            @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
 
         List<Question> questions = questionService.getQuestionList(pageable);
         return questions.stream()
@@ -82,11 +82,17 @@ public class QuestionController {
     }
 
     private QuestionDto convertToDto(Question question) {
-        return modelMapper.map(question, QuestionDto.class);
+        QuestionDto questionDto = modelMapper.map(question, QuestionDto.class);
+        question.getTopics().forEach(topic -> questionDto.addTopicName(topic.getTopicName()));
+        return questionDto;
     }
 
     private Question convertToEntity(QuestionDto questionDto) throws ParseException {
-        return modelMapper.map(questionDto, Question.class);
+        Question question = modelMapper.map(questionDto, Question.class);
+        questionDto.getTopicNameSet().forEach(topicName -> questionService.addTopic(question,new Topic(topicName)));
+        // All correct answers are stored without capital letters
+        question.setCorrectAnswers(question.getCorrectAnswers().toLowerCase());
+        return question;
     }
 
     private Topic convertToEntity(TopicDto topicDto) throws ParseException {

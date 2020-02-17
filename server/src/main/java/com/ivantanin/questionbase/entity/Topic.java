@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -12,10 +13,12 @@ import java.util.Set;
 public class Topic {
 
     public Topic() {
+        this.questions = new HashSet<Question>();
     }
 
     public Topic(String topicName) {
         this.topicName = topicName;
+        this.questions = new HashSet<Question>();
     }
 
     @Id
