@@ -13,7 +13,7 @@ public class AvatarController {
     @Autowired AvatarService avatarService;
     @Autowired UserService userService;
 
-    @PutMapping("/{avatarURL")
+    @PutMapping("/{avatarURL}")
     public Avatar createAvatar(@PathVariable("userId") Long userId, @PathVariable("avatarURL") String avatarURL){
         return  avatarService.createAvatar( userId, avatarURL);
     }

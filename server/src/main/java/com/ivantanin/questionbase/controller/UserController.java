@@ -6,6 +6,9 @@ import com.ivantanin.questionbase.entity.User;
 import com.ivantanin.questionbase.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.expression.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -42,13 +45,8 @@ public class UserController {
 
     @GetMapping("all/page")
     @ResponseBody
-    public List<UserDto> getUsers(
-            @PathVariable("page") int page,
-            @PathVariable("size") int size,
-            @PathVariable("sortDir") String sortDir,
-            @PathVariable("sort") String sort) {
-
-        List<User> users = userService.getUserList(page, size, sortDir, sort);
+    public List<UserDto> getUsers(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+        List<User> users = userService.getUserList(pageable);
         return users.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
@@ -82,7 +80,10 @@ public class UserController {
     }
 
     private UserDto convertToDto(User user) {
-        return modelMapper.map(user, UserDto.class);
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+        userDto.setAvatarId(user.getAvatar().getAvatar_id());
+        userDto.setAddress(user.getAddress());
+        return userDto;
     }
 
     private User convertToEntity(UserDto userDto) throws ParseException {

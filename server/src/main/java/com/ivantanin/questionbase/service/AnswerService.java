@@ -8,8 +8,7 @@ import com.ivantanin.questionbase.repository.QuestionRepository;
 import com.ivantanin.questionbase.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,11 +42,8 @@ public class AnswerService {
         return answerRepository.findAll();
     }
 
-    public List<Answer> getAnswerList(
-            int page, int size, String sortDir, String sort) {
-        PageRequest pageReq
-                = PageRequest.of(page, size, Sort.Direction.fromString(sortDir), sort);
-        Page<Answer> answers = answerRepository.findAll(pageReq);
+    public List<Answer> getAnswerList(Pageable pageable) {
+        Page<Answer> answers = answerRepository.findAll(pageable);
         return answers.getContent();
     }
 

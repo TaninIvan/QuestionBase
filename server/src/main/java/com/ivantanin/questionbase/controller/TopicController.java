@@ -5,6 +5,9 @@ import com.ivantanin.questionbase.entity.Topic;
 import com.ivantanin.questionbase.service.TopicService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.expression.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -41,13 +44,9 @@ public class TopicController {
 
     @GetMapping("all/page")
     @ResponseBody
-    public List<TopicDto> getTopics(
-            @PathVariable("page") int page,
-            @PathVariable("size") int size,
-            @PathVariable("sortDir") String sortDir,
-            @PathVariable("sort") String sort) {
+    public List<TopicDto> getTopics(@PageableDefault(sort = {"topicName"}, direction = Sort.Direction.ASC) Pageable pageable) {
 
-        List<Topic> topics = topicService.getTopicList(page, size, sortDir, sort);
+        List<Topic> topics = topicService.getTopicList(pageable);
         return topics.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());

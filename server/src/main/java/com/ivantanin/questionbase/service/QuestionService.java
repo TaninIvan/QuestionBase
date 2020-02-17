@@ -6,6 +6,7 @@ import com.ivantanin.questionbase.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -51,11 +52,8 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
-    public List<Question> getQuestionList(
-            int page, int size, String sortDir, String sort) {
-        PageRequest pageReq
-                = PageRequest.of(page, size, Sort.Direction.fromString(sortDir), sort);
-        Page<Question> questions = questionRepository.findAll(pageReq);
+    public List<Question> getQuestionList(Pageable pageable) {
+        Page<Question> questions = questionRepository.findAll(pageable);
         return questions.getContent();
     }
 

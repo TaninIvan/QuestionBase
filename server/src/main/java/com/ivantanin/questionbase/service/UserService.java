@@ -4,8 +4,7 @@ import com.ivantanin.questionbase.entity.User;
 import com.ivantanin.questionbase.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -49,11 +48,8 @@ public class UserService {
                 user.getScore() >= from && user.getScore() <= to).collect(Collectors.toList());
     }
 
-    public List<User> getUserList(
-            int page, int size, String sortDir, String sort) {
-        PageRequest pageReq
-                = PageRequest.of(page, size, Sort.Direction.fromString(sortDir), sort);
-        Page<User> users = userRepository.findAll(pageReq);
+    public List<User> getUserList(Pageable pageable) { ;
+        Page<User> users = userRepository.findAll(pageable);
         return users.getContent();
     }
 

@@ -5,6 +5,9 @@ import com.ivantanin.questionbase.entity.Answer;
 import com.ivantanin.questionbase.service.AnswerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.expression.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -37,14 +40,9 @@ public class AnswerController {
 
     @GetMapping("/all")
     @ResponseBody
-    public List<AnswerDto> getAnswers(
-            @PathVariable("page") int page,
-            @PathVariable("size") int size,
-            @PathVariable("sortDir") String sortDir,
-            @PathVariable("sort") String sort) {
-
-        List<Answer> posts = answerService.getAnswerList(page, size, sortDir, sort);
-        return posts.stream()
+    public List<AnswerDto> getAnswers(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+        List<Answer> answers = answerService.getAnswerList(pageable);
+        return answers.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
