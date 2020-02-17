@@ -38,7 +38,7 @@ public class TopicService {
         return topicRepository.findAll();
     }
 
-    public List<Topic> getTopicList( Pageable pageable) {
+    public List<Topic> getTopicPage(Pageable pageable) {
         Page<Topic> topics = topicRepository.findAll(pageable);
         return topics.getContent();
     }

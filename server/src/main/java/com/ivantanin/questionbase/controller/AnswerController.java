@@ -22,6 +22,7 @@ public class AnswerController {
     @Autowired AnswerService answerService;
     @Autowired ModelMapper modelMapper;
 
+    // POST
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
@@ -32,6 +33,7 @@ public class AnswerController {
         return convertToDto(answerCreated);
     }
 
+    // GET
     @GetMapping("/{id}")
     @ResponseBody
     public AnswerDto getAnswer(@PathVariable("id") Long id){
@@ -41,12 +43,13 @@ public class AnswerController {
     @GetMapping("/all")
     @ResponseBody
     public List<AnswerDto> getAnswers(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
-        List<Answer> answers = answerService.getAnswerList(pageable);
+        List<Answer> answers = answerService.getAnswerPage(pageable);
         return answers.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
+    // PUT
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public void updateAnswer(@RequestBody AnswerDto answerDto) throws ParseException {
@@ -54,6 +57,7 @@ public class AnswerController {
         answerService.updateAnswer(answer);
     }
 
+    // DELETE
     @DeleteMapping("/{id}")
     public String deleteAnswer(@PathVariable("id") Long id){
         answerService.delete(id);
@@ -66,6 +70,7 @@ public class AnswerController {
         return "All answers have deleted!";
     }
 
+    // CONVERTERS
     private AnswerDto convertToDto(Answer answer) {
         return modelMapper.map(answer, AnswerDto.class);
     }

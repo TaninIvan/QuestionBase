@@ -40,7 +40,7 @@ public class UserService {
         return (userRepository.findAll());
     }
 
-    public List<User> getUserList(Pageable pageable) { ;
+    public List<User> getUserPage(Pageable pageable) { ;
         Page<User> users = userRepository.findAll(pageable);
         return users.getContent();
     }

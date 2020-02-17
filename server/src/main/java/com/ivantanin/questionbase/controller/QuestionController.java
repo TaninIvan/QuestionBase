@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequestMapping("question")
@@ -24,6 +25,7 @@ public class QuestionController {
     @Autowired QuestionService questionService;
     @Autowired ModelMapper modelMapper;
 
+    // POST
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
@@ -32,6 +34,7 @@ public class QuestionController {
         return convertToDto(questionService.createQuestion(question));
     }
 
+    // GET
     @GetMapping(value = "{id}")
     @ResponseBody
     public QuestionDto getQuestion(@PathVariable("id") Long id){
@@ -46,14 +49,24 @@ public class QuestionController {
     @GetMapping("all/page")
     @ResponseBody
     public List<QuestionDto> getQuestions(
-            @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
-
-        List<Question> questions = questionService.getQuestionList(pageable);
+            @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        List<Question> questions = questionService.getQuestionPage(pageable);
         return questions.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("last")
+    @ResponseBody
+    public List<QuestionDto> getLastQuestions(@RequestParam(required = false) Optional<Integer> last) {
+
+        List<Question> questions = questionService.getLastQuestions(last.orElse(5));
+        return questions.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    // PUT
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public void updateUser(@RequestBody QuestionDto questionDto) throws ParseException {
@@ -61,7 +74,14 @@ public class QuestionController {
         questionService.updateQuestion(question);
     }
 
+    @PutMapping("{id}/addTopic")
+    public String addTopic(@PathVariable Long id, @RequestBody TopicDto topicDto){
+        Topic topic = convertToEntity(topicDto);
+        questionService.addTopic(questionService.get(id),topic);
+        return "Success";
+    }
 
+    // DELETE
     @DeleteMapping("{id}" )
     public String deleteQuestion(@PathVariable("id") Long id){
         questionService.delete(1L);
@@ -74,13 +94,7 @@ public class QuestionController {
         return "All deleted";
     }
 
-    @PutMapping("{id}/addTopic")
-    public String addTopic(@PathVariable Long id, @RequestBody TopicDto topicDto){
-       Topic topic = convertToEntity(topicDto);
-       questionService.addTopic(questionService.get(id),topic);
-       return "Success";
-    }
-
+    // CONVERTERS
     private QuestionDto convertToDto(Question question) {
         QuestionDto questionDto = modelMapper.map(question, QuestionDto.class);
         question.getTopics().forEach(topic -> questionDto.addTopicName(topic.getTopicName()));

@@ -1,7 +1,6 @@
 package com.ivantanin.questionbase.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ivantanin.questionbase.entity.Answer;
 import lombok.Data;
 import lombok.ToString;
 

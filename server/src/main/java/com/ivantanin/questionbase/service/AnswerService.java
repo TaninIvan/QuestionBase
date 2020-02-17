@@ -42,7 +42,7 @@ public class AnswerService {
         return answerRepository.findAll();
     }
 
-    public List<Answer> getAnswerList(Pageable pageable) {
+    public List<Answer> getAnswerPage(Pageable pageable) {
         Page<Answer> answers = answerRepository.findAll(pageable);
         return answers.getContent();
     }

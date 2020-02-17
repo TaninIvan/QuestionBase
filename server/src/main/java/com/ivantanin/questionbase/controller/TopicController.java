@@ -22,6 +22,7 @@ public class TopicController {
     @Autowired TopicService topicService;
     @Autowired ModelMapper modelMapper;
 
+    // POST
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
@@ -31,6 +32,7 @@ public class TopicController {
         return convertToDto(topicCreated);
     }
 
+    // GET
     @GetMapping(value = "/{topicName}")
     @ResponseBody
     public TopicDto getTopic(@PathVariable("topicName")String topicName){
@@ -46,12 +48,13 @@ public class TopicController {
     @ResponseBody
     public List<TopicDto> getTopics(@PageableDefault(sort = {"topicName"}, direction = Sort.Direction.ASC) Pageable pageable) {
 
-        List<Topic> topics = topicService.getTopicList(pageable);
+        List<Topic> topics = topicService.getTopicPage(pageable);
         return topics.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
+    // DELETE
     @DeleteMapping("{topicName}" )
     public String deleteUser(@PathVariable("topicName") String topicName){
         topicService.delete(topicName.substring(0,1).toUpperCase() + topicName.substring(1)); // topic name must be capitalized
@@ -64,6 +67,7 @@ public class TopicController {
         return "All topics have deleted!";
     }
 
+    // CONVERTERS
     private TopicDto convertToDto(Topic topic) {
 
         TopicDto topicDto = modelMapper.map(topic, TopicDto.class);

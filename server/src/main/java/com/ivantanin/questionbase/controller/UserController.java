@@ -23,6 +23,7 @@ public class UserController {
     @Autowired UserService userService;
     @Autowired ModelMapper modelMapper;
 
+    // POST
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
@@ -32,6 +33,7 @@ public class UserController {
         return convertToDto(userCreated);
     }
 
+    // GET
     @GetMapping("{id}")
     @ResponseBody
     public UserDto getUser(@PathVariable("id") Long id){
@@ -46,12 +48,28 @@ public class UserController {
     @GetMapping("all/page")
     @ResponseBody
     public List<UserDto> getUsers(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
-        List<User> users = userService.getUserList(pageable);
+        List<User> users = userService.getUserPage(pageable);
         return users.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("streamTest")
+    public List<User> streamTest(
+            @RequestParam(required = false) Optional<Integer> from,
+            @RequestParam(required = false) Optional<Integer> to,
+            @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable){
+
+        return userService.getUserPage(pageable).stream().filter(user ->
+                user.getScore() >= from.orElse(1) && user.getScore() <= to.orElse(1)).collect(Collectors.toList());
+    }
+
+    @GetMapping("noAnswer")
+    public  List<User> getAllUsersWithNoAnswer(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+        return userService.getUsersWithoutAnswers(pageable);
+    }
+
+    // PUT
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public void updateUser(@RequestBody UserDto userDto) throws ParseException {
@@ -59,6 +77,7 @@ public class UserController {
         userService.updateUser(user);
     }
 
+    // DELETE
     @DeleteMapping("{id}" )
     public String deleteUser(@PathVariable("id") Long id){
         userService.delete(id);
@@ -71,21 +90,7 @@ public class UserController {
         return "All users have deleted!";
     }
 
-    @GetMapping("streamTest")
-    public List<User> streamTest(
-            @RequestParam Optional<Integer> from,
-            @RequestParam Optional<Integer> to,
-            @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable){
-
-        return userService.getUserList(pageable).stream().filter(user ->
-                user.getScore() >= from.orElse(1) && user.getScore() <= to.orElse(1)).collect(Collectors.toList());
-    }
-
-    @GetMapping("noAnswer")
-    public  List<User> getAllUsersWithNoAnswer(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
-        return userService.getUsersWithoutAnswers(pageable);
-    }
-
+    // CONVERTERS
     private UserDto convertToDto(User user) {
         UserDto userDto = modelMapper.map(user, UserDto.class);
         userDto.setAvatar(user.getAvatar());

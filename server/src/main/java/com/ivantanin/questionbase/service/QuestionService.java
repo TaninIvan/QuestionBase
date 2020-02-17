@@ -5,7 +5,6 @@ import com.ivantanin.questionbase.entity.Topic;
 import com.ivantanin.questionbase.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -56,9 +56,16 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
-    public List<Question> getQuestionList(Pageable pageable) {
+    public List<Question> getQuestionPage(Pageable pageable) {
         Page<Question> questions = questionRepository.findAll(pageable);
         return questions.getContent();
+    }
+
+    public List<Question> getLastQuestions(int last) {
+        return questionRepository.findAll(Sort.by(Sort.Direction.DESC, "id"))
+                .stream()
+                .limit(last)
+                .collect(Collectors.toList());
     }
 
     // update

@@ -13,16 +13,19 @@ public class AvatarController {
     @Autowired AvatarService avatarService;
     @Autowired UserService userService;
 
+    // POST
     @PutMapping("/{avatarURL}")
     public Avatar createAvatar(@PathVariable("userId") Long userId, @PathVariable("avatarURL") String avatarURL){
         return  avatarService.createAvatar( userId, avatarURL);
     }
 
+    // GET
     @GetMapping()
     public Avatar getAvatar(@PathVariable("userId") Long userId){
         return avatarService.get(userService.get(userId).getAvatar().getAvatar_id());
     }
 
+    //  DELETE
     @DeleteMapping("/{id}")
     public String deleteAvatar(@PathVariable("id") Long id){
         avatarService.delete(id);
