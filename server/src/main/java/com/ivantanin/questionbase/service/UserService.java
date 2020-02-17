@@ -53,6 +53,10 @@ public class UserService {
         return users.getContent();
     }
 
+    public List<User> getUsersWithoutAnswers(Pageable pageable) {
+        return userRepository.findAllUsersWithoutAnswers(pageable).stream().collect(Collectors.toList());
+    }
+
     // update
     public void updateUser(User newUser) {
         userRepository.save(newUser);

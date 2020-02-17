@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequestMapping("/user")
@@ -77,6 +78,11 @@ public class UserController {
             @PathVariable("from") int from,
             @PathVariable("to") int to){
         return userService.getUserWithScoresBetween(from,to);
+    }
+
+    @GetMapping("noAnswer")
+    public  List<User> getAllUsersWithNoAnswer(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+        return userService.getUsersWithoutAnswers(pageable);
     }
 
     private UserDto convertToDto(User user) {
