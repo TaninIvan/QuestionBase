@@ -68,6 +68,14 @@ public class QuestionService {
                 .collect(Collectors.toList());
     }
 
+    public  List<Question> getMostPopularQuestion() {
+        return questionRepository.findMostPopularQuestion();
+    }
+
+    public  List<Question> getMostPricedQuestion() {
+        return questionRepository.findMostPricedQuestion();
+    }
+
     // update
     public void updateQuestion(Question newQuestion) {
         questionRepository.save(newQuestion);

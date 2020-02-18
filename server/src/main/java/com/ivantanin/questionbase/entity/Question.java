@@ -11,6 +11,23 @@ import java.util.Set;
 
 @Entity
 @Data
+@NamedNativeQuery  (name = "Question.findMostPopularQuestion",
+                    query =
+                            "SELECT DISTINCT q.* FROM question q, answer a\n" +
+                                    "WHERE q.id=a.question_id AND question_id IN\n" +
+                                    "\t(SELECT question_id FROM (\n" +
+                                    "\t\tSELECT question_id, count FROM (\n" +
+                                    "\t\t\tSELECT question_id, COUNT(question_id) \n" +
+                                    "\t\t\tFROM answer GROUP BY question_id) AS Q1\n" +
+                                    "\t\t) AS Q2\n" +
+                                    "\t\tWHERE count=(SELECT max(count) FROM (\n" +
+                                    "\t\t\tSELECT question_id, COUNT(question_id) \n" +
+                                    "\t\t\tFROM answer GROUP BY question_id) AS Q3)\n" +
+                                    "\t)",
+                    resultClass = Question.class)
+
+@NamedQuery         (name = "Question.findMostPricedQuestion",
+                    query = "SELECT q FROM Question q WHERE reward = (SELECT MAX(reward) FROM Question)")
 public class Question {
 
     public Question() {

@@ -66,6 +66,22 @@ public class QuestionController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("most/popular")
+    @ResponseBody
+    public List<QuestionDto> getPopularQuestion() {
+       return questionService.getMostPopularQuestion().stream()
+               .map(this::convertToDto)
+               .collect(Collectors.toList());
+    }
+
+    @GetMapping("most/priced")
+    @ResponseBody
+    public List<QuestionDto> getPricedQuestion() {
+        return questionService.getMostPricedQuestion().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     // PUT
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
