@@ -19,8 +19,19 @@ import java.util.stream.Collectors;
 @RestController
 public class AnswerController {
 
-    @Autowired AnswerService answerService;
-    @Autowired ModelMapper modelMapper;
+    // Constructor Based Injection
+    @Autowired
+    AnswerService answerService;
+    public AnswerController(AnswerService answerService) {
+        this.answerService = answerService;
+    }
+
+    // Setter Based Injection
+    @Autowired
+    ModelMapper modelMapper;
+    public void setModelMapper(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
 
     // POST
     @PostMapping
