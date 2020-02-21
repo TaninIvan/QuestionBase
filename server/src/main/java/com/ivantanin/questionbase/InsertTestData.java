@@ -28,17 +28,6 @@ public class InsertTestData {
     @Autowired AvatarService avatarService;
     @Autowired AnswerService answerService;
 
-    @Bean
-    public MyType run() {
-        return new MyType("hi");
-    }
-
-    @Bean
-    @Qualifier("wow")
-    public MyType runWow() {
-        return new MyType("wow");
-    }
-
     @PostConstruct
     public void postConstruct() {
         if (!userService.getAll().iterator().hasNext()) {
