@@ -17,6 +17,7 @@ public interface QuestionRepository extends CrudRepository<Question,Long>,
     @NotNull Page<Question> findAll (@NotNull Pageable pageReq);
 
     @NotNull List<Question> findAll(@NotNull Sort sort);
+    @NotNull List<Question> findAll();
 
     List<Question> findMostPopularQuestion();
     List<Question> findMostPricedQuestion();

@@ -14,7 +14,10 @@ import org.springframework.expression.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -37,7 +40,7 @@ public class QuestionController {
     // GET
     @GetMapping(value = "{id}")
     @ResponseBody
-    public QuestionDto getQuestion(@PathVariable("id") Long id){
+    public QuestionDto getQuestion(@PathVariable("id") Long id, @RequestHeader Map<String,String> headers) {
         return convertToDto(questionService.get(id));
     }
 
@@ -82,6 +85,30 @@ public class QuestionController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("filter")
+    public List<QuestionDto> filter(@RequestHeader  Map<String,String> headers) throws java.text.ParseException {
+        List<Question> questions = questionService.getAll();
+        if(headers.containsKey("author")) {
+            questions = questions.stream().filter(question -> question.getAuthor().equals(headers.get("author"))).collect(Collectors.toList());
+        }
+
+        if(headers.containsKey("from")) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date from = format.parse(headers.get("from"));
+            questions = questions.stream().filter(question -> question.getCreationDate().after(from)).collect(Collectors.toList());
+        }
+
+        if(headers.containsKey("to")) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date to = format.parse(headers.get("to"));
+            questions = questions.stream().filter(question -> question.getCreationDate().before(to)).collect(Collectors.toList());
+        }
+
+        return questions.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     // PUT
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
@@ -93,8 +120,7 @@ public class QuestionController {
     @PutMapping("{id}/addTopic")
     public String addTopic(@PathVariable Long id, @RequestBody TopicDto topicDto){
         Topic topic = convertToEntity(topicDto);
-        questionService.addTopic(questionService.get(id),topic);
-        return "Success";
+        return questionService.addTopic(questionService.get(id),topic);
     }
 
     // DELETE

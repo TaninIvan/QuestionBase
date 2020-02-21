@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ public class QuestionService {
     // create
     public Question createQuestion(String text, String answer, String author, int rew, String topicName){
         Question question = new Question();
-        question.setCreationDate(LocalDateTime.now());
+        question.setCreationDate(new Date());
         question.setQuestionText(text);
         question.setAuthor(author);
         // All correct answers are stored without capital letters
@@ -52,7 +53,7 @@ public class QuestionService {
         return questionRepository.findById(id).orElse(new Question());
     }
 
-    public Iterable<Question> getAll() {
+    public List<Question> getAll() {
         return questionRepository.findAll();
     }
 
@@ -91,7 +92,7 @@ public class QuestionService {
     }
 
     // topic
-    public void addTopic(Question question, Topic newtopic) {
+    public String addTopic(Question question, Topic newtopic) {
         String topicName = newtopic.getTopicName();
         Topic topic = topicService.get(topicName);
 
@@ -107,5 +108,6 @@ public class QuestionService {
             topicService.createTopic(topic);
             log.fine("Topic added to the question!");
         } else log.fine("Topic already added!");
+        return topicName;
     }
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,10 +20,10 @@ public class QuestionDto {
     private int reward;
     private Set<String> topicNameSet;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @NotNull private LocalDateTime creationDate;
+    @NotNull private Date creationDate;
 
     public QuestionDto() {
-        this.creationDate = LocalDateTime.now();
+        this.creationDate = new Date();
         this.topicNameSet = new HashSet<String>();
     }
 

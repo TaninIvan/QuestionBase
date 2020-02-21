@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,7 +31,7 @@ import java.util.Set;
 public class Question {
 
     public Question() {
-        this.setCreationDate(LocalDateTime.now());
+        this.setCreationDate(new Date());
         this.topics = new HashSet<Topic>();
         this.usersAnswers = new HashSet<Answer>();
     }
@@ -61,7 +61,7 @@ public class Question {
 
     @Column(name = "creation_date", nullable = false, updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime creationDate;
+    private Date creationDate;
 
     @Override
     public String toString() {
