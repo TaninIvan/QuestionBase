@@ -12,7 +12,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.expression.ParseException;
 import org.springframework.web.bind.annotation.*;
 
-
+@RequestMapping("avatar")
 @RestController
 public class AvatarController {
 
@@ -21,13 +21,13 @@ public class AvatarController {
     @Autowired ModelMapper modelMapper;
 
     // POST
-    @PostMapping("avatar")
+    @PostMapping()
     public AvatarDto createAvatar(@RequestBody AvatarDto avatarDto) throws Exception {
         return  convertToDto(avatarService.createAvatar(convertToEntity(avatarDto)));
     }
 
     // GET
-    @GetMapping("avatars")
+    @GetMapping("all")
     @ResponseBody
     public Iterable<Avatar> getAvatars(@PageableDefault(sort = {"avatar_id"}, direction = Sort.Direction.ASC) Pageable pageable) {
         Iterable<Avatar> avatars = avatarService.getAll();
@@ -35,21 +35,37 @@ public class AvatarController {
         return avatars;
     }
 
-    @RequestMapping("user/{userId}/avatar")
-    @GetMapping()
-    public AvatarDto getAvatar(@PathVariable("userId") Long userId){
+    @GetMapping("{avatar_id}")
+    public AvatarDto getAvatar(@PathVariable("avatar_id") Long avatar_id){
+        return convertToDto(avatarService.get(avatar_id));
+    }
+
+    @GetMapping("byUserId/{userId}")
+    public AvatarDto getAvatarByUserId(@PathVariable("userId") Long userId){
         return convertToDto(avatarService.get(userService.get(userId).getAvatar().getAvatar_id()));
     }
 
     // PUT
-    @PutMapping()
-    public void updateAvatar(@RequestBody AvatarDto avatarDto, @PathVariable("userId") Long userId){
+    @PutMapping("{avatar_id}")
+    public void updateAvatar(@RequestBody AvatarDto avatarDto, @PathVariable("avatar_id") Long avatar_id){
+        avatarDto.setAvatar_id(avatar_id);
+        avatarService.update(convertToEntity(avatarDto));
+    }
+
+    @PutMapping("byUserId/{userId}")
+    public void updateAvatarByUserId(@RequestBody AvatarDto avatarDto, @PathVariable("userId") Long userId){
         avatarService.update(convertToEntity(avatarDto));
     }
 
     //  DELETE
-    @DeleteMapping()
-    public String deleteAvatar(@PathVariable("userId") Long userId){
+    @DeleteMapping("{avatar_id}")
+    public String deleteAvatar(@PathVariable("avatar_id") Long avatar_id){
+        avatarService.delete(avatar_id);
+        return "Avatar has deleted!";
+    }
+
+    @DeleteMapping("byUserId/{userId}")
+    public String deleteAvatarByUserId(@PathVariable("userId") Long userId){
         avatarService.delete(userService.get(userId).getAvatar().getAvatar_id());
         return "Avatar has deleted!";
     }

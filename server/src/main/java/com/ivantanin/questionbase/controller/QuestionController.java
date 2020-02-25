@@ -129,7 +129,7 @@ public class QuestionController {
     // DELETE
     @DeleteMapping("{id}" )
     public String deleteQuestion(@PathVariable("id") Long id){
-        questionService.delete(1L);
+        questionService.delete(id);
         return "Question has deleted!";
     }
 

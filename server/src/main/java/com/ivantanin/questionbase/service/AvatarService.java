@@ -5,6 +5,7 @@ import com.ivantanin.questionbase.entity.User;
 import com.ivantanin.questionbase.repository.AvatarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -65,10 +66,12 @@ public class AvatarService {
     }
 
     // delete
+    @Transactional
     public void delete(Long id) {
         avatarRepository.deleteById(id);
     }
 
+    @Transactional
     public void deleteAll() {
         avatarRepository.deleteAll();
     }

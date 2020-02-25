@@ -36,7 +36,7 @@ public class Question {
         this.usersAnswers = new HashSet<Answer>();
     }
 
-    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnoreProperties("question")
     private Set<Answer> usersAnswers;
 
