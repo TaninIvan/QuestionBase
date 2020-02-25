@@ -53,7 +53,8 @@ public class AnswerController {
 
     @GetMapping("/all")
     @ResponseBody
-    public List<AnswerDto> getAnswers(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+    public List<AnswerDto> getAnswers(
+            @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
         List<Answer> answers = answerService.getAnswerPage(pageable);
         return answers.stream()
                 .map(this::convertToDto)

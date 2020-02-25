@@ -54,18 +54,20 @@ public class UserController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("streamTest")
-    public List<User> streamTest(
+    @GetMapping("filterByScore")
+    public List<User> filterByScore(
             @RequestParam(required = false) Optional<Integer> from,
             @RequestParam(required = false) Optional<Integer> to,
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable){
 
         return userService.getUserPage(pageable).stream().filter(user ->
-                user.getScore() >= from.orElse(1) && user.getScore() <= to.orElse(1)).collect(Collectors.toList());
+                user.getScore() >= from.orElse(1) && user.getScore() <= to.orElse(1))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("noAnswer")
-    public  List<User> getAllUsersWithNoAnswer(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+    public  List<User> getAllUsersWithNoAnswer(
+            @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return userService.getUsersWithoutAnswers(pageable);
     }
 

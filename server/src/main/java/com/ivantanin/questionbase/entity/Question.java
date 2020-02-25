@@ -41,7 +41,8 @@ public class Question {
     private Set<Answer> usersAnswers;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
-    @JoinTable(name = "questions_topics", joinColumns = @JoinColumn(name = "question_id"), inverseJoinColumns = @JoinColumn(name = "topic_name"))
+    @JoinTable(name = "questions_topics", joinColumns = @JoinColumn(name = "question_id"),
+            inverseJoinColumns = @JoinColumn(name = "topic_name"))
     @JsonIgnoreProperties("questions")
     private Set<Topic> topics;
 

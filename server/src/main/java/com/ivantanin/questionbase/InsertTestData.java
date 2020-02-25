@@ -33,7 +33,8 @@ public class InsertTestData {
         if (!userService.getAll().iterator().hasNext()) {
             try {
                 JSONParser parser = new JSONParser();
-                JSONArray jsonArray = (JSONArray) parser.parse(new FileReader("src\\main\\resources\\users.json"));
+                JSONArray jsonArray = (JSONArray) parser
+                        .parse(new FileReader("src\\main\\resources\\users.json"));
 
                 Gson gson = new Gson();
                 User[] users = gson.fromJson(String.valueOf(jsonArray), User[].class);
@@ -48,7 +49,8 @@ public class InsertTestData {
         if (!questionService.getAll().iterator().hasNext()) {
             try {
                 JSONParser parser = new JSONParser();
-                JSONArray jsonArray = (JSONArray) parser.parse(new FileReader("src\\main\\resources\\questions.json"));
+                JSONArray jsonArray = (JSONArray) parser
+                        .parse(new FileReader("src\\main\\resources\\questions.json"));
                 Gson gson = new Gson();
                 Question[] questions = gson.fromJson(String.valueOf(jsonArray), Question[].class);
                 for (Question question : questions) {
@@ -76,7 +78,8 @@ public class InsertTestData {
         if (!answerService.getAll().iterator().hasNext()) {
             try {
                 JSONParser parser = new JSONParser();
-                JSONArray jsonArray = (JSONArray) parser.parse(new FileReader("src\\main\\resources\\answers.json"));
+                JSONArray jsonArray = (JSONArray) parser
+                        .parse(new FileReader("src\\main\\resources\\answers.json"));
                 Gson gson = new Gson();
                 Answer[] answers = gson.fromJson(String.valueOf(jsonArray), Answer[].class);
                 Long questionId = 1L;

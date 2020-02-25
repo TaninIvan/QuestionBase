@@ -16,6 +16,7 @@ public class UserDto {
     private String username;
     @NotNull
     private String password;
+    @NotNull
     private Integer score;
     private Avatar avatar;
     private Address[] address;

@@ -7,6 +7,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
@@ -33,6 +34,7 @@ public class User {
 
     private String username;
     private String password;
+    @NotNull
     private Integer score;
 
     @Type(type = "jsonb")

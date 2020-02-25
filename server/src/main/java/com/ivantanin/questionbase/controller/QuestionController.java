@@ -89,19 +89,22 @@ public class QuestionController {
     public List<QuestionDto> filter(@RequestHeader  Map<String,String> headers) throws java.text.ParseException {
         List<Question> questions = questionService.getAll();
         if(headers.containsKey("author")) {
-            questions = questions.stream().filter(question -> question.getAuthor().equals(headers.get("author"))).collect(Collectors.toList());
+            questions = questions.stream().filter(question -> question.getAuthor().equals(headers.get("author")))
+                    .collect(Collectors.toList());
         }
 
         if(headers.containsKey("from")) {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date from = format.parse(headers.get("from"));
-            questions = questions.stream().filter(question -> question.getCreationDate().after(from)).collect(Collectors.toList());
+            questions = questions.stream().filter(question -> question.getCreationDate().after(from))
+                    .collect(Collectors.toList());
         }
 
         if(headers.containsKey("to")) {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date to = format.parse(headers.get("to"));
-            questions = questions.stream().filter(question -> question.getCreationDate().before(to)).collect(Collectors.toList());
+            questions = questions.stream().filter(question -> question.getCreationDate().before(to))
+                    .collect(Collectors.toList());
         }
 
         return questions.stream()

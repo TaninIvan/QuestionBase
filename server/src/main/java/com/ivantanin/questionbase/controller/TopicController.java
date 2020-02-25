@@ -36,7 +36,8 @@ public class TopicController {
     @GetMapping(value = "/{topicName}")
     @ResponseBody
     public TopicDto getTopic(@PathVariable("topicName")String topicName){
-        return convertToDto(topicService.get(topicName.substring(0,1).toUpperCase() + topicName.substring(1))); // topic name must be capitalized
+        return convertToDto(topicService.get(topicName.substring(0,1).toUpperCase()
+                + topicName.substring(1))); // topic name must be capitalized
     }
 
     @GetMapping("all")
@@ -46,7 +47,8 @@ public class TopicController {
 
     @GetMapping("all/page")
     @ResponseBody
-    public List<TopicDto> getTopics(@PageableDefault(sort = {"topicName"}, direction = Sort.Direction.ASC) Pageable pageable) {
+    public List<TopicDto> getTopics(
+            @PageableDefault(sort = {"topicName"}, direction = Sort.Direction.ASC) Pageable pageable) {
 
         List<Topic> topics = topicService.getTopicPage(pageable);
         return topics.stream()
@@ -57,7 +59,8 @@ public class TopicController {
     // DELETE
     @DeleteMapping("{topicName}" )
     public String deleteUser(@PathVariable("topicName") String topicName){
-        topicService.delete(topicName.substring(0,1).toUpperCase() + topicName.substring(1)); // topic name must be capitalized
+        topicService.delete(topicName.substring(0,1).toUpperCase()
+                + topicName.substring(1)); // topic name must be capitalized
         return "Topic has deleted!";
     }
 
