@@ -34,7 +34,7 @@ public class AvatarService {
 
         us.setAvatar(avatar);
         avatarRepository.save(avatar);
-        userService.createUser(us);
+        userService.updateUser(us);
         log.fine("New avatar saved!");
         return avatar;
     }

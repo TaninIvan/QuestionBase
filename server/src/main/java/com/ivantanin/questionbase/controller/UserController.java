@@ -27,7 +27,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public UserDto createUser(@RequestBody UserDto userDto) throws ParseException{
+    public UserDto createUser(@RequestBody UserDto userDto) throws Exception {
         User user = convertToEntity(userDto);
         User userCreated = userService.createUser(user);
         return convertToDto(userCreated);
@@ -80,9 +80,15 @@ public class UserController {
     }
 
     // DELETE
-    @DeleteMapping("{id}" )
+    @DeleteMapping("{id}")
     public String deleteUser(@PathVariable("id") Long id){
         userService.delete(id);
+        return "User has deleted!";
+    }
+
+    @DeleteMapping("deleteByUsername/{username}")
+    public String deleteUser(@PathVariable("username") String username){
+        userService.delete(username);
         return "User has deleted!";
     }
 

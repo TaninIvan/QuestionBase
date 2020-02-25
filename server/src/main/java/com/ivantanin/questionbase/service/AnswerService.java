@@ -24,8 +24,8 @@ public class AnswerService {
 
     // create
     public Answer createAnswer(Long questionId, Long userId, Answer answer){
-        Question question = questionRepository.findById(questionId).get();
-        User user = userRepository.findById(userId).get();
+        Question question = questionRepository.findById(questionId).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
 
         answer.setQuestion(question);
         answer.setUser(user);
@@ -35,7 +35,7 @@ public class AnswerService {
 
     // get
     public Answer get(Long id) {
-        return answerRepository.findById(id).orElse(new Answer());
+        return answerRepository.findById(id).orElse(null);
     }
 
     public Iterable<Answer> getAll() {

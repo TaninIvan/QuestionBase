@@ -29,7 +29,7 @@ public class InsertTestData {
     @Autowired AnswerService answerService;
 
     @PostConstruct
-    public void postConstruct() {
+    public void postConstruct() throws Exception {
         if (!userService.getAll().iterator().hasNext()) {
             try {
                 JSONParser parser = new JSONParser();
