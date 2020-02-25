@@ -13,14 +13,14 @@ public class TopicDto {
 
     @NotNull
     private String topicName;
-    private Set<Long> questionsId;
+    private Set<Long> questionsIds;
 
     public TopicDto() {
-        this.questionsId = new HashSet<Long>();
+        this.questionsIds = new HashSet<Long>();
     }
 
     public void addQuestion(Long id) {
-        this.questionsId.add(id);
+        this.questionsIds.add(id);
     }
 
 }

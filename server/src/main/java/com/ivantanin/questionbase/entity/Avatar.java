@@ -39,12 +39,4 @@ public class Avatar implements Serializable {
         result = 31 * result + Arrays.hashCode(image);
         return result;
     }
-
-    @Override
-    public String toString() {
-        return "Avatar{" +
-                "avatar_id=" + avatar_id +
-                ", image=" + Arrays.toString(image) +
-                '}';
-    }
 }

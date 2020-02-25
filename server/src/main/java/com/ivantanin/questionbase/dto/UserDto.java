@@ -1,9 +1,9 @@
 package com.ivantanin.questionbase.dto;
 
 import com.ivantanin.questionbase.entity.Address;
-import com.ivantanin.questionbase.entity.Avatar;
 import lombok.Data;
 import lombok.ToString;
+
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -18,7 +18,7 @@ public class UserDto {
     private String password;
     @NotNull
     private Integer score;
-    private Avatar avatar;
+    private Long avatarId;
     private Address[] address;
 
 }

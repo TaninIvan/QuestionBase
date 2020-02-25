@@ -2,6 +2,7 @@ package com.ivantanin.questionbase.controller;
 
 import com.ivantanin.questionbase.dto.UserDto;
 import com.ivantanin.questionbase.entity.User;
+import com.ivantanin.questionbase.service.AvatarService;
 import com.ivantanin.questionbase.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +15,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @RequestMapping("/user")
 @RestController
 public class UserController {
 
+    private static Logger log = Logger.getLogger(UserController.class.getName());
+
     @Autowired UserService userService;
     @Autowired ModelMapper modelMapper;
+    @Autowired AvatarService avatarService;
 
     // POST
     @PostMapping
@@ -101,13 +106,17 @@ public class UserController {
     // CONVERTERS
     private UserDto convertToDto(User user) {
         UserDto userDto = modelMapper.map(user, UserDto.class);
-        userDto.setAvatar(user.getAvatar());
+        if (user.getAvatar() != null)
+             userDto.setAvatarId(user.getAvatar().getAvatar_id());
         userDto.setAddress(user.getAddress());
         return userDto;
     }
 
     private User convertToEntity(UserDto userDto) throws ParseException {
-        return modelMapper.map(userDto, User.class);
+        User user = modelMapper.map(userDto, User.class);
+        if (userDto.getAvatarId() != null)
+            user.setAvatar(avatarService.get(userDto.getAvatarId()));
+        return user;
     }
 
 }

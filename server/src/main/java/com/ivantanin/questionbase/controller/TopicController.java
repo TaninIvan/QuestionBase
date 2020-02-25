@@ -2,6 +2,7 @@ package com.ivantanin.questionbase.controller;
 
 import com.ivantanin.questionbase.dto.TopicDto;
 import com.ivantanin.questionbase.entity.Topic;
+import com.ivantanin.questionbase.service.QuestionService;
 import com.ivantanin.questionbase.service.TopicService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class TopicController {
 
     @Autowired TopicService topicService;
     @Autowired ModelMapper modelMapper;
+    @Autowired QuestionService questionService;
 
     // POST
     @PostMapping
@@ -56,6 +58,14 @@ public class TopicController {
                 .collect(Collectors.toList());
     }
 
+    // PUT
+    @PutMapping()
+    @ResponseStatus(HttpStatus.OK)
+    public void updateTopic(@RequestBody TopicDto topicDto) throws ParseException {
+        Topic topic = convertToEntity(topicDto);
+        topicService.updateTopic(topic);
+    }
+
     // DELETE
     @DeleteMapping("{topicName}" )
     public String deleteUser(@PathVariable("topicName") String topicName){
@@ -72,14 +82,16 @@ public class TopicController {
 
     // CONVERTERS
     private TopicDto convertToDto(Topic topic) {
-
         TopicDto topicDto = modelMapper.map(topic, TopicDto.class);
         topic.getQuestions().forEach(question -> topicDto.addQuestion(question.getId()));
         return topicDto;
     }
 
     private Topic convertToEntity(TopicDto topicDto) throws ParseException {
-        return modelMapper.map(topicDto, Topic.class);
+        Topic topic = modelMapper.map(topicDto, Topic.class);
+        if (!topicDto.getQuestionsIds().isEmpty())
+            topicDto.getQuestionsIds().forEach(questionId -> topic.setQuestions(questionService.get(questionId)));
+        return topic;
     }
 }
 

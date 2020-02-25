@@ -42,14 +42,14 @@ public class UserService {
 
     // get
     public User get(Long id) {
-        return userRepository.findById(id).orElse(new User());
+        return userRepository.findById(id).orElse(null);
     }
 
     public Iterable<User> getAll() {
         return (userRepository.findAll());
     }
 
-    public List<User> getUserPage(Pageable pageable) { ;
+    public List<User> getUserPage(Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
         return users.getContent();
     }

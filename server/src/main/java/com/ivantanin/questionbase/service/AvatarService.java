@@ -19,6 +19,7 @@ public class AvatarService {
 
     private static Logger log = Logger.getLogger(AvatarService.class.getName());
 
+    // create
     public Avatar createAvatar(Long userId, String imageURL){
         Avatar avatar = new Avatar();
         User us = userService.get(userId);
@@ -39,19 +40,31 @@ public class AvatarService {
         return avatar;
     }
 
-    public void createAvatar(Avatar avatar){
-        avatarRepository.save(avatar);
-        log.fine("New avatar saved!");
+    public Avatar createAvatar(Avatar avatar) throws Exception {
+        try {
+            if (userService.get(avatar.getUser().getId()).getAvatar() != null)
+                throw new Exception("This user already has avatar! You should use update method.");
+        } catch (NullPointerException n) {
+            throw new Exception("User with that id do not exist!");
+        }
+        return avatarRepository.save(avatar);
     }
 
+    // get
     public Avatar get(Long id) {
-        return avatarRepository.findById(id).orElse(new Avatar());
+        return avatarRepository.findById(id).orElse(null);
     }
 
     public Iterable<Avatar> getAll() {
         return avatarRepository.findAll();
     }
 
+    // update
+    public void update(Avatar avatar) {
+        avatarRepository.save(avatar);
+    }
+
+    // delete
     public void delete(Long id) {
         avatarRepository.deleteById(id);
     }
