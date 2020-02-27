@@ -1,7 +1,6 @@
 package com.ivantanin.questionbase.repository;
 
 import com.ivantanin.questionbase.entity.Question;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -14,11 +13,10 @@ import java.util.List;
 @Repository
 public interface QuestionRepository extends CrudRepository<Question,Long>,
         PagingAndSortingRepository<Question,Long> {
-    @NotNull Page<Question> findAll (@NotNull Pageable pageReq);
-
-    @NotNull List<Question> findAll(@NotNull Sort sort);
-    @NotNull List<Question> findAll();
-
+    Page<Question> findAll (Pageable pageReq);
+    List<Question> findAll(Sort sort);
+    List<Question> findAll();
+    List<Question> findAllByIdIn(List<Long> ids);
     List<Question> findMostPopularQuestion();
     List<Question> findMostPricedQuestion();
 }

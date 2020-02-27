@@ -3,7 +3,6 @@ package com.ivantanin.questionbase.controller;
 import com.ivantanin.questionbase.dto.AnswerDto;
 import com.ivantanin.questionbase.entity.Answer;
 import com.ivantanin.questionbase.service.AnswerService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,17 +19,9 @@ import java.util.stream.Collectors;
 public class AnswerController {
 
     // Constructor Based Injection
-    @Autowired
-    AnswerService answerService;
+    @Autowired AnswerService answerService;
     public AnswerController(AnswerService answerService) {
         this.answerService = answerService;
-    }
-
-    // Setter Based Injection
-    @Autowired
-    ModelMapper modelMapper;
-    public void setModelMapper(ModelMapper modelMapper) {
-        this.modelMapper = modelMapper;
     }
 
     // POST
@@ -38,17 +29,17 @@ public class AnswerController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public AnswerDto createAnswer(@RequestBody AnswerDto answerDto) throws ParseException {
-        Answer answer = convertToEntity(answerDto);
+        Answer answer = answerService.convertToEntity(answerDto);
         Answer answerCreated = answerService.createAnswer(answer.getUser().getId(),
                 answer.getQuestion().getId(),answer);
-        return convertToDto(answerCreated);
+        return answerService.convertToDto(answerCreated);
     }
 
     // GET
     @GetMapping("/{id}")
     @ResponseBody
     public AnswerDto getAnswer(@PathVariable("id") Long id){
-        return convertToDto(answerService.get(id));
+        return answerService.convertToDto(answerService.get(id));
     }
 
     @GetMapping("/all")
@@ -57,7 +48,7 @@ public class AnswerController {
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
         List<Answer> answers = answerService.getAnswerPage(pageable);
         return answers.stream()
-                .map(this::convertToDto)
+                .map(answerService::convertToDto)
                 .collect(Collectors.toList());
     }
 
@@ -65,7 +56,7 @@ public class AnswerController {
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public void updateAnswer(@RequestBody AnswerDto answerDto) throws ParseException {
-        Answer answer = convertToEntity(answerDto);
+        Answer answer = answerService.convertToEntity(answerDto);
         answerService.updateAnswer(answer);
     }
 
@@ -80,15 +71,6 @@ public class AnswerController {
     public String deleteAllQuestions(){
         answerService.deleteAll();
         return "All answers have deleted!";
-    }
-
-    // CONVERTERS
-    private AnswerDto convertToDto(Answer answer) {
-        return modelMapper.map(answer, AnswerDto.class);
-    }
-
-    private Answer convertToEntity(AnswerDto answerDto) throws ParseException {
-        return modelMapper.map(answerDto, Answer.class);
     }
 }
 

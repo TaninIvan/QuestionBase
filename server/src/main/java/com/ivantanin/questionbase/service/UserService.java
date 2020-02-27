@@ -1,10 +1,13 @@
 package com.ivantanin.questionbase.service;
 
+import com.ivantanin.questionbase.dto.UserDto;
 import com.ivantanin.questionbase.entity.User;
 import com.ivantanin.questionbase.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +19,8 @@ import java.util.stream.Collectors;
 public class UserService {
 
     @Autowired UserRepository userRepository;
+    @Autowired ModelMapper modelMapper;
+    @Autowired AvatarService avatarService;
     private static Logger log = Logger.getLogger(UserService.class.getName());
 
     // create
@@ -77,5 +82,21 @@ public class UserService {
 
     public void deleteAll() {
         userRepository.deleteAll();
+    }
+
+    // CONVERTERS
+    public UserDto convertToDto(User user) {
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+        if (user.getAvatar() != null)
+            userDto.setAvatarId(user.getAvatar().getAvatar_id());
+        userDto.setAddress(user.getAddress());
+        return userDto;
+    }
+
+    public User convertToEntity(UserDto userDto) throws ParseException {
+        User user = modelMapper.map(userDto, User.class);
+        if (userDto.getAvatarId() != null)
+            user.setAvatar(avatarService.get(userDto.getAvatarId()));
+        return user;
     }
 }

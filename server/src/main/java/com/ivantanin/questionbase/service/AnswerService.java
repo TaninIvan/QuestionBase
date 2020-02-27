@@ -1,27 +1,36 @@
 package com.ivantanin.questionbase.service;
 
+import com.ivantanin.questionbase.dto.AnswerDto;
 import com.ivantanin.questionbase.entity.Answer;
 import com.ivantanin.questionbase.entity.Question;
 import com.ivantanin.questionbase.entity.User;
 import com.ivantanin.questionbase.repository.AnswerRepository;
 import com.ivantanin.questionbase.repository.QuestionRepository;
 import com.ivantanin.questionbase.repository.UserRepository;
+import lombok.extern.java.Log;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 @Service
+@Log
 public class AnswerService {
 
     @Autowired AnswerRepository answerRepository;
     @Autowired UserRepository userRepository;
     @Autowired QuestionRepository questionRepository;
-    private static Logger log = Logger.getLogger(AnswerService.class.getName());
+
+    // Setter Based Injection
+    @Autowired ModelMapper modelMapper;
+    public void setModelMapper(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
 
     // create
     public Answer createAnswer(Long questionId, Long userId, Answer answer){
@@ -69,5 +78,12 @@ public class AnswerService {
         return answer.getQuestion().getCorrectAnswers().contains(answer.getText());
     }
 
+    // CONVERTERS
+    public AnswerDto convertToDto(Answer answer) {
+        return modelMapper.map(answer, AnswerDto.class);
+    }
 
+    public Answer convertToEntity(AnswerDto answerDto) throws ParseException {
+        return modelMapper.map(answerDto, Answer.class);
+    }
 }

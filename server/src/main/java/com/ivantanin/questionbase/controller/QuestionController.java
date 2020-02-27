@@ -5,7 +5,7 @@ import com.ivantanin.questionbase.dto.TopicDto;
 import com.ivantanin.questionbase.entity.Question;
 import com.ivantanin.questionbase.entity.Topic;
 import com.ivantanin.questionbase.service.QuestionService;
-import org.modelmapper.ModelMapper;
+import com.ivantanin.questionbase.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,22 +26,22 @@ import java.util.stream.Collectors;
 public class QuestionController {
 
     @Autowired QuestionService questionService;
-    @Autowired ModelMapper modelMapper;
+    @Autowired TopicService topicService;
 
     // POST
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public QuestionDto createQuestion(@RequestBody QuestionDto questionDto) throws ParseException {
-        Question question = convertToEntity(questionDto);
-        return convertToDto(questionService.createQuestion(question));
+        Question question = questionService.convertToEntity(questionDto);
+        return questionService.convertToDto(questionService.createQuestion(question));
     }
 
     // GET
     @GetMapping(value = "{id}")
     @ResponseBody
     public QuestionDto getQuestion(@PathVariable("id") Long id, @RequestHeader Map<String,String> headers) {
-        return convertToDto(questionService.get(id));
+        return questionService.convertToDto(questionService.get(id));
     }
 
     @GetMapping("all")
@@ -55,7 +55,7 @@ public class QuestionController {
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         List<Question> questions = questionService.getQuestionPage(pageable);
         return questions.stream()
-                .map(this::convertToDto)
+                .map(questionService::convertToDto)
                 .collect(Collectors.toList());
     }
 
@@ -65,7 +65,7 @@ public class QuestionController {
 
         List<Question> questions = questionService.getLastQuestions(last.orElse(5));
         return questions.stream()
-                .map(this::convertToDto)
+                .map(questionService::convertToDto)
                 .collect(Collectors.toList());
     }
 
@@ -73,7 +73,7 @@ public class QuestionController {
     @ResponseBody
     public List<QuestionDto> getPopularQuestion() {
        return questionService.getMostPopularQuestion().stream()
-               .map(this::convertToDto)
+               .map(questionService::convertToDto)
                .collect(Collectors.toList());
     }
 
@@ -81,7 +81,7 @@ public class QuestionController {
     @ResponseBody
     public List<QuestionDto> getPricedQuestion() {
         return questionService.getMostPricedQuestion().stream()
-                .map(this::convertToDto)
+                .map(questionService::convertToDto)
                 .collect(Collectors.toList());
     }
 
@@ -108,21 +108,22 @@ public class QuestionController {
         }
 
         return questions.stream()
-                .map(this::convertToDto)
+                .map(questionService::convertToDto)
                 .collect(Collectors.toList());
     }
 
     // PUT
-    @PutMapping()
+    @PutMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateUser(@RequestBody QuestionDto questionDto) throws ParseException {
-        Question question = convertToEntity(questionDto);
+    public void updateQuestion(@PathVariable Long id, @RequestBody QuestionDto questionDto) throws ParseException {
+        Question question = questionService.convertToEntity(questionDto);
+        question.setId(id);
         questionService.updateQuestion(question);
     }
 
     @PutMapping("{id}/addTopic")
     public String addTopic(@PathVariable Long id, @RequestBody TopicDto topicDto){
-        Topic topic = convertToEntity(topicDto);
+        Topic topic = topicService.convertToEntity(topicDto);
         return questionService.addTopic(questionService.get(id),topic);
     }
 
@@ -137,24 +138,5 @@ public class QuestionController {
     public String deleteAllQuestions(){
         questionService.deleteAll();
         return "All deleted";
-    }
-
-    // CONVERTERS
-    private QuestionDto convertToDto(Question question) {
-        QuestionDto questionDto = modelMapper.map(question, QuestionDto.class);
-        question.getTopics().forEach(topic -> questionDto.addTopicName(topic.getTopicName()));
-        return questionDto;
-    }
-
-    private Question convertToEntity(QuestionDto questionDto) throws ParseException {
-        Question question = modelMapper.map(questionDto, Question.class);
-        questionDto.getTopicNameSet().forEach(topicName -> questionService.addTopic(question,new Topic(topicName)));
-        // All correct answers are stored without capital letters
-        question.setCorrectAnswers(question.getCorrectAnswers().toLowerCase());
-        return question;
-    }
-
-    private Topic convertToEntity(TopicDto topicDto) throws ParseException {
-        return modelMapper.map(topicDto, Topic.class);
     }
 }

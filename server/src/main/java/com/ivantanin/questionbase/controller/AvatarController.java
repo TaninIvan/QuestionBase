@@ -4,12 +4,10 @@ import com.ivantanin.questionbase.dto.AvatarDto;
 import com.ivantanin.questionbase.entity.Avatar;
 import com.ivantanin.questionbase.service.AvatarService;
 import com.ivantanin.questionbase.service.UserService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.expression.ParseException;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("avatar")
@@ -18,12 +16,12 @@ public class AvatarController {
 
     @Autowired AvatarService avatarService;
     @Autowired UserService userService;
-    @Autowired ModelMapper modelMapper;
+
 
     // POST
     @PostMapping()
     public AvatarDto createAvatar(@RequestBody AvatarDto avatarDto) throws Exception {
-        return  convertToDto(avatarService.createAvatar(convertToEntity(avatarDto)));
+        return  avatarService.convertToDto(avatarService.createAvatar(avatarService.convertToEntity(avatarDto)));
     }
 
     // GET
@@ -31,30 +29,30 @@ public class AvatarController {
     @ResponseBody
     public Iterable<Avatar> getAvatars(@PageableDefault(sort = {"avatar_id"}, direction = Sort.Direction.ASC) Pageable pageable) {
         Iterable<Avatar> avatars = avatarService.getAll();
-        avatars.forEach(this::convertToDto);;
+        avatars.forEach(avatarService::convertToDto);;
         return avatars;
     }
 
     @GetMapping("{avatar_id}")
     public AvatarDto getAvatar(@PathVariable("avatar_id") Long avatar_id){
-        return convertToDto(avatarService.get(avatar_id));
+        return avatarService.convertToDto(avatarService.get(avatar_id));
     }
 
     @GetMapping("byUserId/{userId}")
     public AvatarDto getAvatarByUserId(@PathVariable("userId") Long userId){
-        return convertToDto(avatarService.get(userService.get(userId).getAvatar().getAvatar_id()));
+        return avatarService.convertToDto(avatarService.get(userService.get(userId).getAvatar().getAvatar_id()));
     }
 
     // PUT
     @PutMapping("{avatar_id}")
     public void updateAvatar(@RequestBody AvatarDto avatarDto, @PathVariable("avatar_id") Long avatar_id){
         avatarDto.setAvatar_id(avatar_id);
-        avatarService.update(convertToEntity(avatarDto));
+        avatarService.update(avatarService.convertToEntity(avatarDto));
     }
 
     @PutMapping("byUserId/{userId}")
     public void updateAvatarByUserId(@RequestBody AvatarDto avatarDto, @PathVariable("userId") Long userId){
-        avatarService.update(convertToEntity(avatarDto));
+        avatarService.update(avatarService.convertToEntity(avatarDto));
     }
 
     //  DELETE
@@ -69,19 +67,5 @@ public class AvatarController {
         avatarService.delete(userService.get(userId).getAvatar().getAvatar_id());
         return "Avatar has deleted!";
     }
-
-    // CONVERTERS
-    private AvatarDto convertToDto(Avatar avatar) {
-        AvatarDto avatarDto = modelMapper.map(avatar, AvatarDto.class);
-        avatarDto.setUserId(avatar.getAvatar_id());
-        return avatarDto;
-    }
-
-    private Avatar convertToEntity(AvatarDto avatarDto) throws ParseException {
-        Avatar avatar = modelMapper.map(avatarDto, Avatar.class);
-        avatar.setUser(userService.get(avatarDto.getUserId()));
-        return avatar;
-    }
-
 }
 

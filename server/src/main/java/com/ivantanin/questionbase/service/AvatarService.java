@@ -1,24 +1,27 @@
 package com.ivantanin.questionbase.service;
 
+import com.ivantanin.questionbase.dto.AvatarDto;
 import com.ivantanin.questionbase.entity.Avatar;
 import com.ivantanin.questionbase.entity.User;
 import com.ivantanin.questionbase.repository.AvatarRepository;
+import lombok.extern.java.Log;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.logging.Logger;
 
 @Service
+@Log
 public class AvatarService {
 
     @Autowired AvatarRepository avatarRepository;
     @Autowired UserService userService;
-
-    private static Logger log = Logger.getLogger(AvatarService.class.getName());
+    @Autowired ModelMapper modelMapper;
 
     // create
     public Avatar createAvatar(Long userId, String imageURL){
@@ -74,5 +77,18 @@ public class AvatarService {
     @Transactional
     public void deleteAll() {
         avatarRepository.deleteAll();
+    }
+
+    // CONVERTERS
+    public AvatarDto convertToDto(Avatar avatar) {
+        AvatarDto avatarDto = modelMapper.map(avatar, AvatarDto.class);
+        avatarDto.setUserId(avatar.getAvatar_id());
+        return avatarDto;
+    }
+
+    public Avatar convertToEntity(AvatarDto avatarDto) throws ParseException {
+        Avatar avatar = modelMapper.map(avatarDto, Avatar.class);
+        avatar.setUser(userService.get(avatarDto.getUserId()));
+        return avatar;
     }
 }

@@ -1,21 +1,26 @@
 package com.ivantanin.questionbase.service;
 
+import com.ivantanin.questionbase.dto.TopicDto;
 import com.ivantanin.questionbase.entity.Topic;
 import com.ivantanin.questionbase.repository.TopicRepository;
+import lombok.extern.java.Log;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 @Service
+@Log
 public class TopicService {
 
     @Autowired TopicRepository topicRepository;
-    private static Logger log = Logger.getLogger(TopicService.class.getName());
+    @Autowired ModelMapper modelMapper;
+    @Autowired QuestionService questionService;
 
     // create
     public Topic createTopic(String topicName){
@@ -58,5 +63,19 @@ public class TopicService {
     @Transactional
     public void deleteAll() {
         topicRepository.deleteAll();
+    }
+
+    // CONVERTERS
+    public TopicDto convertToDto(Topic topic) {
+        TopicDto topicDto = modelMapper.map(topic, TopicDto.class);
+        topic.getQuestions().forEach(question -> topicDto.addQuestion(question.getId()));
+        return topicDto;
+    }
+
+    public Topic convertToEntity(TopicDto topicDto) throws ParseException {
+        Topic topic = modelMapper.map(topicDto, Topic.class);
+        if (!topicDto.getQuestionsIds().isEmpty())
+            topicDto.getQuestionsIds().forEach(questionId -> topic.setQuestions(questionService.get(questionId)));
+        return topic;
     }
 }
