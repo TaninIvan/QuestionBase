@@ -2,6 +2,7 @@ package com.ivantanin.questionbase.entity;
 
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
@@ -16,12 +17,14 @@ import java.util.Set;
 
 public class User {
 
-   @OneToOne(cascade = CascadeType.ALL)
-   @JoinColumn(name = "avatar_id")
-   private Avatar avatar;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "avatar_id")
+    @ToString.Exclude
+    transient private Avatar avatar;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Answer> answers;
+    @ToString.Exclude
+    transient private Set<Answer> answers;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

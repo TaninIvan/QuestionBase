@@ -15,11 +15,11 @@ public class Answer {
         this.setAnswerDate(LocalDateTime.now());
     }
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne()
     @JoinColumn(name = "question_id")
     private Question question;
 
