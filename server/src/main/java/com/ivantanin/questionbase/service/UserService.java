@@ -2,6 +2,7 @@ package com.ivantanin.questionbase.service;
 
 import com.ivantanin.questionbase.dto.UserDto;
 import com.ivantanin.questionbase.entity.User;
+import com.ivantanin.questionbase.repository.AnswerRepository;
 import com.ivantanin.questionbase.repository.UserRepository;
 import lombok.extern.java.Log;
 import org.modelmapper.ModelMapper;
@@ -21,6 +22,7 @@ public class UserService {
     @Autowired UserRepository userRepository;
     @Autowired ModelMapper modelMapper;
     @Autowired AvatarService avatarService;
+    @Autowired AnswerRepository answerRepository;
 
     // create
     public User createUser(String username, String password, int score) throws Exception {
@@ -69,11 +71,13 @@ public class UserService {
     // delete
     @Transactional
     public void delete(Long id) {
+        answerRepository.deleteAllByUserId(id);
         userRepository.deleteById(id);
     }
 
     @Transactional
     public void delete(String username) {
+        answerRepository.deleteAllByUserId(userRepository.findByUsername(username).get().getId());
         userRepository.deleteByUsername(username);
     }
 

@@ -22,7 +22,7 @@ public class User {
     @ToString.Exclude
     transient private Avatar avatar;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     transient private Set<Answer> answers;
 
