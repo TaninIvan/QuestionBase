@@ -24,8 +24,7 @@ public class TopicService {
 
     // create
     public Topic createTopic(String topicName){
-        Topic topic = new Topic();
-        topic.setTopicName(topicName);
+        Topic topic = new Topic(topicName);
         log.fine("New topic saved!");
         return topicRepository.save(topic);
     }

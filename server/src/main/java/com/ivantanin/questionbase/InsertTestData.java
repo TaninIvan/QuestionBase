@@ -28,7 +28,7 @@ public class InsertTestData {
 
     @PostConstruct
     public void postConstruct() throws Exception {
-        if (!userService.getAll().iterator().hasNext()) {
+        if (userService.getAll().isEmpty()) {
             try {
                 JSONParser parser = new JSONParser();
                 JSONArray jsonArray = (JSONArray) parser
@@ -44,7 +44,7 @@ public class InsertTestData {
             }
         }
 
-        if (!questionService.getAll().iterator().hasNext()) {
+        if (questionService.getAll().isEmpty()) {
             try {
                 JSONParser parser = new JSONParser();
                 JSONArray jsonArray = (JSONArray) parser
@@ -59,7 +59,7 @@ public class InsertTestData {
             }
         }
 
-        if (!avatarService.getAll().iterator().hasNext()) {
+        if (avatarService.getAll().isEmpty()) {
 
             avatarService.createAvatar(1L, "src\\main\\resources\\testAvas\\ava1.jpg");
             avatarService.createAvatar(2L, "src\\main\\resources\\testAvas\\ava2.jpg");
@@ -73,7 +73,7 @@ public class InsertTestData {
             avatarService.createAvatar(10L, "src\\main\\resources\\testAvas\\ava10.jpg");
         }
 
-        if (!answerService.getAll().iterator().hasNext()) {
+        if (answerService.getAll().isEmpty()) {
             try {
                 JSONParser parser = new JSONParser();
                 JSONArray jsonArray = (JSONArray) parser

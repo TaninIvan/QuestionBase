@@ -3,6 +3,7 @@ package com.ivantanin.questionbase.service;
 import com.ivantanin.questionbase.dto.QuestionDto;
 import com.ivantanin.questionbase.entity.Question;
 import com.ivantanin.questionbase.entity.Topic;
+import com.ivantanin.questionbase.repository.AnswerRepository;
 import com.ivantanin.questionbase.repository.QuestionRepository;
 import com.ivantanin.questionbase.repository.TopicRepository;
 import lombok.extern.java.Log;
@@ -15,7 +16,6 @@ import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,24 +27,7 @@ public class QuestionService {
     @Autowired TopicService topicService;
     @Autowired TopicRepository topicRepository;
     @Autowired ModelMapper modelMapper;
-
-    // create
-    public Question createQuestion(String text, String answer, String author, int rew, String topicName){
-
-        Question question = new Question();
-        question.setCreationDate(new Date());
-        question.setQuestionText(text);
-        question.setAuthor(author);
-
-        // All correct answers are stored without capital letters
-        question.setCorrectAnswers(answer.toLowerCase());
-        question.setReward(rew);
-
-        questionRepository.save(question);
-        addTopic(question, new Topic(topicName));
-        log.fine("New question saved");
-        return question;
-    }
+    @Autowired AnswerRepository answerRepository;
 
     public Question createQuestion(Question question){
 
@@ -90,34 +73,39 @@ public class QuestionService {
 
     // update
     @Transactional
-    public void updateQuestion(Question newQuestion) {
-        Question question = questionRepository.findById(newQuestion.getId()).orElse(new Question());
+    public void updateQuestion(Long questionId, Question newQuestion) throws Exception {
+        Question question = questionRepository.findById(questionId).orElse(null);
 
-        if (!question.equals(newQuestion)) {
+        if (question == null)
+            throw new Exception("Attempt to update a nonexistent question!");
+        else if (!question.equals(newQuestion)) {
 
-            // To avoid errors when loading from json file in InsertTestData.java
-            newQuestion.getTopics().forEach(topic -> addTopic(newQuestion, topic));
+            question.setReward(newQuestion.getReward());
+            question.setAuthor(newQuestion.getAuthor());
+            question.setQuestionText(newQuestion.getQuestionText());
 
             // All correct answers are stored without capital letters
-            newQuestion.setCorrectAnswers(newQuestion.getCorrectAnswers().toLowerCase());
+            question.setCorrectAnswers(newQuestion.getCorrectAnswers().toLowerCase());
 
-            question = newQuestion;
+            questionRepository.save(question);
         }
-
     }
 
     // delete
     @Transactional
     public void delete(Long id) {
+        answerRepository.deleteQuestionId(id);
         questionRepository.deleteById(id);
     }
 
     @Transactional
     public void deleteAll() {
+        answerRepository.deleteAllQuestionId();
         questionRepository.deleteAll();
     }
 
-    // topic
+    @Transactional
+    // Add topic
     public String addTopic(Question question, Topic newtopic) {
         String topicName = newtopic.getTopicName();
         Topic topic = topicService.get(topicName);
@@ -132,9 +120,17 @@ public class QuestionService {
             topic.addQuestion(question);
             questionRepository.save(question);
             topicService.createTopic(topic);
-            log.fine("Topic added to the question!");
-        } else log.fine("Topic already added!");
-        return topicName;
+        } else return "The question already contains this topic!";
+        return topicName + " added!";
+    }
+
+    @Transactional
+    // Delete topics
+    public String deleteTopic(Question question, Topic deletedTopic) throws Exception {
+        if (question.getTopics().contains(deletedTopic)) {
+            questionRepository.deleteTopicFromQuestion(question.getId(),deletedTopic.getTopicName());
+            return deletedTopic.getTopicName() + " deleted!";
+        } else return "The question does not contain such topic!";
     }
 
     // CONVERTERS

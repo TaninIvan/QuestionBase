@@ -48,7 +48,7 @@ public class AnswerService {
         return answerRepository.findById(id).orElse(null);
     }
 
-    public Iterable<Answer> getAll() {
+    public List<Answer> getAll() {
         return answerRepository.findAll();
     }
 

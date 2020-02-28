@@ -1,6 +1,7 @@
 package com.ivantanin.questionbase.entity;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -24,6 +25,7 @@ public class Topic {
     private String topicName;
 
     @ManyToMany(mappedBy = "topics", fetch = FetchType.EAGER,cascade = CascadeType.DETACH)
+    @ToString.Exclude
     transient private Set<Question> questions;
 
     public void addQuestion(Question question) {

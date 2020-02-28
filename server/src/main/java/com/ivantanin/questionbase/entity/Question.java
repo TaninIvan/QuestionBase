@@ -2,6 +2,7 @@ package com.ivantanin.questionbase.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -36,7 +37,8 @@ public class Question {
     }
 
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Answer> usersAnswers;
+    @ToString.Exclude
+    transient private Set<Answer> usersAnswers;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinTable(name = "questions_topics", joinColumns = @JoinColumn(name = "question_id"),

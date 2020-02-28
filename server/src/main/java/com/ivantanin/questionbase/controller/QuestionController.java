@@ -118,16 +118,20 @@ public class QuestionController {
     // PUT
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateQuestion(@PathVariable Long id, @RequestBody QuestionDto questionDto) throws ParseException {
-        Question question = questionService.convertToEntity(questionDto);
-        question.setId(id);
-        questionService.updateQuestion(question);
+    public void updateQuestion(@PathVariable Long id, @RequestBody QuestionDto questionDto) throws Exception {
+        questionService.updateQuestion(id,questionService.convertToEntity(questionDto));
     }
 
     @PutMapping("{id}/addTopic")
     public String addTopic(@PathVariable Long id, @RequestBody TopicDto topicDto){
         Topic topic = topicService.convertToEntity(topicDto);
         return questionService.addTopic(questionService.get(id),topic);
+    }
+
+    @PutMapping("{id}/deleteTopic")
+    public String deleteTopic(@PathVariable Long id, @RequestBody TopicDto topicDto) throws Exception {
+        Topic topic = topicService.convertToEntity(topicDto);
+        return questionService.deleteTopic(questionService.get(id),topic);
     }
 
     // DELETE

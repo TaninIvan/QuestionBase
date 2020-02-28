@@ -9,11 +9,22 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface AnswerRepository  extends CrudRepository<Answer, Long>,
         PagingAndSortingRepository<Answer,Long> {
     Page<Answer> findAll (Pageable pageReq);
+    List<Answer> findAll();
 
     @Modifying
-    @Query("DELETE FROM Answer a WHERE a.user.id = :userId")
+    @Query("DELETE Answer a WHERE a.user.id = :userId")
     void deleteAllByUserId(@Param("userId") Long userId);
+
+    @Modifying
+    @Query("UPDATE Answer a  SET a.question.id = null WHERE a.question.id = :questionId")
+    void deleteQuestionId(@Param("questionId") Long questionId);
+
+    @Modifying
+    @Query("UPDATE Answer a  SET a.question.id = -1")
+    void deleteAllQuestionId();
 }
