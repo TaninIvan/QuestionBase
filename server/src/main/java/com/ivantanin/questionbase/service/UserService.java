@@ -3,25 +3,24 @@ package com.ivantanin.questionbase.service;
 import com.ivantanin.questionbase.dto.UserDto;
 import com.ivantanin.questionbase.entity.User;
 import com.ivantanin.questionbase.repository.UserRepository;
+import lombok.extern.java.Log;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
+@Log
 public class UserService {
 
     @Autowired UserRepository userRepository;
     @Autowired ModelMapper modelMapper;
     @Autowired AvatarService avatarService;
-    private static Logger log = Logger.getLogger(UserService.class.getName());
 
     // create
     public User createUser(String username, String password, int score) throws Exception {
@@ -46,17 +45,16 @@ public class UserService {
     }
 
     // get
-    public User get(Long id) {
+    public User getById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
 
-    public Iterable<User> getAll() {
+    public List<User> getAll() {
         return (userRepository.findAll());
     }
 
     public List<User> getUserPage(Pageable pageable) {
-        Page<User> users = userRepository.findAll(pageable);
-        return users.getContent();
+        return userRepository.findAll(pageable).getContent();
     }
 
     public List<User> getUsersWithoutAnswers(Pageable pageable) {
@@ -79,7 +77,7 @@ public class UserService {
         userRepository.deleteByUsername(username);
     }
 
-
+    @Transactional
     public void deleteAll() {
         userRepository.deleteAll();
     }

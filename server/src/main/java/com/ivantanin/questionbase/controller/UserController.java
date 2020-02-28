@@ -37,38 +37,45 @@ public class UserController {
     @GetMapping("{id}")
     @ResponseBody
     public UserDto getUser(@PathVariable("id") Long id){
-        return userService.convertToDto(userService.get(id));
+        return userService.convertToDto(userService.getById(id));
     }
 
     @GetMapping("all")
-    public Iterable<User> getAllUsers(){
-        return userService.getAll();
+    public List<UserDto> getAllUsers(){
+        return userService.getAll()
+                .stream()
+                .map(userService::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("all/page")
     @ResponseBody
     public List<UserDto> getUsers(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
-        List<User> users = userService.getUserPage(pageable);
-        return users.stream()
+        return userService.getUserPage(pageable).stream()
                 .map(userService::convertToDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("filterByScore")
-    public List<User> filterByScore(
+    public List<UserDto> filterByScore(
             @RequestParam(required = false) Optional<Integer> from,
             @RequestParam(required = false) Optional<Integer> to,
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable){
 
-        return userService.getUserPage(pageable).stream().filter(user ->
-                user.getScore() >= from.orElse(1) && user.getScore() <= to.orElse(1))
+        return userService.getUserPage(pageable)
+                .stream()
+                .filter(user -> user.getScore() >= from.orElse(1) && user.getScore() <= to.orElse(1))
+                .map(userService::convertToDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("noAnswer")
-    public  List<User> getAllUsersWithNoAnswer(
+    public  List<UserDto> getAllUsersWithNoAnswer(
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
-        return userService.getUsersWithoutAnswers(pageable);
+        return userService.getUsersWithoutAnswers(pageable)
+                .stream()
+                .map(userService::convertToDto)
+                .collect(Collectors.toList());
     }
 
     // PUT

@@ -45,8 +45,11 @@ public class QuestionController {
     }
 
     @GetMapping("all")
-    public Iterable<Question> getAllQuestions(){
-        return questionService.getAll();
+    public List<QuestionDto> getAllQuestions(){
+        return questionService.getAll()
+                .stream()
+                .map(questionService::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("all/page")

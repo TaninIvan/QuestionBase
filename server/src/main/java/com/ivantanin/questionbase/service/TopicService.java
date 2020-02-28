@@ -40,7 +40,7 @@ public class TopicService {
         return topicRepository.findByTopicName(topicName).orElse(null);
     }
 
-    public Iterable<Topic> getAll() {
+    public List<Topic> getAll() {
         return topicRepository.findAll();
     }
 
@@ -75,7 +75,7 @@ public class TopicService {
     public Topic convertToEntity(TopicDto topicDto) throws ParseException {
         Topic topic = modelMapper.map(topicDto, Topic.class);
         if (!topicDto.getQuestionsIds().isEmpty())
-            topicDto.getQuestionsIds().forEach(questionId -> topic.setQuestions(questionService.get(questionId)));
+            topicDto.getQuestionsIds().forEach(questionId -> topic.addQuestion(questionService.get(questionId)));
         return topic;
     }
 }

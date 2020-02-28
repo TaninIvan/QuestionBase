@@ -2,12 +2,10 @@ package com.ivantanin.questionbase.dto;
 
 import com.ivantanin.questionbase.entity.Address;
 import lombok.Data;
-import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 
 @Data
-@ToString
 public class UserDto {
 
     @NotNull

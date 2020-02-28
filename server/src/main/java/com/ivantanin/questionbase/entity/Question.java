@@ -1,7 +1,6 @@
 package com.ivantanin.questionbase.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -37,13 +36,11 @@ public class Question {
     }
 
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("question")
     private Set<Answer> usersAnswers;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinTable(name = "questions_topics", joinColumns = @JoinColumn(name = "question_id"),
             inverseJoinColumns = @JoinColumn(name = "topic_name"))
-    @JsonIgnoreProperties("questions")
     private Set<Topic> topics;
 
     @Id
@@ -64,19 +61,7 @@ public class Question {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date creationDate;
 
-    @Override
-    public String toString() {
-        return "Question{" +
-                "id=" + id +
-                ", questionText='" + questionText + '\'' +
-                ", correctAnswers='" + correctAnswers + '\'' +
-                ", reward=" + reward +
-                ", author='" + author + '\'' +
-                ", creationDate=" + creationDate +
-                '}';
-    }
-
-    public void setTopics(Topic topic) {
+    public void addTopic(Topic topic) {
         this.getTopics().add(topic);
     }
 }

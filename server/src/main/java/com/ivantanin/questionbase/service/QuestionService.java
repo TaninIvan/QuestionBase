@@ -1,7 +1,6 @@
 package com.ivantanin.questionbase.service;
 
 import com.ivantanin.questionbase.dto.QuestionDto;
-import com.ivantanin.questionbase.dto.TopicDto;
 import com.ivantanin.questionbase.entity.Question;
 import com.ivantanin.questionbase.entity.Topic;
 import com.ivantanin.questionbase.repository.QuestionRepository;
@@ -31,10 +30,12 @@ public class QuestionService {
 
     // create
     public Question createQuestion(String text, String answer, String author, int rew, String topicName){
+
         Question question = new Question();
         question.setCreationDate(new Date());
         question.setQuestionText(text);
         question.setAuthor(author);
+
         // All correct answers are stored without capital letters
         question.setCorrectAnswers(answer.toLowerCase());
         question.setReward(rew);
@@ -46,10 +47,13 @@ public class QuestionService {
     }
 
     public Question createQuestion(Question question){
+
         // To avoid errors when loading from json file in InsertTestData.java
         question.getTopics().forEach(topic -> addTopic(question, topic));
+
         // All correct answers are stored without capital letters
         question.setCorrectAnswers(question.getCorrectAnswers().toLowerCase());
+
         log.fine("New question saved");
         return questionRepository.save(question);
 
@@ -90,8 +94,10 @@ public class QuestionService {
         Question question = questionRepository.findById(newQuestion.getId()).orElse(new Question());
 
         if (!question.equals(newQuestion)) {
+
             // To avoid errors when loading from json file in InsertTestData.java
             newQuestion.getTopics().forEach(topic -> addTopic(newQuestion, topic));
+
             // All correct answers are stored without capital letters
             newQuestion.setCorrectAnswers(newQuestion.getCorrectAnswers().toLowerCase());
 
@@ -116,14 +122,14 @@ public class QuestionService {
         String topicName = newtopic.getTopicName();
         Topic topic = topicService.get(topicName);
 
-        if (topicRepository.existsById(newtopic.getTopicName())) {
+        if (!topicRepository.existsById(topicName)) {
             topic = new Topic(topicName);
             topicService.createTopic(topic);
         }
 
         if (!question.getTopics().contains(topic)) {
-            question.setTopics(topic);
-            topic.setQuestions(question);
+            question.addTopic(topic);
+            topic.addQuestion(question);
             questionRepository.save(question);
             topicService.createTopic(topic);
             log.fine("Topic added to the question!");

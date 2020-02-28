@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @Log
@@ -26,7 +27,7 @@ public class AvatarService {
     // create
     public Avatar createAvatar(Long userId, String imageURL){
         Avatar avatar = new Avatar();
-        User us = userService.get(userId);
+        User us = userService.getById(userId);
         avatar.setUser(us);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -46,7 +47,7 @@ public class AvatarService {
 
     public Avatar createAvatar(Avatar avatar) throws Exception {
         try {
-            if (userService.get(avatar.getUser().getId()).getAvatar() != null)
+            if (userService.getById(avatar.getUser().getId()).getAvatar() != null)
                 throw new Exception("This user already has avatar! You should use update method.");
         } catch (NullPointerException n) {
             throw new Exception("User with that id do not exist!");
@@ -59,7 +60,7 @@ public class AvatarService {
         return avatarRepository.findById(id).orElse(null);
     }
 
-    public Iterable<Avatar> getAll() {
+    public List<Avatar> getAll() {
         return avatarRepository.findAll();
     }
 
@@ -88,7 +89,7 @@ public class AvatarService {
 
     public Avatar convertToEntity(AvatarDto avatarDto) throws ParseException {
         Avatar avatar = modelMapper.map(avatarDto, Avatar.class);
-        avatar.setUser(userService.get(avatarDto.getUserId()));
+        avatar.setUser(userService.getById(avatarDto.getUserId()));
         return avatar;
     }
 }

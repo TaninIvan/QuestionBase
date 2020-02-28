@@ -2,13 +2,11 @@ package com.ivantanin.questionbase.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
-@ToString
 public class AnswerDto {
 
     @NotNull

@@ -39,8 +39,11 @@ public class TopicController {
     }
 
     @GetMapping("all")
-    public Iterable<Topic> getAllTopics(){
-        return topicService.getAll();
+    public List<TopicDto> getAllTopics(){
+        return topicService.getAll()
+                .stream()
+                .map(topicService::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("all/page")

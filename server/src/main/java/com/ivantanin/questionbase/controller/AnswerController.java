@@ -46,8 +46,8 @@ public class AnswerController {
     @ResponseBody
     public List<AnswerDto> getAnswers(
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
-        List<Answer> answers = answerService.getAnswerPage(pageable);
-        return answers.stream()
+        return answerService.getAnswerPage(pageable)
+                .stream()
                 .map(answerService::convertToDto)
                 .collect(Collectors.toList());
     }

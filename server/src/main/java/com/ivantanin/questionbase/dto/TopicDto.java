@@ -1,14 +1,12 @@
 package com.ivantanin.questionbase.dto;
 
 import lombok.Data;
-import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@ToString
 public class TopicDto {
 
     @NotNull

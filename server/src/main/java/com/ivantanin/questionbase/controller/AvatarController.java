@@ -1,7 +1,6 @@
 package com.ivantanin.questionbase.controller;
 
 import com.ivantanin.questionbase.dto.AvatarDto;
-import com.ivantanin.questionbase.entity.Avatar;
 import com.ivantanin.questionbase.service.AvatarService;
 import com.ivantanin.questionbase.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +9,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequestMapping("avatar")
 @RestController
 public class AvatarController {
 
     @Autowired AvatarService avatarService;
     @Autowired UserService userService;
-
 
     // POST
     @PostMapping()
@@ -27,10 +28,11 @@ public class AvatarController {
     // GET
     @GetMapping("all")
     @ResponseBody
-    public Iterable<Avatar> getAvatars(@PageableDefault(sort = {"avatar_id"}, direction = Sort.Direction.ASC) Pageable pageable) {
-        Iterable<Avatar> avatars = avatarService.getAll();
-        avatars.forEach(avatarService::convertToDto);;
-        return avatars;
+    public List<AvatarDto> getAvatars(@PageableDefault(sort = {"avatar_id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+        return avatarService.getAll()
+                .stream()
+                .map(avatarService::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("{avatar_id}")
@@ -40,7 +42,7 @@ public class AvatarController {
 
     @GetMapping("byUserId/{userId}")
     public AvatarDto getAvatarByUserId(@PathVariable("userId") Long userId){
-        return avatarService.convertToDto(avatarService.get(userService.get(userId).getAvatar().getAvatar_id()));
+        return avatarService.convertToDto(avatarService.get(userService.getById(userId).getAvatar().getAvatar_id()));
     }
 
     // PUT
@@ -64,7 +66,7 @@ public class AvatarController {
 
     @DeleteMapping("byUserId/{userId}")
     public String deleteAvatarByUserId(@PathVariable("userId") Long userId){
-        avatarService.delete(userService.get(userId).getAvatar().getAvatar_id());
+        avatarService.delete(userService.getById(userId).getAvatar().getAvatar_id());
         return "Avatar has deleted!";
     }
 }
