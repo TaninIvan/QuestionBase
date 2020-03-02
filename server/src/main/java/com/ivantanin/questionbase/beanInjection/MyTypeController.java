@@ -1,6 +1,6 @@
-package com.ivantanin.questionbase.controller;
+package com.ivantanin.questionbase.beanInjection;
 
-import com.ivantanin.questionbase.MyType;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,39 +11,31 @@ import java.util.List;
 
 @RequestMapping("/myType")
 @RestController
+@Data
 public class MyTypeController {
 
-    @Autowired
-    private List<MyType> myTypeList;
-
-    @Autowired
-    @Qualifier("A")
-    private List<MyType> myTypeListA;
-
-    @Autowired
-    @Qualifier("B")
-    private List<MyType> myTypeListB;
-
-    @Autowired
-    private MyType myType;
+    @Autowired @Qualifier("A") private final TypeInterface myTypeListA;
+    @Autowired @Qualifier("B") private final TypeInterface myTypeListB;
+    private final TypeInterface myType;
+    private final List<TypeInterface> myTypeList;
 
     @GetMapping()
-    public List<MyType> myTypeList() {
+    public List<TypeInterface> myTypeList() {
         return myTypeList;
     }
 
     @GetMapping("A")
-    public List<MyType> myTypeListA() {
+    public TypeInterface myTypeListA() {
         return myTypeListA;
     }
 
     @GetMapping("B")
-    public List<MyType> myTypeListB() {
+    public TypeInterface myTypeListB() {
         return myTypeListB;
     }
 
     @GetMapping("primary")
-    public MyType myTypeListPrimary() {
+    public TypeInterface myTypeListPrimary() {
         return myType;
     }
 }
