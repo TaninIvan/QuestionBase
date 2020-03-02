@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,13 +36,16 @@ public class AvatarController {
     }
 
     @GetMapping("byUserId/{userId}")
-    public byte[] getAvatarByUserId(@PathVariable("userId") Long userId) throws Exception {
+    public ResponseEntity<byte[]> getAvatarByUserId(@PathVariable("userId") Long userId) throws Exception {
         User user = userService.getById(userId);
         Avatar avatar = avatarService.getAvatarById(userId);
         if (avatar == null)
             throw new Exception("User with id " + userId + " does not has a avatar yet!");
-        //return avatarService.convertToDto(avatar);
-       return avatar.getImage();
+
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(avatar.getImage());
     }
 
     // PUT

@@ -10,9 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.File;
 import java.util.List;
 
 @Service
@@ -24,19 +25,21 @@ public class AvatarService {
     @Autowired ModelMapper modelMapper;
 
     // create
-    public Avatar createAvatar(Long userId, String imageURL) throws Exception {
+    public Avatar createAvatar(Long userId, File file) throws Exception {
         Avatar avatar = new Avatar();
         avatar.setAvatar_id(userId);
         User us = userService.getById(userId);
         avatar.setUser(us);
 
+        BufferedImage originalImage = ImageIO.read(file);
+
+        // convert image to byte array
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try(FileOutputStream fos = new FileOutputStream(imageURL)){
-            baos.writeTo(fos);
-        } catch (IOException ioe) {
-            log.warning(ioe.getMessage());
-        }
+        ImageIO.write(originalImage, "jpg", baos);
+        baos.flush();
         avatar.setImage(baos.toByteArray());
+        baos.close();
+
 
         us.setAvatar(avatar);
         avatarRepository.save(avatar);

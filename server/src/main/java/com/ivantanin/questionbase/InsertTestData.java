@@ -4,7 +4,10 @@ import com.google.gson.Gson;
 import com.ivantanin.questionbase.entity.Answer;
 import com.ivantanin.questionbase.entity.Question;
 import com.ivantanin.questionbase.entity.User;
-import com.ivantanin.questionbase.service.*;
+import com.ivantanin.questionbase.service.AnswerService;
+import com.ivantanin.questionbase.service.AvatarService;
+import com.ivantanin.questionbase.service.QuestionService;
+import com.ivantanin.questionbase.service.UserService;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -12,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -61,16 +65,16 @@ public class InsertTestData {
 
         if (avatarService.getAll().isEmpty()) {
 
-            avatarService.createAvatar(1L, "src\\main\\resources\\testAvas\\ava1.jpg");
-            avatarService.createAvatar(2L, "src\\main\\resources\\testAvas\\ava2.jpg");
-            avatarService.createAvatar(3L, "src\\main\\resources\\testAvas\\ava3.jpg");
-            avatarService.createAvatar(4L, "src\\main\\resources\\testAvas\\ava4.jpg");
-            avatarService.createAvatar(5L, "src\\main\\resources\\testAvas\\ava5.jpg");
-            avatarService.createAvatar(6L, "src\\main\\resources\\testAvas\\ava6.jpg");
-            avatarService.createAvatar(7L, "src\\main\\resources\\testAvas\\ava7.jpg");
-            avatarService.createAvatar(8L, "src\\main\\resources\\testAvas\\ava8.jpg");
-            avatarService.createAvatar(9L, "src\\main\\resources\\testAvas\\ava9.jpg");
-            avatarService.createAvatar(10L, "src\\main\\resources\\testAvas\\ava10.jpg");
+            File dir = new File("src\\main\\resources\\testAvas\\");
+            File[] files = dir.listFiles();
+            if (files == null)
+                throw new NullPointerException("Failed to read images!");
+
+            long id = 1L;
+            for(File file:files){
+                avatarService.createAvatar(id,file);
+                id++;
+            }
         }
 
         if (answerService.getAll().isEmpty()) {
