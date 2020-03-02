@@ -62,9 +62,8 @@ public class UserController {
             @RequestParam(required = false) Optional<Integer> to,
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable){
 
-        return userService.getUserPage(pageable)
+        return userService.getUsersByScore(from.orElse(1), to.orElse(100), pageable)
                 .stream()
-                .filter(user -> user.getScore() >= from.orElse(1) && user.getScore() <= to.orElse(1))
                 .map(userService::convertToDto)
                 .collect(Collectors.toList());
     }

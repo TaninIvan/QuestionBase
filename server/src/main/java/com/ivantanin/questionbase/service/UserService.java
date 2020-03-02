@@ -69,6 +69,10 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public List<User> getUsersByScore(Integer from, Integer to, Pageable pageable) {
+        return userRepository.getUsersByScore(from, to, pageable);
+    }
+
     // update
     public void updateUser(User newUser) {
         userRepository.save(newUser);
