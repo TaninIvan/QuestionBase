@@ -8,6 +8,8 @@ import lombok.extern.java.Log;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ParseException;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -60,7 +62,7 @@ public class AvatarService {
 
     // get
     public Avatar getAvatarById(Long id) {
-        return avatarRepository.findById(id).orElse(new Avatar());
+        return avatarRepository.findById(id).orElse(null);
     }
 
     public List<Avatar> getAll() {
@@ -93,5 +95,12 @@ public class AvatarService {
     public Avatar convertToEntity(AvatarDto avatarDto) throws ParseException {
         Avatar avatar = modelMapper.map(avatarDto, Avatar.class);
         return avatar;
+    }
+
+    public ResponseEntity<byte[]> convertToResponseEntity(Avatar avatar) {
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(avatar.getImage());
     }
 }

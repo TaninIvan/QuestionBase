@@ -8,6 +8,4 @@ import javax.validation.constraints.NotNull;
 public class AvatarDto {
 
     @NotNull private Long avatar_id;
-    @NotNull private byte[] image;
-
 }

@@ -49,21 +49,6 @@ public class AvatarController {
     }
 
     // PUT
-    /*
-    @PutMapping("byUserId/{userId}")
-    public void updateAvatarByUserId(@RequestBody AvatarDto avatarDto,
-                                     @PathVariable("userId") Long userId) throws Exception {
-        User user = userService.getById(userId);
-
-        avatarDto.setAvatar_id(userId);
-        Avatar avatar = avatarService.convertToEntity(avatarDto);
-        user.setAvatar(avatar);
-
-        userService.updateUser(user);
-        avatarService.update(avatar);
-    } */
-
-    // PUT
     @PutMapping("byUserId/{userId}")
     public void updateAvatarByUserId(@RequestParam("file") MultipartFile file,
                                      @PathVariable("userId") Long userId) throws Exception {
@@ -78,9 +63,7 @@ public class AvatarController {
 
             userService.updateUser(user);
             avatarService.update(avatar);
-    }
-
-
+        }
     }
 
     //  DELETE
