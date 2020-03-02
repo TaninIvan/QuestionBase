@@ -7,9 +7,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public class AvatarDto {
 
-    @NotNull
-    private Long avatar_id;
-    private byte[] image;
-    private Long userId;
+    @NotNull private Long avatar_id;
+    @NotNull private byte[] image;
 
 }

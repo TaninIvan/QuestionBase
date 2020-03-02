@@ -36,7 +36,7 @@ public class UserController {
     // GET
     @GetMapping("{id}")
     @ResponseBody
-    public UserDto getUser(@PathVariable("id") Long id){
+    public UserDto getUser(@PathVariable("id") Long id) throws Exception {
         return userService.convertToDto(userService.getById(id));
     }
 
@@ -95,7 +95,7 @@ public class UserController {
     }
 
     @DeleteMapping("deleteByUsername/{username}")
-    public String deleteUser(@PathVariable("username") String username){
+    public String deleteUser(@PathVariable("username") String username) throws Exception {
         userService.delete(username);
         return "User has deleted!";
     }

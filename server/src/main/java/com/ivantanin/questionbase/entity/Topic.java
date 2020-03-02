@@ -1,6 +1,7 @@
 package com.ivantanin.questionbase.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.util.Set;
 
 @Entity
 @Data
+@EqualsAndHashCode(exclude = "questions")
 public class Topic {
 
     public Topic() {
@@ -26,7 +28,7 @@ public class Topic {
 
     @ManyToMany(mappedBy = "topics", fetch = FetchType.EAGER,cascade = CascadeType.DETACH)
     @ToString.Exclude
-    transient private Set<Question> questions;
+    private Set<Question> questions;
 
     public void addQuestion(Question question) {
         this.getQuestions().add(question);

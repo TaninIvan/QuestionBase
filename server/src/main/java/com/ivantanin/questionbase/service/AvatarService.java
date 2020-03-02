@@ -9,7 +9,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -25,8 +24,9 @@ public class AvatarService {
     @Autowired ModelMapper modelMapper;
 
     // create
-    public Avatar createAvatar(Long userId, String imageURL){
+    public Avatar createAvatar(Long userId, String imageURL) throws Exception {
         Avatar avatar = new Avatar();
+        avatar.setAvatar_id(userId);
         User us = userService.getById(userId);
         avatar.setUser(us);
 
@@ -34,7 +34,7 @@ public class AvatarService {
         try(FileOutputStream fos = new FileOutputStream(imageURL)){
             baos.writeTo(fos);
         } catch (IOException ioe) {
-            System.out.println(ioe.getMessage());
+            log.warning(ioe.getMessage());
         }
         avatar.setImage(baos.toByteArray());
 
@@ -47,7 +47,7 @@ public class AvatarService {
 
     public Avatar createAvatar(Avatar avatar) throws Exception {
         try {
-            if (userService.getById(avatar.getUser().getId()).getAvatar() != null)
+            if (getAvatarById(avatar.getAvatar_id()) != null)
                 throw new Exception("This user already has avatar! You should use update method.");
         } catch (NullPointerException n) {
             throw new Exception("User with that id do not exist!");
@@ -56,8 +56,8 @@ public class AvatarService {
     }
 
     // get
-    public Avatar get(Long id) {
-        return avatarRepository.findById(id).orElse(null);
+    public Avatar getAvatarById(Long id) {
+        return avatarRepository.findById(id).orElse(new Avatar());
     }
 
     public List<Avatar> getAll() {
@@ -70,12 +70,13 @@ public class AvatarService {
     }
 
     // delete
-    @Transactional
-    public void delete(Long id) {
+    public void delete(Long id) throws Exception {
+        User user = userService.getById(id);
+        user.setAvatar(null);
+        userService.updateUser(user);
         avatarRepository.deleteById(id);
     }
 
-    @Transactional
     public void deleteAll() {
         avatarRepository.deleteAll();
     }
@@ -83,13 +84,11 @@ public class AvatarService {
     // CONVERTERS
     public AvatarDto convertToDto(Avatar avatar) {
         AvatarDto avatarDto = modelMapper.map(avatar, AvatarDto.class);
-        avatarDto.setUserId(avatar.getAvatar_id());
         return avatarDto;
     }
 
     public Avatar convertToEntity(AvatarDto avatarDto) throws ParseException {
         Avatar avatar = modelMapper.map(avatarDto, Avatar.class);
-        avatar.setUser(userService.getById(avatarDto.getUserId()));
         return avatar;
     }
 }

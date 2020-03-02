@@ -1,6 +1,8 @@
 package com.ivantanin.questionbase.controller;
 
 import com.ivantanin.questionbase.dto.AvatarDto;
+import com.ivantanin.questionbase.entity.Avatar;
+import com.ivantanin.questionbase.entity.User;
 import com.ivantanin.questionbase.service.AvatarService;
 import com.ivantanin.questionbase.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,54 +22,67 @@ public class AvatarController {
     @Autowired AvatarService avatarService;
     @Autowired UserService userService;
 
-    // POST
-    @PostMapping()
-    public AvatarDto createAvatar(@RequestBody AvatarDto avatarDto) throws Exception {
-        return  avatarService.convertToDto(avatarService.createAvatar(avatarService.convertToEntity(avatarDto)));
-    }
-
     // GET
     @GetMapping("all")
     @ResponseBody
-    public List<AvatarDto> getAvatars(@PageableDefault(sort = {"avatar_id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+    public List<AvatarDto> getAvatars(
+            @PageableDefault(sort = {"avatar_id"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return avatarService.getAll()
                 .stream()
                 .map(avatarService::convertToDto)
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("{avatar_id}")
-    public AvatarDto getAvatar(@PathVariable("avatar_id") Long avatar_id){
-        return avatarService.convertToDto(avatarService.get(avatar_id));
-    }
-
     @GetMapping("byUserId/{userId}")
-    public AvatarDto getAvatarByUserId(@PathVariable("userId") Long userId){
-        return avatarService.convertToDto(avatarService.get(userService.getById(userId).getAvatar().getAvatar_id()));
+    public byte[] getAvatarByUserId(@PathVariable("userId") Long userId) throws Exception {
+        User user = userService.getById(userId);
+        Avatar avatar = avatarService.getAvatarById(userId);
+        if (avatar == null)
+            throw new Exception("User with id " + userId + " does not has a avatar yet!");
+        //return avatarService.convertToDto(avatar);
+       return avatar.getImage();
     }
 
     // PUT
-    @PutMapping("{avatar_id}")
-    public void updateAvatar(@RequestBody AvatarDto avatarDto, @PathVariable("avatar_id") Long avatar_id){
-        avatarDto.setAvatar_id(avatar_id);
-        avatarService.update(avatarService.convertToEntity(avatarDto));
+    /*
+    @PutMapping("byUserId/{userId}")
+    public void updateAvatarByUserId(@RequestBody AvatarDto avatarDto,
+                                     @PathVariable("userId") Long userId) throws Exception {
+        User user = userService.getById(userId);
+
+        avatarDto.setAvatar_id(userId);
+        Avatar avatar = avatarService.convertToEntity(avatarDto);
+        user.setAvatar(avatar);
+
+        userService.updateUser(user);
+        avatarService.update(avatar);
+    } */
+
+    // PUT
+    @PutMapping("byUserId/{userId}")
+    public void updateAvatarByUserId(@RequestParam("file") MultipartFile file,
+                                     @PathVariable("userId") Long userId) throws Exception {
+        if (!file.isEmpty()) {
+            byte[] bytes = file.getBytes();
+            Avatar avatar = avatarService.getAvatarById(userId);
+            User user = userService.getById(userId);
+
+            avatar.setAvatar_id(userId);
+            avatar.setImage(bytes);
+            user.setAvatar(avatar);
+
+            userService.updateUser(user);
+            avatarService.update(avatar);
     }
 
-    @PutMapping("byUserId/{userId}")
-    public void updateAvatarByUserId(@RequestBody AvatarDto avatarDto, @PathVariable("userId") Long userId){
-        avatarService.update(avatarService.convertToEntity(avatarDto));
+
     }
 
     //  DELETE
-    @DeleteMapping("{avatar_id}")
-    public String deleteAvatar(@PathVariable("avatar_id") Long avatar_id){
-        avatarService.delete(avatar_id);
-        return "Avatar has deleted!";
-    }
-
     @DeleteMapping("byUserId/{userId}")
-    public String deleteAvatarByUserId(@PathVariable("userId") Long userId){
-        avatarService.delete(userService.getById(userId).getAvatar().getAvatar_id());
+    public String deleteAvatarByUserId(@PathVariable("userId") Long userId) throws Exception {
+        User user = userService.getById(userId);
+        avatarService.delete(userId);
         return "Avatar has deleted!";
     }
 }

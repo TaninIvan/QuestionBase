@@ -1,6 +1,7 @@
 package com.ivantanin.questionbase.entity;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,12 +12,13 @@ import java.io.Serializable;
 public class Avatar implements Serializable {
 
     @OneToOne(mappedBy = "avatar", cascade = {CascadeType.MERGE, CascadeType.REFRESH})
-    transient private User user;
+    @ToString.Exclude
+    private User user;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long avatar_id;
 
     @Column(name = "image")
+    @ToString.Exclude
     private byte[] image;
 }

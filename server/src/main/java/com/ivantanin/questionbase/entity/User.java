@@ -20,7 +20,7 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "avatar_id")
     @ToString.Exclude
-    transient private Avatar avatar;
+    private Avatar avatar;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude

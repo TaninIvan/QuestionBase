@@ -3,6 +3,7 @@ package com.ivantanin.questionbase.service;
 import com.ivantanin.questionbase.dto.UserDto;
 import com.ivantanin.questionbase.entity.User;
 import com.ivantanin.questionbase.repository.AnswerRepository;
+import com.ivantanin.questionbase.repository.AvatarRepository;
 import com.ivantanin.questionbase.repository.UserRepository;
 import lombok.extern.java.Log;
 import org.modelmapper.ModelMapper;
@@ -23,7 +24,7 @@ public class UserService {
     @Autowired ModelMapper modelMapper;
     @Autowired AvatarService avatarService;
     @Autowired AnswerRepository answerRepository;
-
+    @Autowired AvatarRepository avatarRepository;
     // create
     public User createUser(String username, String password, int score) throws Exception {
         if(userRepository.findByUsername(username).isPresent()) {
@@ -47,8 +48,11 @@ public class UserService {
     }
 
     // get
-    public User getById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    public User getById(Long id) throws Exception {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null)
+            throw new Exception("User with id " + id + " does not exist!");
+        return user;
     }
 
     public List<User> getAll() {
@@ -60,7 +64,9 @@ public class UserService {
     }
 
     public List<User> getUsersWithoutAnswers(Pageable pageable) {
-        return userRepository.findAllUsersWithoutAnswers(pageable).stream().collect(Collectors.toList());
+        return userRepository.findAllUsersWithoutAnswers(pageable)
+                .stream()
+                .collect(Collectors.toList());
     }
 
     // update
@@ -76,13 +82,20 @@ public class UserService {
     }
 
     @Transactional
-    public void delete(String username) {
-        answerRepository.deleteAllByUserId(userRepository.findByUsername(username).get().getId());
+    public void delete(String username) throws Exception {
+        User user = userRepository.findByUsername(username).orElse(null);
+        Long userId;
+        if (user == null)
+            throw new Exception("No user found with username - " + username);
+        else userId = user.getId();
+        answerRepository.deleteAllByUserId(userId);
         userRepository.deleteByUsername(username);
     }
 
     @Transactional
     public void deleteAll() {
+        answerRepository.deleteAll();
+        avatarRepository.deleteAll();
         userRepository.deleteAll();
     }
 
@@ -98,7 +111,7 @@ public class UserService {
     public User convertToEntity(UserDto userDto) throws ParseException {
         User user = modelMapper.map(userDto, User.class);
         if (userDto.getAvatarId() != null)
-            user.setAvatar(avatarService.get(userDto.getAvatarId()));
+            user.setAvatar(avatarService.getAvatarById(userDto.getAvatarId()));
         return user;
     }
 }
