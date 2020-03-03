@@ -38,15 +38,7 @@ public class TopicController {
                 + topicName.substring(1))); // topic name must be capitalized
     }
 
-    @GetMapping("all")
-    public List<TopicDto> getAllTopics(){
-        return topicService.getAll()
-                .stream()
-                .map(topicService::convertToDto)
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("all/page")
+    @GetMapping("page")
     @ResponseBody
     public List<TopicDto> getTopics(
             @PageableDefault(sort = {"topicName"}, direction = Sort.Direction.ASC) Pageable pageable) {

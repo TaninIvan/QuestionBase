@@ -44,15 +44,7 @@ public class QuestionController {
         return questionService.convertToDto(questionService.get(id));
     }
 
-    @GetMapping("all")
-    public List<QuestionDto> getAllQuestions(){
-        return questionService.getAll()
-                .stream()
-                .map(questionService::convertToDto)
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("all/page")
+    @GetMapping("page")
     @ResponseBody
     public List<QuestionDto> getQuestions(
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {

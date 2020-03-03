@@ -40,15 +40,7 @@ public class UserController {
         return userService.convertToDto(userService.getById(id));
     }
 
-    @GetMapping("all")
-    public List<UserDto> getAllUsers(){
-        return userService.getAll()
-                .stream()
-                .map(userService::convertToDto)
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("all/page")
+    @GetMapping("page")
     @ResponseBody
     public List<UserDto> getUsers(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
         return userService.getUserPage(pageable).stream()

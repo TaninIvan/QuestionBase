@@ -25,7 +25,7 @@ public class AvatarController {
     @Autowired UserService userService;
 
     // GET
-    @GetMapping("all")
+    @GetMapping("page")
     @ResponseBody
     public List<AvatarDto> getAvatars(
             @PageableDefault(sort = {"avatar_id"}, direction = Sort.Direction.ASC) Pageable pageable) {
@@ -68,10 +68,9 @@ public class AvatarController {
 
     //  DELETE
     @DeleteMapping("byUserId/{userId}")
-    public String deleteAvatarByUserId(@PathVariable("userId") Long userId) throws Exception {
+    public void deleteAvatarByUserId(@PathVariable("userId") Long userId) throws Exception {
         User user = userService.getById(userId);
         avatarService.delete(userId);
-        return "Avatar has deleted!";
     }
 }
 

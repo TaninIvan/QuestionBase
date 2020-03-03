@@ -3,6 +3,7 @@ package com.ivantanin.questionbase.service;
 import com.ivantanin.questionbase.dto.AvatarDto;
 import com.ivantanin.questionbase.entity.Avatar;
 import com.ivantanin.questionbase.entity.User;
+import com.ivantanin.questionbase.repository.AnswerRepository;
 import com.ivantanin.questionbase.repository.AvatarRepository;
 import lombok.extern.java.Log;
 import org.modelmapper.ModelMapper;
@@ -25,6 +26,7 @@ public class AvatarService {
     @Autowired AvatarRepository avatarRepository;
     @Autowired UserService userService;
     @Autowired ModelMapper modelMapper;
+    @Autowired AnswerRepository answerRepository;
 
     // create
     public Avatar createAvatar(Long userId, File file) throws Exception {
@@ -76,6 +78,8 @@ public class AvatarService {
 
     // delete
     public void delete(Long id) throws Exception {
+        if(avatarRepository.existsById(id))
+            throw new Exception("Avatar with id " + id + " does not exist!");
         User user = userService.getById(id);
         user.setAvatar(null);
         userService.updateUser(user);

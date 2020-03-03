@@ -42,7 +42,7 @@ public class AnswerController {
         return answerService.convertToDto(answerService.get(id));
     }
 
-    @GetMapping("/all")
+    @GetMapping("page")
     @ResponseBody
     public List<AnswerDto> getAnswers(
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
