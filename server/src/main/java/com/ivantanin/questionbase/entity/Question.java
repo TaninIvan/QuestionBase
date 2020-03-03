@@ -50,7 +50,7 @@ public class Question {
     @Column(nullable = false)
     private Long id;
 
-    @Column(name = "question_text", nullable = false)
+    @Column(name = "question_text", nullable = false, unique = true)
     private String questionText;
 
     @Column(name = "correct_answers", nullable = false)

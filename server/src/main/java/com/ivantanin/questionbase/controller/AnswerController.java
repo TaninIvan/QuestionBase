@@ -42,12 +42,21 @@ public class AnswerController {
         return answerService.convertToDto(answerService.get(id));
     }
 
+    @GetMapping("byUser/{userId}")
+    @ResponseBody
+    public List<AnswerDto> getAnswersByUserId(@PathVariable("userId") Long userId,
+                                              @PageableDefault(sort = {"text"},
+                                                      direction = Sort.Direction.ASC) Pageable pageable){
+        return answerService.getAnswersByUserId(userId, pageable).stream()
+                .map(answerService::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     @GetMapping("page")
     @ResponseBody
     public List<AnswerDto> getAnswers(
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
-        return answerService.getAnswerPage(pageable)
-                .stream()
+        return answerService.getAnswerPage(pageable).stream()
                 .map(answerService::convertToDto)
                 .collect(Collectors.toList());
     }

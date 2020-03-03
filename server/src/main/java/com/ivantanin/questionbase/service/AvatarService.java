@@ -78,7 +78,7 @@ public class AvatarService {
 
     // delete
     public void delete(Long id) throws Exception {
-        if(avatarRepository.existsById(id))
+        if(!avatarRepository.existsById(id))
             throw new Exception("Avatar with id " + id + " does not exist!");
         User user = userService.getById(id);
         user.setAvatar(null);

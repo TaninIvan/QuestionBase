@@ -57,6 +57,10 @@ public class AnswerService {
         return answers.getContent();
     }
 
+    public List<Answer> getAnswersByUserId(Long userId, Pageable pageable) {
+        return answerRepository.findAllByUserId(userId,pageable).getContent();
+    }
+
     // update
     public void updateAnswer(Answer newAnswer) {
         answerRepository.save(newAnswer);

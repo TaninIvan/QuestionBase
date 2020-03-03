@@ -25,6 +25,8 @@ public interface AnswerRepository  extends CrudRepository<Answer, Long>,
     void deleteQuestionId(@Param("questionId") Long questionId);
 
     @Modifying
-    @Query("UPDATE Answer a  SET a.question.id = -1")
+    @Query("UPDATE Answer a  SET a.question.id = null")
     void deleteAllQuestionId();
+
+    Page<Answer> findAllByUserId(Long userId, Pageable pageReq);
 }
