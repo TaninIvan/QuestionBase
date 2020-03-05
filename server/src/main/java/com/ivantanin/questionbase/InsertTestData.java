@@ -4,6 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ivantanin.questionbase.entity.Answer;
 import com.ivantanin.questionbase.entity.Question;
 import com.ivantanin.questionbase.entity.User;
+import com.ivantanin.questionbase.repository.AnswerRepository;
+import com.ivantanin.questionbase.repository.AvatarRepository;
+import com.ivantanin.questionbase.repository.QuestionRepository;
+import com.ivantanin.questionbase.repository.UserRepository;
 import com.ivantanin.questionbase.service.AnswerService;
 import com.ivantanin.questionbase.service.AvatarService;
 import com.ivantanin.questionbase.service.QuestionService;
@@ -25,9 +29,13 @@ import java.util.List;
 public class InsertTestData {
 
     @Autowired UserService userService;
+    @Autowired UserRepository userRepository;
     @Autowired QuestionService questionService;
+    @Autowired QuestionRepository questionRepository;
     @Autowired AvatarService avatarService;
+    @Autowired AvatarRepository avatarRepository;
     @Autowired AnswerService answerService;
+    @Autowired AnswerRepository answerRepository;
 
 
 
@@ -35,7 +43,7 @@ public class InsertTestData {
     public void postConstruct() throws Exception {
         ObjectMapper om = new ObjectMapper();
 
-        if (userService.getAll().isEmpty()) {
+        if (userRepository.count() == 0) {
             try (InputStream is = new FileInputStream(new File("src\\main\\resources\\users.json"))) {
                 String json = IOUtils.toString(is, StandardCharsets.UTF_8);
 
@@ -52,7 +60,7 @@ public class InsertTestData {
         }
 
 
-        if (questionService.getAll().isEmpty()) {
+        if (questionRepository.count() == 0) {
             try (InputStream is = new FileInputStream(new File("src\\main\\resources\\questions.json"))) {
                 String json = IOUtils.toString(is, StandardCharsets.UTF_8);
 
@@ -68,7 +76,7 @@ public class InsertTestData {
             }
         }
 
-        if (avatarService.getAll().isEmpty()) {
+        if (avatarRepository.count() == 0) {
 
             File dir = new File("src\\main\\resources\\testAvas\\");
             File[] files = dir.listFiles();
@@ -82,7 +90,7 @@ public class InsertTestData {
             }
         }
 
-        if (answerService.getAll().isEmpty()) {
+        if (answerRepository.count() == 0) {
             try (InputStream is = new FileInputStream(new File("src\\main\\resources\\answers.json"))) {
                 String json = IOUtils.toString(is, StandardCharsets.UTF_8);
 

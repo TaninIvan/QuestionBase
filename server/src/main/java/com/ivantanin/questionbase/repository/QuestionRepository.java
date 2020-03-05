@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
 @Repository
 public interface QuestionRepository extends CrudRepository<Question,Long>,
         PagingAndSortingRepository<Question,Long>, QuestionRepositoryCustom {
@@ -32,5 +31,4 @@ public interface QuestionRepository extends CrudRepository<Question,Long>,
             "WHERE qt.question_id = :questionId AND qt.topic_name = :topicName",
             nativeQuery = true)
     void deleteTopicFromQuestion(@Param("questionId") Long questionId, @Param("topicName") String topicName);
-
 }
