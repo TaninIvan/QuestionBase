@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Log
@@ -64,6 +65,14 @@ public class QuestionService {
 
     public  List<Question> getMostPricedQuestion() {
         return questionRepository.findMostPricedQuestion();
+    }
+
+    public List<Question> filterQuestionsByHeaders(Map<String,String> headers, Pageable pageable)
+            throws java.text.ParseException {
+        if (headers.isEmpty())
+            return questionRepository.findAll(pageable).getContent();
+        else
+            return questionRepository.filterQuestionsByHeaders(headers, pageable);
     }
 
     // update

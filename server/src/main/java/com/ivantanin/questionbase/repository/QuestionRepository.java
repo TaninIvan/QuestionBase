@@ -16,7 +16,7 @@ import java.util.List;
 
 @Repository
 public interface QuestionRepository extends CrudRepository<Question,Long>,
-        PagingAndSortingRepository<Question,Long> {
+        PagingAndSortingRepository<Question,Long>, QuestionRepositoryCustom {
     Page<Question> findAll (Pageable pageReq);
     List<Question> findAll(Sort sort);
     List<Question> findAll();

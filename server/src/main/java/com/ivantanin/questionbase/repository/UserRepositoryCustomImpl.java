@@ -23,7 +23,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom{
         int pageSize = pageable.getPageSize();
         CriteriaBuilder cb = em.getCriteriaBuilder();
 
-        // вы полняем сам select
+        // select
         CriteriaQuery<User> q = cb.createQuery(User.class);
         Root<User> u = q.from(User.class);
         q.select(u).where(cb.between(u.get("score"), from, to));

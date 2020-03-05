@@ -14,8 +14,6 @@ import org.springframework.expression.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -81,27 +79,8 @@ public class QuestionController {
     }
 
     @GetMapping("filter")
-    public List<QuestionDto> filter(@RequestHeader  Map<String,String> headers) throws java.text.ParseException {
-        List<Question> questions = questionService.getAll();
-        if(headers.containsKey("author")) {
-            questions = questions.stream().filter(question -> question.getAuthor().equals(headers.get("author")))
-                    .collect(Collectors.toList());
-        }
-
-        if(headers.containsKey("from")) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date from = format.parse(headers.get("from"));
-            questions = questions.stream().filter(question -> question.getCreationDate().after(from))
-                    .collect(Collectors.toList());
-        }
-
-        if(headers.containsKey("to")) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date to = format.parse(headers.get("to"));
-            questions = questions.stream().filter(question -> question.getCreationDate().before(to))
-                    .collect(Collectors.toList());
-        }
-
+    public List<QuestionDto> filter(@RequestHeader  Map<String,String> headers, Pageable pageable) throws java.text.ParseException {
+        List<Question> questions = questionService.filterQuestionsByHeaders(headers, pageable);
         return questions.stream()
                 .map(questionService::convertToDto)
                 .collect(Collectors.toList());
