@@ -39,12 +39,8 @@ public class UserService {
         }
     }
 
-    public User createUser(User newUser) throws Exception {
-        if(userRepository.findByUsername(newUser.getUsername()).isPresent()) {
-            throw new Exception("The user with this nickname already exists.");
-        } else {
+    public User createUser(User newUser) {
             return userRepository.save(newUser);
-        }
     }
 
     // get

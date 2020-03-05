@@ -11,13 +11,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Log
@@ -57,10 +55,7 @@ public class QuestionService {
     }
 
     public List<Question> getLastQuestions(int last) {
-        return questionRepository.findAll(Sort.by(Sort.Direction.DESC, "id"))
-                .stream()
-                .limit(last)
-                .collect(Collectors.toList());
+        return questionRepository.findLastQuestions(last);
     }
 
     public  List<Question> getMostPopularQuestion() {

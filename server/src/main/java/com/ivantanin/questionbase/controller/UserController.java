@@ -27,7 +27,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public UserDto createUser(@RequestBody UserDto userDto) throws Exception {
+    public UserDto createUser(@RequestBody UserDto userDto) {
         User user = userService.convertToEntity(userDto);
         User userCreated = userService.createUser(user);
         return userService.convertToDto(userCreated);

@@ -24,6 +24,9 @@ public interface QuestionRepository extends CrudRepository<Question,Long>,
     List<Question> findMostPopularQuestion();
     List<Question> findMostPricedQuestion();
 
+    @Query(value = "SELECT * FROM question ORDER BY creation_date DESC LIMIT :last", nativeQuery = true)
+    List<Question> findLastQuestions(@Param("last") int last);
+
     @Modifying
     @Query(value = "DELETE FROM questions_topics qt " +
             "WHERE qt.question_id = :questionId AND qt.topic_name = :topicName",
