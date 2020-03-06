@@ -17,6 +17,9 @@ import java.util.Set;
 
 public class User {
 
+    public User() {
+        this.score = 0;
+    }
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "avatar_id")
     @ToString.Exclude

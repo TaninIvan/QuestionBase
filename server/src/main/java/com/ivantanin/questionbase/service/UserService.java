@@ -39,8 +39,10 @@ public class UserService {
         }
     }
 
-    public User createUser(User newUser) {
-            return userRepository.save(newUser);
+    public User createUser(User newUser) throws Exception {
+        if (userRepository.findByUsername(newUser.getUsername()).isPresent())
+            throw new Exception("User with nickname "  + newUser.getUsername() + " already exist!");
+        return userRepository.save(newUser);
     }
 
     // get
@@ -70,7 +72,10 @@ public class UserService {
     }
 
     // update
-    public User updateUser(User newUser) {
+    public User updateUser(User newUser) throws Exception {
+        User user = userRepository.findById(newUser.getId()).orElse(null);
+        if (user == null)
+            throw new Exception("Such user does not exist!");
         return userRepository.save(newUser);
     }
 
@@ -82,12 +87,10 @@ public class UserService {
     }
 
     @Transactional
-    public void delete(String username) throws Exception {
+    public void delete(String username) {
         User user = userRepository.findByUsername(username).orElse(null);
         Long userId;
-        if (user == null)
-            throw new Exception("No user found with username - " + username);
-        else userId = user.getId();
+        userId = user.getId();
         answerRepository.deleteAllByUserId(userId);
         userRepository.deleteByUsername(username);
     }

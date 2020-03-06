@@ -12,6 +12,7 @@ import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<User,Long>,
         PagingAndSortingRepository<User,Long>, UserRepositoryCustom {
+
     @Query("SELECT u FROM User u WHERE (SELECT COUNT(*) FROM Answer a WHERE u.id = a.user) = 0")
     Page<User> findAllUsersWithoutAnswers(Pageable pageable);
 
