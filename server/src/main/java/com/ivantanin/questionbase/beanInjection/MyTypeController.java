@@ -1,6 +1,6 @@
 package com.ivantanin.questionbase.beanInjection;
 
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @RequestMapping("/myType")
 @RestController
-@Data
+@RequiredArgsConstructor
 public class MyTypeController {
 
     @Autowired @Qualifier("A") private final TypeInterface myTypeListA;

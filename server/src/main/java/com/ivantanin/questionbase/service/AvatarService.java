@@ -72,8 +72,8 @@ public class AvatarService {
     }
 
     // update
-    public void update(Avatar avatar) {
-        avatarRepository.save(avatar);
+    public Avatar update(Avatar avatar) {
+        return avatarRepository.save(avatar);
     }
 
     // delete

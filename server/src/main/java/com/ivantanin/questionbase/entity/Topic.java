@@ -29,9 +29,5 @@ public class Topic {
     @ManyToMany(mappedBy = "topics", fetch = FetchType.EAGER,cascade = CascadeType.DETACH)
     @ToString.Exclude
     private Set<Question> questions;
-
-    public void addQuestion(Question question) {
-        this.getQuestions().add(question);
-    }
 }
 

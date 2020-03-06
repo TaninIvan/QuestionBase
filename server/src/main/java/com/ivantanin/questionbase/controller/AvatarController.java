@@ -50,8 +50,8 @@ public class AvatarController {
 
     // PUT
     @PutMapping("byUserId/{userId}")
-    public void updateAvatarByUserId(@RequestParam("file") MultipartFile file,
-                                     @PathVariable("userId") Long userId) throws Exception {
+    public AvatarDto updateAvatarByUserId(@RequestParam("file") MultipartFile file,
+                                          @PathVariable("userId") Long userId) throws Exception {
         if (!file.isEmpty()) {
             byte[] bytes = file.getBytes();
             Avatar avatar = avatarService.getAvatarById(userId);
@@ -62,8 +62,9 @@ public class AvatarController {
             user.setAvatar(avatar);
 
             userService.updateUser(user);
-            avatarService.update(avatar);
+            return avatarService.convertToDto(avatarService.update(avatar));
         }
+        return null;
     }
 
     //  DELETE

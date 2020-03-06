@@ -70,8 +70,8 @@ public class UserService {
     }
 
     // update
-    public void updateUser(User newUser) {
-        userRepository.save(newUser);
+    public User updateUser(User newUser) {
+        return userRepository.save(newUser);
     }
 
     // delete

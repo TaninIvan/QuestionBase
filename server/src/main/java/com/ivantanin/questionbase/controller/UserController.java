@@ -72,10 +72,10 @@ public class UserController {
     // PUT
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateUser(@PathVariable Long id, @RequestBody UserDto userDto) throws ParseException {
+    public UserDto updateUser(@PathVariable Long id, @RequestBody UserDto userDto) throws ParseException {
         User user = userService.convertToEntity(userDto);
         user.setId(id);
-        userService.updateUser(user);
+        return userService.convertToDto(userService.updateUser(user));
     }
 
     // DELETE

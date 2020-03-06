@@ -49,14 +49,6 @@ public class TopicController {
                 .collect(Collectors.toList());
     }
 
-    // PUT
-    @PutMapping()
-    @ResponseStatus(HttpStatus.OK)
-    public void updateTopic(@RequestBody TopicDto topicDto) throws ParseException {
-        Topic topic = topicService.convertToEntity(topicDto);
-        topicService.updateTopic(topic);
-    }
-
     // DELETE
     @DeleteMapping("{topicName}" )
     public String deleteUser(@PathVariable("topicName") String topicName){

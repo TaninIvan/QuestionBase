@@ -5,8 +5,6 @@ import com.ivantanin.questionbase.entity.Answer;
 import com.ivantanin.questionbase.entity.Question;
 import com.ivantanin.questionbase.entity.User;
 import com.ivantanin.questionbase.repository.AnswerRepository;
-import com.ivantanin.questionbase.repository.QuestionRepository;
-import com.ivantanin.questionbase.repository.UserRepository;
 import lombok.extern.java.Log;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +21,8 @@ import java.util.List;
 public class AnswerService {
 
     @Autowired AnswerRepository answerRepository;
-    @Autowired UserRepository userRepository;
-    @Autowired QuestionRepository questionRepository;
+    @Autowired QuestionService questionService;
+    @Autowired UserService userService;
 
     // Setter Based Injection
     @Autowired ModelMapper modelMapper;
@@ -33,12 +31,19 @@ public class AnswerService {
     }
 
     // create
-    public Answer createAnswer(Long questionId, Long userId, Answer answer){
-        Question question = questionRepository.findById(questionId).orElse(null);
-        User user = userRepository.findById(userId).orElse(null);
+    public Answer createAnswer(Long questionId, Long userId, Answer answer) throws Exception {
+        if (answerRepository.findByUserAndQuestionIds(userId, questionId).orElse(null) != null)
+            throw new Exception("This user has already answered this question!");
+        Question question = questionService.get(questionId);
+        User user = userService.getById(userId);
 
         answer.setQuestion(question);
         answer.setUser(user);
+        if (isCorrect(answer)) {
+            user.setScore(user.getScore() + question.getReward());
+            userService.updateUser(user);
+        }
+
         log.fine("New answer saved!");
         return answerRepository.save(answer);
     }
@@ -61,9 +66,13 @@ public class AnswerService {
         return answerRepository.findAllByUserId(userId,pageable).getContent();
     }
 
+    public Answer getAnswerByUserAndQuestionIds(Long userId, Long questionId) {
+        return answerRepository.findByUserAndQuestionIds(userId,questionId).orElse(null);
+    }
+
     // update
-    public void updateAnswer(Answer newAnswer) {
-        answerRepository.save(newAnswer);
+    public Answer updateAnswer(Answer newAnswer) {
+        return answerRepository.save(newAnswer);
     }
 
     //delete

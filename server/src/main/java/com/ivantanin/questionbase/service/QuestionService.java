@@ -42,8 +42,11 @@ public class QuestionService {
     }
 
     // get
-    public Question get(Long id) {
-        return questionRepository.findById(id).orElse(new Question());
+    public Question get(Long id) throws Exception {
+        Question question = questionRepository.findById(id).orElse(null);
+        if (question == null)
+            throw new Exception("Question with id " + id + " does not exist!");
+        return question;
     }
 
     public List<Question> getAll() {
@@ -77,7 +80,7 @@ public class QuestionService {
 
     // update
     @Transactional
-    public void updateQuestion(Long questionId, Question newQuestion) throws Exception {
+    public Question updateQuestion(Long questionId, Question newQuestion) throws Exception {
         Question question = questionRepository.findById(questionId).orElse(null);
 
         if (question == null)
@@ -91,8 +94,9 @@ public class QuestionService {
             // All correct answers are stored without capital letters
             question.setCorrectAnswers(newQuestion.getCorrectAnswers().toLowerCase());
 
-            questionRepository.save(question);
+            return questionRepository.save(question);
         }
+        return question;
     }
 
     // delete
@@ -121,7 +125,7 @@ public class QuestionService {
 
         if (!question.getTopics().contains(topic)) {
             question.addTopic(topic);
-            topic.addQuestion(question);
+            topicService.addQuestion(topic, question);
             questionRepository.save(question);
             topicService.createTopic(topic);
         } else return "The question already contains this topic!";

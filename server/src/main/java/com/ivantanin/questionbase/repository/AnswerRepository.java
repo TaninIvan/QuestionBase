@@ -10,6 +10,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AnswerRepository  extends CrudRepository<Answer, Long>,
         PagingAndSortingRepository<Answer,Long> {
@@ -27,6 +28,9 @@ public interface AnswerRepository  extends CrudRepository<Answer, Long>,
     @Modifying
     @Query("UPDATE Answer a  SET a.question.id = null")
     void deleteAllQuestionId();
+
+    @Query("SELECT a FROM Answer a  WHERE a.user.id = :userId AND a.question.id = :questionId")
+    Optional<Answer> findByUserAndQuestionIds(@Param("userId")Long userId, @Param("questionId")Long questionId);
 
     Page<Answer> findAllByUserId(Long userId, Pageable pageReq);
 }

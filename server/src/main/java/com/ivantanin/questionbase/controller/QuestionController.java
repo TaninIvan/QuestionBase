@@ -38,7 +38,8 @@ public class QuestionController {
     // GET
     @GetMapping(value = "{id}")
     @ResponseBody
-    public QuestionDto getQuestion(@PathVariable("id") Long id, @RequestHeader Map<String,String> headers) {
+    public QuestionDto getQuestion(
+            @PathVariable("id") Long id, @RequestHeader Map<String,String> headers) throws Exception {
         return questionService.convertToDto(questionService.get(id));
     }
 
@@ -79,7 +80,8 @@ public class QuestionController {
     }
 
     @GetMapping("filter")
-    public List<QuestionDto> filter(@RequestHeader  Map<String,String> headers, Pageable pageable) throws java.text.ParseException {
+    public List<QuestionDto> filter(
+            @RequestHeader  Map<String,String> headers, Pageable pageable) throws java.text.ParseException {
         List<Question> questions = questionService.filterQuestionsByHeaders(headers, pageable);
         return questions.stream()
                 .map(questionService::convertToDto)
@@ -89,23 +91,24 @@ public class QuestionController {
     // PUT
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateQuestion(@PathVariable Long id, @RequestBody QuestionDto questionDto) throws Exception {
-        questionService.updateQuestion(id,questionService.convertToEntity(questionDto));
+    public QuestionDto updateQuestion(@PathVariable Long id, @RequestBody QuestionDto questionDto) throws Exception {
+        Question question = questionService.updateQuestion(id,questionService.convertToEntity(questionDto));
+        return questionService.convertToDto(question);
     }
 
     @PutMapping("{id}/addTopic")
-    public String addTopic(@PathVariable Long id, @RequestBody TopicDto topicDto){
+    public String addTopic(@PathVariable Long id, @RequestBody TopicDto topicDto) throws Exception {
         Topic topic = topicService.convertToEntity(topicDto);
         return questionService.addTopic(questionService.get(id),topic);
     }
 
+    // DELETE
     @PutMapping("{id}/deleteTopic")
     public String deleteTopic(@PathVariable Long id, @RequestBody TopicDto topicDto) throws Exception {
         Topic topic = topicService.convertToEntity(topicDto);
         return questionService.deleteTopic(questionService.get(id),topic);
     }
 
-    // DELETE
     @DeleteMapping("{id}" )
     public String deleteQuestion(@PathVariable("id") Long id){
         questionService.delete(id);

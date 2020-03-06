@@ -28,7 +28,7 @@ public class AnswerController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public AnswerDto createAnswer(@RequestBody AnswerDto answerDto) throws ParseException {
+    public AnswerDto createAnswer(@RequestBody AnswerDto answerDto) throws Exception {
         Answer answer = answerService.convertToEntity(answerDto);
         Answer answerCreated = answerService.createAnswer(answer.getUser().getId(),
                 answer.getQuestion().getId(),answer);
@@ -64,9 +64,9 @@ public class AnswerController {
     // PUT
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
-    public void updateAnswer(@RequestBody AnswerDto answerDto) throws ParseException {
+    public AnswerDto updateAnswer(@RequestBody AnswerDto answerDto) throws ParseException {
         Answer answer = answerService.convertToEntity(answerDto);
-        answerService.updateAnswer(answer);
+        return answerService.convertToDto(answerService.updateAnswer(answer));
     }
 
     // DELETE

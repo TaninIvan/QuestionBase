@@ -1,6 +1,7 @@
 package com.ivantanin.questionbase.service;
 
 import com.ivantanin.questionbase.dto.TopicDto;
+import com.ivantanin.questionbase.entity.Question;
 import com.ivantanin.questionbase.entity.Topic;
 import com.ivantanin.questionbase.repository.TopicRepository;
 import lombok.extern.java.Log;
@@ -49,8 +50,9 @@ public class TopicService {
     }
 
     // update
-    public void updateTopic(Topic newTopic) {
-        topicRepository.save(newTopic);
+    public void addQuestion(Topic topic, Question question) {
+        topic.getQuestions().add(question);
+        question.getTopics().add(topic);
     }
 
     // delete
@@ -67,14 +69,21 @@ public class TopicService {
     // CONVERTERS
     public TopicDto convertToDto(Topic topic) {
         TopicDto topicDto = modelMapper.map(topic, TopicDto.class);
-        topic.getQuestions().forEach(question -> topicDto.addQuestion(question.getId()));
+        if (!topic.getQuestions().isEmpty())
+            topic.getQuestions().forEach(question -> topicDto.addQuestion(question.getId()));
         return topicDto;
     }
 
     public Topic convertToEntity(TopicDto topicDto) throws ParseException {
         Topic topic = modelMapper.map(topicDto, Topic.class);
         if (!topicDto.getQuestionsIds().isEmpty())
-            topicDto.getQuestionsIds().forEach(questionId -> topic.addQuestion(questionService.get(questionId)));
+            topicDto.getQuestionsIds().forEach(questionId -> {
+                try {
+                    addQuestion(topic, questionService.get(questionId));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
         return topic;
     }
 }
