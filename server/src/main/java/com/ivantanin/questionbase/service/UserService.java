@@ -87,8 +87,9 @@ public class UserService {
     @Transactional
     public void delete(String username) {
         User user = userRepository.findByUsername(username).orElse(null);
-        Long userId;
-        userId = user.getId();
+        if (user == null)
+            throw new NullPointerException();
+        Long userId = user.getId();
         answerRepository.deleteAllByUserId(userId);
         userRepository.deleteByUsername(username);
     }

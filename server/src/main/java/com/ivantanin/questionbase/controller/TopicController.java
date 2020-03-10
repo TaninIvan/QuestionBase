@@ -47,7 +47,7 @@ public class TopicController {
                     + topicName.substring(1))); // topic name must be capitalized
         } catch (Exception e){
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, e.getMessage(),e);
+                    HttpStatus.BAD_REQUEST, "There is no topic " + topicName,e);
         }
     }
 

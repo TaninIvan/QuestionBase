@@ -10,6 +10,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.expression.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,10 +30,15 @@ public class AnswerController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public AnswerDto createAnswer(@RequestBody AnswerDto answerDto) throws Exception {
-        Answer answer = answerService.convertToEntity(answerDto);
-        Answer answerCreated = answerService.createAnswer(answer.getUser().getId(),
-                answer.getQuestion().getId(),answer);
-        return answerService.convertToDto(answerCreated);
+        try {
+            Answer answer = answerService.convertToEntity(answerDto);
+            Answer answerCreated = answerService.createAnswer(answer.getUser().getId(),
+                    answer.getQuestion().getId(),answer);
+            return answerService.convertToDto(answerCreated);
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
     }
 
     // GET
@@ -72,8 +78,13 @@ public class AnswerController {
     // DELETE
     @DeleteMapping("/{id}")
     public String deleteAnswer(@PathVariable("id") Long id){
-        answerService.delete(id);
-        return "Answer has deleted!";
+        try {
+            answerService.delete(id);
+            return "Answer has deleted!";
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "There is no entity with id " + id, e);
+        }
     }
 
     @DeleteMapping("/all")

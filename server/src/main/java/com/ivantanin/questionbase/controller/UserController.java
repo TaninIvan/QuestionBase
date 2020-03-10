@@ -5,7 +5,6 @@ import com.ivantanin.questionbase.entity.User;
 import com.ivantanin.questionbase.service.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -101,7 +100,7 @@ public class UserController {
         try {
             userService.delete(id);
             return "User has deleted!";
-        } catch (EmptyResultDataAccessException e) {
+        } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "User with id " + id + " does not exist", e);
         }
@@ -113,7 +112,7 @@ public class UserController {
         try {
             userService.delete(username);
             return "User has deleted!";
-        } catch (EmptyResultDataAccessException e) {
+        } catch (NullPointerException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "User with username " + username + " does not exist", e);
         }
