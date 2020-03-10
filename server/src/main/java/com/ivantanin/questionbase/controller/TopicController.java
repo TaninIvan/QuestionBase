@@ -4,12 +4,14 @@ import com.ivantanin.questionbase.dto.TopicDto;
 import com.ivantanin.questionbase.entity.Topic;
 import com.ivantanin.questionbase.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.expression.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,16 +28,27 @@ public class TopicController {
     @ResponseBody
     public TopicDto createTopic(@RequestBody TopicDto topicDto) throws ParseException {
         Topic topic = topicService.convertToEntity(topicDto);
-        Topic topicCreated = topicService.createTopic(topic);
-        return topicService.convertToDto(topicCreated);
+        try {
+            Topic topicCreated = topicService.createTopic(topic);
+            return topicService.convertToDto(topicCreated);
+        } catch (Exception e){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, e.getMessage(),e);
+        }
+
     }
 
     // GET
     @GetMapping(value = "/{topicName}")
     @ResponseBody
     public TopicDto getTopic(@PathVariable("topicName")String topicName){
-        return topicService.convertToDto(topicService.get(topicName.substring(0,1).toUpperCase()
-                + topicName.substring(1))); // topic name must be capitalized
+        try {
+            return topicService.convertToDto(topicService.get(topicName.substring(0,1).toUpperCase()
+                    + topicName.substring(1))); // topic name must be capitalized
+        } catch (Exception e){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, e.getMessage(),e);
+        }
     }
 
     @GetMapping("page")
@@ -52,9 +65,16 @@ public class TopicController {
     // DELETE
     @DeleteMapping("{topicName}" )
     public String deleteUser(@PathVariable("topicName") String topicName){
-        topicService.delete(topicName.substring(0,1).toUpperCase()
-                + topicName.substring(1)); // topic name must be capitalized
-        return "Topic has deleted!";
+
+        try {
+            topicService.delete(topicName.substring(0,1).toUpperCase()
+                    + topicName.substring(1)); // topic name must be capitalized
+            return "Topic has deleted!";
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Topic " + topicName + " does not exist", e);
+        }
+
     }
 
     @DeleteMapping("all")

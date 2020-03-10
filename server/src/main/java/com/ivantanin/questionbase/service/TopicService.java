@@ -24,24 +24,15 @@ public class TopicService {
     @Autowired QuestionService questionService;
 
     // create
-    public Topic createTopic(String topicName){
-        Topic topic = new Topic(topicName);
-        log.fine("New topic saved!");
-        return topicRepository.save(topic);
-    }
-
-    public Topic createTopic(Topic topic){
-        log.fine("New topic saved!");
+    public Topic createTopic(Topic topic) throws Exception {
+        if(topicRepository.findByTopicName(topic.getTopicName()).isPresent())
+            throw new Exception("The user with this nickname already exists.");
         return topicRepository.save(topic);
     }
 
     // get
     public Topic get(String topicName) {
         return topicRepository.findByTopicName(topicName).orElse(null);
-    }
-
-    public List<Topic> getAll() {
-        return topicRepository.findAll();
     }
 
     public List<Topic> getTopicPage(Pageable pageable) {

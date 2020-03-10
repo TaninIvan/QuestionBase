@@ -13,6 +13,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.expression.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,12 @@ public class QuestionController {
     @ResponseBody
     public QuestionDto createQuestion(@RequestBody QuestionDto questionDto) throws ParseException {
         Question question = questionService.convertToEntity(questionDto);
-        return questionService.convertToDto(questionService.createQuestion(question));
+        try {
+            return questionService.convertToDto(questionService.createQuestion(question));
+        } catch (Exception e){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, e.getMessage(),e);
+        }
     }
 
     // GET

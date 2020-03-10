@@ -31,7 +31,13 @@ public class QuestionService {
     public Question createQuestion(Question question){
 
         // To avoid errors when loading from json file in InsertTestData.java
-        question.getTopics().forEach(topic -> addTopic(question, topic));
+        question.getTopics().forEach(topic -> {
+            try {
+                addTopic(question, topic);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
         // All correct answers are stored without capital letters
         question.setCorrectAnswers(question.getCorrectAnswers().toLowerCase());
@@ -114,7 +120,7 @@ public class QuestionService {
 
     @Transactional
     // Add topic
-    public String addTopic(Question question, Topic newtopic) {
+    public String addTopic(Question question, Topic newtopic) throws Exception {
         String topicName = newtopic.getTopicName();
         Topic topic = topicService.get(topicName);
 
@@ -150,7 +156,13 @@ public class QuestionService {
 
     public Question convertToEntity(QuestionDto questionDto) throws ParseException {
         Question question = modelMapper.map(questionDto, Question.class);
-        questionDto.getTopicNameSet().forEach(topicName -> addTopic(question,new Topic(topicName)));
+        questionDto.getTopicNameSet().forEach(topicName -> {
+            try {
+                addTopic(question,new Topic(topicName));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
         // All correct answers are stored without capital letters
         question.setCorrectAnswers(question.getCorrectAnswers().toLowerCase());
         return question;

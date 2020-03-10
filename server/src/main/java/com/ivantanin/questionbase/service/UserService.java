@@ -27,16 +27,14 @@ public class UserService {
     @Autowired AvatarRepository avatarRepository;
     // create
     public User createUser(String username, String password, int score) throws Exception {
-        if(userRepository.findByUsername(username).isPresent()) {
+        if(userRepository.findByUsername(username).isPresent())
             throw new Exception("The user with this nickname already exists.");
-        } else {
-            User user = new User();
-            user.setUsername(username);
-            user.setPassword(password);
-            user.setScore(score);
-            log.fine("New user saved!");
-            return userRepository.save(user);
-        }
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setScore(score);
+        log.fine("New user saved!");
+        return userRepository.save(user);
     }
 
     public User createUser(User newUser) throws Exception {
