@@ -19,7 +19,10 @@ public class User {
 
     public User() {
         this.score = 0;
+        this.role = Role.USER;
+        this.active = true;
     }
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "avatar_id")
     @ToString.Exclude
@@ -36,6 +39,11 @@ public class User {
     @Column(unique = true)
     private String username;
     private String password;
+    private boolean active;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @NotNull  private Integer score;
 
     @Type(type = "jsonb")

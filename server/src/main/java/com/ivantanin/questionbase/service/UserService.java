@@ -1,6 +1,7 @@
 package com.ivantanin.questionbase.service;
 
 import com.ivantanin.questionbase.dto.UserDto;
+import com.ivantanin.questionbase.entity.Role;
 import com.ivantanin.questionbase.entity.User;
 import com.ivantanin.questionbase.repository.AnswerRepository;
 import com.ivantanin.questionbase.repository.AvatarRepository;
@@ -10,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.expression.ParseException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,14 +27,18 @@ public class UserService {
     @Autowired AvatarService avatarService;
     @Autowired AnswerRepository answerRepository;
     @Autowired AvatarRepository avatarRepository;
+    @Autowired BCryptPasswordEncoder bCryptPasswordEncoder;
+
     // create
-    public User createUser(String username, String password, int score) throws Exception {
+    public User createUser(String username, String password, Role role, int score) throws Exception {
         if(userRepository.findByUsername(username).isPresent())
             throw new Exception("The user with this nickname already exists.");
         User user = new User();
         user.setUsername(username);
-        user.setPassword(password);
         user.setScore(score);
+
+        user.setRole(role);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         log.fine("New user saved!");
         return userRepository.save(user);
     }
@@ -40,6 +46,8 @@ public class UserService {
     public User createUser(User newUser) throws Exception {
         if (userRepository.findByUsername(newUser.getUsername()).isPresent())
             throw new Exception("User with nickname "  + newUser.getUsername() + " already exist!");
+
+        newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
         return userRepository.save(newUser);
     }
 
@@ -114,6 +122,8 @@ public class UserService {
         User user = modelMapper.map(userDto, User.class);
         if (userDto.getAvatarId() != null)
             user.setAvatar(avatarService.getAvatarById(userDto.getAvatarId()));
+        if (userDto.getRole() == null)
+            user.setRole(Role.USER);
         return user;
     }
 }
