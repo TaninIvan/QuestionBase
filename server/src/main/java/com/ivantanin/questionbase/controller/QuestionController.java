@@ -105,20 +105,35 @@ public class QuestionController {
     @PutMapping("{id}/addTopic")
     public String addTopic(@PathVariable Long id, @RequestBody TopicDto topicDto) throws Exception {
         Topic topic = topicService.convertToEntity(topicDto);
-        return questionService.addTopic(questionService.get(id),topic);
+        try {
+            return questionService.addTopic(questionService.get(id),topic);
+        } catch (Exception e){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, e.getMessage(),e);
+        }
     }
 
     // DELETE
     @PutMapping("{id}/deleteTopic")
     public String deleteTopic(@PathVariable Long id, @RequestBody TopicDto topicDto) throws Exception {
         Topic topic = topicService.convertToEntity(topicDto);
-        return questionService.deleteTopic(questionService.get(id),topic);
+        try {
+            return questionService.deleteTopic(questionService.get(id),topic);
+        } catch (Exception e){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, e.getMessage(),e);
+        }
     }
 
     @DeleteMapping("{id}" )
     public String deleteQuestion(@PathVariable("id") Long id){
-        questionService.delete(id);
-        return "Question has deleted!";
+        try {
+            questionService.delete(id);
+            return "Question has deleted!";
+        } catch (Exception e){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, e.getMessage(),e);
+        }
     }
 
     @DeleteMapping("all")

@@ -26,7 +26,7 @@ public class TopicService {
     // create
     public Topic createTopic(Topic topic) throws Exception {
         if(topicRepository.findByTopicName(topic.getTopicName()).isPresent())
-            throw new Exception("The user with this nickname already exists.");
+            throw new Exception("Topic " + topic.getTopicName() + " already exists.");
         return topicRepository.save(topic);
     }
 
@@ -41,6 +41,10 @@ public class TopicService {
     }
 
     // update
+    public Topic update(Topic topic) {
+        return topicRepository.save(topic);
+    }
+
     public void addQuestion(Topic topic, Question question) {
         topic.getQuestions().add(question);
         question.getTopics().add(topic);
