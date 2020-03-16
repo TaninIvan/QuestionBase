@@ -124,8 +124,8 @@ public class QuestionService {
         String topicName = newtopic.getTopicName();
         Topic topic = topicService.get(topicName);
 
-        if (!topicRepository.existsById(topicName)) {
-            topic = new Topic(topicName);
+        if (topic == null) {
+            topic = newtopic;
             topicService.createTopic(topic);
         }
 
@@ -133,8 +133,8 @@ public class QuestionService {
             question.addTopic(topic);
             topicService.addQuestion(topic, question);
             questionRepository.save(question);
-            topicService.createTopic(topic);
-        } else return "The question already contains this topic!";
+            topicService.update(topic);
+        } else throw new Exception("The question already contains topic '" + topicName + "'!");
         return topicName + " added!";
     }
 
@@ -144,7 +144,7 @@ public class QuestionService {
         if (question.getTopics().contains(deletedTopic)) {
             questionRepository.deleteTopicFromQuestion(question.getId(),deletedTopic.getTopicName());
             return deletedTopic.getTopicName() + " deleted!";
-        } else return "The question does not contain such topic!";
+        } else  throw new Exception("The question does not contain topic '" + deletedTopic.getTopicName() + "'!");
     }
 
     // CONVERTERS
