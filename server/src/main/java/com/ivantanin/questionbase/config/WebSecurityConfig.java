@@ -34,7 +34,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                     .antMatchers("/answer/**").hasAuthority("ADMIN")
                     .anyRequest().authenticated()
                 .and()
-                    .httpBasic();
+                    .httpBasic()
+                .and()
+                .logout()
+                    .permitAll();
     }
 
     @Override
