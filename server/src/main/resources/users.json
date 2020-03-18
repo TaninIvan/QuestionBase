@@ -1,5 +1,5 @@
-[{"username":"ivan.tanin","password":"ivan.tanin","role":"ADMIN","score":1,"address":[{"country":"Russia","city":"Bor","street":"New","house":"4"}]},
-  {"username":"justuser","password":"123","score":2,"address":[{"country":"Uzbekistan","city":"Namangan","street":"Golf Course","house":"033"}]},
+[{"username":"ivan","password":"ivan","role":"ADMIN","score":1,"address":[{"country":"Russia","city":"Bor","street":"New","house":"4"}]},
+  {"username":"user","password":"user","score":2,"address":[{"country":"Uzbekistan","city":"Namangan","street":"Golf Course","house":"033"}]},
   {"username":"dheaffey2","password":"bm9x8JB3f","score":3,"address":[{"country":"China","city":"Chengdong","street":"Jana","house":"29169"}]},
   {"username":"jkirkby3","password":"zW0CReWVYE","score":4,"address":[{"country":"Portugal","city":"Moinhos","street":"Service","house":"9"}]},
   {"username":"tfredi4","password":"lB8qweyYV4l","score":5,"address":[{"country":"Japan","city":"Mobara","street":"Miller","house":"4"}]},
