@@ -14,6 +14,8 @@ import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -46,6 +48,23 @@ public class AnswerService {
 
         log.fine("New answer saved!");
         return answerRepository.save(answer);
+    }
+
+    public Answer toAnswer(String authorization, Answer answer) throws Exception {
+        String username = null;
+
+        if (authorization != null && authorization.toLowerCase().startsWith("basic")) {
+            // Authorization: Basic base64credentials
+            String base64Credentials = authorization.substring("Basic".length()).trim();
+            byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
+            String credentials = new String(credDecoded, StandardCharsets.UTF_8);
+            // credentials = username:password
+            String[] values = credentials.split(":", 2);
+            username = values[0];
+        }
+        answer.setUser(userService.getByUsername(username));
+        return createAnswer(answer.getQuestion().getId(),
+                answer.getUser().getId(),answer);
     }
 
     // get

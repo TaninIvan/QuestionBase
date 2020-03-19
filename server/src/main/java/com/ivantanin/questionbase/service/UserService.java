@@ -59,6 +59,10 @@ public class UserService {
         return user;
     }
 
+    public User getByUsername(String username) {
+        return userRepository.findByUsername(username).orElse(null);
+    }
+
     public List<User> getAll() {
         return (userRepository.findAll());
     }
@@ -114,7 +118,7 @@ public class UserService {
         UserDto userDto = modelMapper.map(user, UserDto.class);
         if (user.getAvatar() != null)
             userDto.setAvatarId(user.getAvatar().getAvatar_id());
-        userDto.setAddress(user.getAddress());
+        userDto.setPassword("");
         return userDto;
     }
 
