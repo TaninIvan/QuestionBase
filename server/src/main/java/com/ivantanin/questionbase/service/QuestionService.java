@@ -129,12 +129,11 @@ public class QuestionService {
             topicService.createTopic(topic);
         }
 
-        if (!question.getTopics().contains(topic)) {
-            question.addTopic(topic);
-            topicService.addQuestion(topic, question);
-            questionRepository.save(question);
-            topicService.update(topic);
-        } else throw new Exception("The question already contains topic '" + topicName + "'!");
+        if (question.getTopics().contains(topic) && question.getId() != null)
+            throw new Exception("The question '" + question.getId() + "' already contains topic '" + topicName + "'!");
+        question.addTopic(topic);
+        topicService.addQuestion(topic, question);
+        topicService.update(topic);
         return topicName + " added!";
     }
 
