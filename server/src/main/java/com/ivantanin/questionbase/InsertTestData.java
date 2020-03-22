@@ -38,13 +38,12 @@ public class InsertTestData {
     @Autowired AnswerRepository answerRepository;
 
 
-
     @PostConstruct
     public void postConstruct() throws Exception {
         ObjectMapper om = new ObjectMapper();
 
         if (userRepository.count() == 0) {
-            try (InputStream is = new FileInputStream(new File("src\\main\\resources\\users.json"))) {
+            try (InputStream is = new FileInputStream(new File("app/src/main/resources/users.json"))) {
                 String json = IOUtils.toString(is, StandardCharsets.UTF_8);
 
                 List<User> users = om.readValue(json,
@@ -61,7 +60,7 @@ public class InsertTestData {
 
 
         if (questionRepository.count() == 0) {
-            try (InputStream is = new FileInputStream(new File("src\\main\\resources\\questions.json"))) {
+            try (InputStream is = new FileInputStream(new File("app/src/main/resources/questions.json"))) {
                 String json = IOUtils.toString(is, StandardCharsets.UTF_8);
 
                 List<Question> questions = om.readValue(json,
@@ -78,7 +77,7 @@ public class InsertTestData {
 
         if (avatarRepository.count() == 0) {
 
-            File dir = new File("src\\main\\resources\\testAvas\\");
+            File dir = new File("app/src/main/resources/testAvas/");
             File[] files = dir.listFiles();
             if (files == null)
                 throw new NullPointerException("Failed to read images!");
@@ -91,7 +90,7 @@ public class InsertTestData {
         }
 
         if (answerRepository.count() == 0) {
-            try (InputStream is = new FileInputStream(new File("src\\main\\resources\\answers.json"))) {
+            try (InputStream is = new FileInputStream(new File("app/src/main/resources/answers.json"))) {
                 String json = IOUtils.toString(is, StandardCharsets.UTF_8);
 
                 List<Answer> answers = om.readValue(json,
