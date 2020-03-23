@@ -29,10 +29,10 @@ public class AnswerController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public AnswerDto createAnswer(@RequestHeader("Authorization") String a, @RequestBody AnswerDto answerDto) throws Exception {
+    public AnswerDto createAnswer(@RequestBody AnswerDto answerDto) throws Exception {
         try {
             Answer answer = answerService.convertToEntity(answerDto);
-            Answer answerCreated = answerService.toAnswer(a, answer);
+            Answer answerCreated = answerService.toAnswer(answer);
             return answerService.convertToDto(answerCreated);
         } catch (Exception e) {
             throw new ResponseStatusException(
